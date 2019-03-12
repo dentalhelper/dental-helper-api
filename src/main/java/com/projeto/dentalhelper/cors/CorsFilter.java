@@ -23,7 +23,7 @@ public class CorsFilter implements Filter {
 
 	// TODO: Mudar para o property class
 	public List<String> originsPermitidas = Arrays.asList("http://localhost:4200", "http://localhost:8100",
-			"https://dentalhelper.herokuapp.com", "http://192.168.0.101:4200");
+			"https://dentalhelper.herokuapp.com", "http://192.168.0.101:4200", "https://dentalhelper.github.io");
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
