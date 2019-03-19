@@ -14,6 +14,7 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository>{
 	public List<Despesa> filtrar(DespesaFilter filter){
 		
 		return repository.filtrar(filter);
+		
 	}
 
 }

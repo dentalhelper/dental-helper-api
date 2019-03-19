@@ -68,5 +68,4 @@ public class DespesaFilter {
 		this.categoria = categoria;
 	}
 	
-	
 }

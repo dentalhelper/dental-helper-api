@@ -9,4 +9,5 @@ public interface DespesaRepositoryQuery {
 	
 	
 	public List<Despesa> filtrar(DespesaFilter filter);
+	
 }

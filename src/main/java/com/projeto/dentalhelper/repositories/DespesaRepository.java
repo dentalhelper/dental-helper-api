@@ -7,4 +7,5 @@ import com.projeto.dentalhelper.repositories.Despesa.DespesaRepositoryQuery;
 
 public interface DespesaRepository extends JpaRepository<Despesa, Long>, DespesaRepositoryQuery{
 
+	
 }

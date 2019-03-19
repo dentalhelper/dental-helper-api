@@ -18,6 +18,7 @@ public class DespesaRepositoryImpl implements DespesaRepositoryQuery{
 	
 	@PersistenceContext
 	EntityManager manager;
+	
 
 	@Override
 	public List<Despesa> filtrar(DespesaFilter filter) {

@@ -94,7 +94,7 @@ public class DespesaResource implements DespesaApi{
 	
 	private List<Despesa> filtrar(DespesaFilter filter){
 		return service.filtrar(filter);
-		
 	}
+	
 
 }
