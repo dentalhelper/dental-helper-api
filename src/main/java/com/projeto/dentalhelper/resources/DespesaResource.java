@@ -56,10 +56,10 @@ public class DespesaResource implements DespesaApi{
 	private void adicionarLink(Despesa objeto, Long codigo) {
 		objeto.add(linkTo(methodOn(this.getClass()).getByCodigo(codigo)).withSelfRel());
 	}
-
+	
 	@Override
-	public List<Despesa> getAll() {
-		List<Despesa> objetos = service.buscarTodos();
+	public List<Despesa> getByFilter(DespesaFilter filter) {
+		List<Despesa> objetos = service.filtrar(filter);
 		return adicionarReferencia(objetos);
 	}
 
@@ -90,10 +90,6 @@ public class DespesaResource implements DespesaApi{
 			objetosComReferencia.add(objeto);
 		}
 		return objetosComReferencia;
-	}
-	
-	private List<Despesa> filtrar(DespesaFilter filter){
-		return service.filtrar(filter);
 	}
 	
 

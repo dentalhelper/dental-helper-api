@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projeto.dentalhelper.domains.Despesa;
+import com.projeto.dentalhelper.repositories.filter.DespesaFilter;
 
 @RequestMapping(value = "despesa")
 public interface DespesaApi {
@@ -23,7 +24,7 @@ public interface DespesaApi {
 			HttpServletResponse response);
 
 	@GetMapping
-	public List<Despesa> getAll();
+	public List<Despesa> getByFilter(DespesaFilter filter);
 	
 	@GetMapping(value = "/{codigo}")
 	public ResponseEntity<Despesa> getByCodigo(@PathVariable Long codigo);
