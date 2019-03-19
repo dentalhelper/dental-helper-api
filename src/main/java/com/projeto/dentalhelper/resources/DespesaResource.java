@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.events.RecursoCriadoEvent;
+import com.projeto.dentalhelper.repositories.filter.DespesaFilter;
 import com.projeto.dentalhelper.resources.api.DespesaApi;
 import com.projeto.dentalhelper.services.DespesaService;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
@@ -89,6 +90,11 @@ public class DespesaResource implements DespesaApi{
 			objetosComReferencia.add(objeto);
 		}
 		return objetosComReferencia;
+	}
+	
+	private List<Despesa> filtrar(DespesaFilter filter){
+		return service.filtrar(filter);
+		
 	}
 
 }
