@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.repositories.filter.DespesaFilter;
 
-@RequestMapping(value = "despesa")
+@RequestMapping(value = "/despesas")
 public interface DespesaApi {
 	@PostMapping(value = "/novo")
 	public ResponseEntity<Despesa> post(@Valid @RequestBody Despesa objeto,

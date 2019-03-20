@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.events.RecursoCriadoEvent;
@@ -21,6 +22,7 @@ import com.projeto.dentalhelper.resources.api.DespesaApi;
 import com.projeto.dentalhelper.services.DespesaService;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
+@RestController
 public class DespesaResource implements DespesaApi{
 	
 	@Autowired
@@ -60,6 +62,7 @@ public class DespesaResource implements DespesaApi{
 	@Override
 	public List<Despesa> getByFilter(DespesaFilter filter) {
 		List<Despesa> objetos = service.filtrar(filter);
+
 		return adicionarReferencia(objetos);
 	}
 
