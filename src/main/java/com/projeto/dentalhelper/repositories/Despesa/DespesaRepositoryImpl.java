@@ -1,6 +1,7 @@
 package com.projeto.dentalhelper.repositories.Despesa;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -40,6 +41,7 @@ public class DespesaRepositoryImpl implements DespesaRepositoryQuery{
 		
 		List<Predicate> predicates = new ArrayList<>();
 		
+		
 		if(filter.getCategoria() != null) {
 			predicates.add(builder.like(builder.lower(root.join("categoria").<String>get("nome")), "%" + filter.getCategoria().toLowerCase() + "%"));
 			
@@ -58,6 +60,14 @@ public class DespesaRepositoryImpl implements DespesaRepositoryQuery{
 		}
 		if(filter.getDescricao() != null) {
 			predicates.add(builder.like(builder.lower(root.get("descricao")), "%" + filter.getDescricao().toLowerCase() + "%"));
+		}
+		if(filter.isPaga() != null) {
+			if(!filter.isPaga()) {
+				predicates.add(builder.isNull(root.get("dataRealizada")));
+			}
+			if(filter.isPaga()) {
+				predicates.add(builder.isNotNull(root.get("dataRealizada")));
+			}
 		}
 			
 		return predicates.toArray(new Predicate[predicates.size()]);

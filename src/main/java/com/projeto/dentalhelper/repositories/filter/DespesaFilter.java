@@ -19,6 +19,8 @@ public class DespesaFilter {
 	private String descricao;
 	
 	private String categoria;
+	
+	private Boolean paga;
 
 	public Date getDataPrevistaDe() {
 		return dataPrevistaDe;
@@ -67,5 +69,15 @@ public class DespesaFilter {
 	public void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
+
+	public Boolean isPaga() {
+		return paga;
+	}
+
+	public void setPaga(Boolean paga) {
+		this.paga = paga;
+	}
+	
+	
 	
 }

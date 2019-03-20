@@ -1,8 +1,8 @@
 CREATE TABLE despesa(
 
 	codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-	data_prevista DATE,
-	data_realizada DATE  NOT NULL,
+	data_prevista DATE NOT NULL,
+	data_realizada DATE,
 	valor FLOAT NOT NULL,
 	descricao VARCHAR(50) NOT NULL,
 	comprovante VARCHAR(50),

@@ -18,8 +18,8 @@ public class Despesa extends ObjetoIdentificado{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Date dataPrevista;
 	@NotNull
+	private Date dataPrevista;
 	private Date dataRealizada;
 	@NotNull
 	private Float valor;

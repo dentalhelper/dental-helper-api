@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Despesa;
@@ -67,7 +68,7 @@ public class DespesaResource implements DespesaApi{
 	}
 
 	@Override
-	public ResponseEntity<Despesa> getByCodigo(Long codigo) {
+	public ResponseEntity<Despesa> getByCodigo(@PathVariable Long codigo) {
 		Despesa objeto = service.buscarPorCodigo(codigo);
 		adicionarLink(objeto, codigo);
 		return objeto != null ? ResponseEntity.ok(objeto) : ResponseEntity.notFound().build();
