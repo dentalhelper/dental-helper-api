@@ -78,11 +78,11 @@ public class DespesaResource implements DespesaApi{
 		return objeto != null ? ResponseEntity.ok(objeto) : ResponseEntity.notFound().build();
 	}
 
-//	@Override
-//	public ResponseEntity<Despesa> put(Long codigo, @Valid Despesa objetoModificado) {
-//		Despesa objetoEditado = service.atualizar(codigo, objetoModificado);
-//		return ResponseEntity.ok(objetoEditado);
-//	}
+	@Override
+	public ResponseEntity<Despesa> put(Long codigo, @Valid Despesa objetoModificado) {
+		Despesa objetoEditado = service.atualizar(codigo, objetoModificado);
+		return ResponseEntity.ok(objetoEditado);
+	}
 
 	@Override
 	public ResponseEntity<Void> delete(Long codigo) {

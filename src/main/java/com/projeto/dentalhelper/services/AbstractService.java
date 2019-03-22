@@ -52,7 +52,7 @@ public abstract class AbstractService<O extends ObjetoIdentificado, R extends Jp
 		}
 	}
 
-	private void lancarIntegridadeDeDadosException(DataIntegrityViolationException e) {
+	public void lancarIntegridadeDeDadosException(DataIntegrityViolationException e) {
 		throw new IntegridadeDeDadosException(
 				"Integridade de dados violada, não é possível excluir um recurso que está relacionado à outro.");
 	}
