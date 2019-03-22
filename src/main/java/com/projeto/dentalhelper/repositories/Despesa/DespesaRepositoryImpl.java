@@ -46,28 +46,14 @@ public class DespesaRepositoryImpl implements DespesaRepositoryQuery{
 			predicates.add(builder.like(builder.lower(root.join("categoria").<String>get("nome")), "%" + filter.getCategoria().toLowerCase() + "%"));
 			
 		}
-		if(filter.getDataPrevistaDe() != null) {
-			predicates.add(builder.greaterThanOrEqualTo(root.get("dataPrevista"), filter.getDataPrevistaDe()));
+		if(filter.getDataPagamentoDe() != null) {
+			predicates.add(builder.greaterThanOrEqualTo(root.join("pagamento").<Date>get("data"), filter.getDataPagamentoDe()));
 		}
-		if(filter.getDataPrevistaAte() != null) {
-			predicates.add(builder.lessThanOrEqualTo(root.get("dataPrevista"), filter.getDataPrevistaAte()));
-		}
-		if(filter.getDataRealizadaDe() != null) {
-			predicates.add(builder.greaterThanOrEqualTo(root.get("dataRealizada"), filter.getDataRealizadaDe()));
-		}
-		if(filter.getDataRealizadaAte() != null) {
-			predicates.add(builder.lessThanOrEqualTo(root.get("dataRealizada"), filter.getDataRealizadaAte()));
+		if(filter.getDataPagamentoAte() != null) {
+			predicates.add(builder.lessThanOrEqualTo(root.join("pagamento").<Date>get("data"), filter.getDataPagamentoAte()));
 		}
 		if(filter.getDescricao() != null) {
 			predicates.add(builder.like(builder.lower(root.get("descricao")), "%" + filter.getDescricao().toLowerCase() + "%"));
-		}
-		if(filter.isPaga() != null) {
-			if(!filter.isPaga()) {
-				predicates.add(builder.isNull(root.get("dataRealizada")));
-			}
-			if(filter.isPaga()) {
-				predicates.add(builder.isNotNull(root.get("dataRealizada")));
-			}
 		}
 			
 		return predicates.toArray(new Predicate[predicates.size()]);

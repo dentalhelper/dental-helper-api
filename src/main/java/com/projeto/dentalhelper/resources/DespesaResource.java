@@ -36,18 +36,22 @@ public class DespesaResource implements DespesaApi{
 	@Override
 	public ResponseEntity<Despesa> post(@Valid Despesa objeto, HttpServletResponse response) {
 		Despesa objetoSalvo = null;
+		
 
 		try {
 			objetoSalvo = salvar(objeto);
 		} catch (ServiceApplicationException e) {
-//			lancarExceptionComLocation(e);
+			
 		}
+
 		Long codigo = objetoSalvo.getCodigo();
 		adicionarHeaderLocation(response, codigo);
 		adicionarLink(objetoSalvo, codigo);
 		return ResponseEntity.status(HttpStatus.CREATED).body(objetoSalvo);
 
 	}
+	
+	
 	private Despesa salvar(Despesa objeto) throws ServiceApplicationException {
 		return service.salvar(objeto);
 	}
@@ -74,11 +78,11 @@ public class DespesaResource implements DespesaApi{
 		return objeto != null ? ResponseEntity.ok(objeto) : ResponseEntity.notFound().build();
 	}
 
-	@Override
-	public ResponseEntity<Despesa> put(Long codigo, @Valid Despesa objetoModificado) {
-		Despesa objetoEditado = service.atualizar(codigo, objetoModificado);
-		return ResponseEntity.ok(objetoEditado);
-	}
+//	@Override
+//	public ResponseEntity<Despesa> put(Long codigo, @Valid Despesa objetoModificado) {
+//		Despesa objetoEditado = service.atualizar(codigo, objetoModificado);
+//		return ResponseEntity.ok(objetoEditado);
+//	}
 
 	@Override
 	public ResponseEntity<Void> delete(Long codigo) {
