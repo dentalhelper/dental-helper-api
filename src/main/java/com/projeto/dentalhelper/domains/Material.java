@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -25,8 +26,10 @@ public class Material extends ObjetoIdentificado{
 	@Size( max = 50)
 	private String fabricante;	
 	
-	@OneToMany
-	private List<AtributoMaterial> atributoMaterial;
+	@OneToMany()
+	@JoinColumn(name = "codigo_material")
+	private List<AtributoMaterial> atributoMateriais;
+	
 	public String getNome() {
 		return nome;
 	}
@@ -39,12 +42,13 @@ public class Material extends ObjetoIdentificado{
 	public void setFabricante(String fabricante) {
 		this.fabricante = fabricante;
 	}
-	public List<AtributoMaterial> getAtributoMaterial() {
-		return atributoMaterial;
+	public List<AtributoMaterial> getAtributoMateriais() {
+		return atributoMateriais;
 	}
-	public void setAtributoMaterial(List<AtributoMaterial> atributoMaterial) {
-		this.atributoMaterial = atributoMaterial;
+	public void setAtributoMateriais(List<AtributoMaterial> atributoMateriais) {
+		this.atributoMateriais = atributoMateriais;
 	}
+
 	
 	
 

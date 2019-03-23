@@ -37,12 +37,8 @@ public class Despesa extends ObjetoIdentificado{
 	
 
 	@JoinColumn(name = "codigo_pagamento")
-	@OneToOne()
+	@OneToOne(cascade = CascadeType.REMOVE)
 	private Pagamento pagamento;
-	
-	@JsonIgnore
-	@OneToMany()
-	private List<CompraMaterial> ListaDeMateriais;
 
 	public Float getValor() {
 		return valor;
