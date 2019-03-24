@@ -11,7 +11,7 @@ CREATE TABLE despesa(
     
 )ENGINE=innoDB DEFAULT charset=utf8;
 
-INSERT INTO despesa(valor, descricao, codigo_categoria, codigo_pagamento) values (6500.00 ,'Compra de equipamentos', 5, 1);
+INSERT INTO despesa(valor, descricao, codigo_categoria, codigo_pagamento) values (6500.00 ,'Compra de equipamentos', 3, 1);
 INSERT INTO despesa(valor, descricao, codigo_categoria, codigo_pagamento) values (30.00 ,'Compra de alimentos', 2, 2);
 INSERT INTO despesa(valor, descricao, codigo_categoria, codigo_pagamento) values (500.00 ,'Compra de materiais', 3, 3);
 INSERT INTO despesa(valor, descricao, codigo_categoria, codigo_pagamento) values (600.00 ,'Salário da Recepcionista', 4, 4);

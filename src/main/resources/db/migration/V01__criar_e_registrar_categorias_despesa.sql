@@ -9,5 +9,4 @@ INSERT INTO categoria_despesa
 ('Internet'),
 ('Alimentação'),
 ('Materiais'),
-('Salário'),
-('Outros');
+('Salário');

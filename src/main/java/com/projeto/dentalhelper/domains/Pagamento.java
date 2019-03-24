@@ -2,35 +2,29 @@ package com.projeto.dentalhelper.domains;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "pagamento")
-public class Pagamento extends ObjetoIdentificado{
+public class Pagamento extends ObjetoIdentificado {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@NotNull
-	private Date data;
-	
+	private Date dataPagamento;
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private FormaDePagamento forma;
-	
+
 	private Float valor;
-	
+
 	@Enumerated(EnumType.STRING)
 	private TipoPagamento tipo;
 
-	public Date getData() {
-		return data;
+	public Date getDataPagamento() {
+		return dataPagamento;
 	}
 
 	public FormaDePagamento getForma() {
@@ -45,8 +39,8 @@ public class Pagamento extends ObjetoIdentificado{
 		return tipo;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setDataPagamento(Date dataPagamento) {
+		this.dataPagamento = dataPagamento;
 	}
 
 	public void setForma(FormaDePagamento formaDePagamento) {
@@ -60,10 +54,5 @@ public class Pagamento extends ObjetoIdentificado{
 	public void setTipo(TipoPagamento tipo) {
 		this.tipo = tipo;
 	}
-	
-	
-	
-	
-	
-	
+
 }
