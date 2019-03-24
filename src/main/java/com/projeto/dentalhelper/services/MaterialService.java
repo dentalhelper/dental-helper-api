@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.projeto.dentalhelper.domains.AtributoMaterial;
 import com.projeto.dentalhelper.domains.Material;
 import com.projeto.dentalhelper.repositories.MaterialRepository;
+import com.projeto.dentalhelper.repositories.filter.MaterialFilter;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
@@ -57,5 +58,12 @@ public class MaterialService extends AbstractService<Material, MaterialRepositor
 		objetoModificado.setAtributoMateriais(atributos);
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
 		return repository.save(objetoAtualizado);
+	}
+	
+	
+	public List<Material> filtrar(MaterialFilter filter){
+		
+		return repository.filtrar(filter);
+		
 	}
 }

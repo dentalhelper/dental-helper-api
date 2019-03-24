@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projeto.dentalhelper.domains.Pagamento;
 
+import io.swagger.annotations.ApiOperation;
+
 @RequestMapping(value = "pagamentos")
 public interface PagamentoApi {
 	
+	@ApiOperation(value="Busca todos os pagamentos")
 	@GetMapping
 	public List<Pagamento> getAll();
 
