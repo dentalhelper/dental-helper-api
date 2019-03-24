@@ -5,6 +5,9 @@ import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.projeto.dentalhelper.domains.enums.FormaDePagamento;
+import com.projeto.dentalhelper.domains.enums.TipoPagamento;
+
 @Entity
 @Table(name = "pagamento")
 public class Pagamento extends ObjetoIdentificado {
@@ -15,28 +18,27 @@ public class Pagamento extends ObjetoIdentificado {
 	private Date dataPagamento;
 
 	@NotNull
-	@Enumerated(EnumType.STRING)
-	private FormaDePagamento forma;
+	private Integer forma;
 
 	private Float valor;
 
-	@Enumerated(EnumType.STRING)
-	private TipoPagamento tipo;
+	@NotNull
+	private Integer tipo;
 
 	public Date getDataPagamento() {
 		return dataPagamento;
 	}
 
-	public FormaDePagamento getForma() {
-		return forma;
+	public String getForma() {
+		return FormaDePagamento.toEnum(forma).getDescricao();
 	}
 
 	public Float getValor() {
 		return valor;
 	}
 
-	public TipoPagamento getTipo() {
-		return tipo;
+	public String getTipo() {
+		return TipoPagamento.toEnum(tipo).getDescricao();
 	}
 
 	public void setDataPagamento(Date dataPagamento) {
@@ -44,15 +46,15 @@ public class Pagamento extends ObjetoIdentificado {
 	}
 
 	public void setForma(FormaDePagamento formaDePagamento) {
-		this.forma = formaDePagamento;
+		this.forma = formaDePagamento.getCodigo();
 	}
 
 	public void setValor(Float valor) {
 		this.valor = valor;
 	}
 
-	public void setTipo(TipoPagamento tipo) {
-		this.tipo = tipo;
+	public void setTipo(TipoPagamento tipoPagamento) {
+		this.tipo = tipoPagamento.getCodigo();
 	}
 
 }

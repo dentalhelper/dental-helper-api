@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.domains.Pagamento;
-import com.projeto.dentalhelper.domains.TipoPagamento;
+import com.projeto.dentalhelper.domains.enums.TipoPagamento;
 import com.projeto.dentalhelper.repositories.DespesaRepository;
 import com.projeto.dentalhelper.repositories.filter.DespesaFilter;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
