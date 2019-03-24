@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.domains.Pagamento;
+import com.projeto.dentalhelper.domains.TipoPagamento;
 import com.projeto.dentalhelper.repositories.DespesaRepository;
 import com.projeto.dentalhelper.repositories.filter.DespesaFilter;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
@@ -36,8 +37,10 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository>{
 
 		objeto.getPagamento().setValor(objeto.getValor());
 		
+		
 		Pagamento pagamento = objeto.getPagamento();
 		pagamento.setValor(objeto.getValor());
+		pagamento.setTipo(TipoPagamento.DESPESA);
 		
 		objeto.setPagamento(pagamentoService.salvar(pagamento));
 		
@@ -48,6 +51,7 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository>{
 	@Override
 	public Despesa atualizar(Long codigo, Despesa objetoModificado) {	
 		objetoModificado.getPagamento().setValor(objetoModificado.getValor());
+		objetoModificado.getPagamento().setTipo(TipoPagamento.DESPESA);
 		Despesa objetoAtualizado = buscarPorCodigo(codigo);
 		
 		Pagamento pagamento = pagamentoService.buscarPorCodigo(objetoAtualizado.getPagamento().getCodigo());
@@ -60,24 +64,6 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository>{
 		return repository.save(objetoAtualizado);
 	}
 	
-//	@Override
-//	public void deletar (Long codigo)   {
-//		Despesa despesa = buscarPorCodigo(codigo);
-//		Pagamento pagamento = despesa.getPagamento();
-//		despesa.setPagamento(null);
-//		
-//		repository.save(despesa);
-//		
-//		try {
-//			repository.deleteById(codigo);
-//			if(pagamento != null) {
-//				pagamentoService.deletar(pagamento.getCodigo());
-//			}
-//
-//		} catch (DataIntegrityViolationException e) {
-//			lancarIntegridadeDeDadosException(e);
-//		}
-//	}
 	
 	
 

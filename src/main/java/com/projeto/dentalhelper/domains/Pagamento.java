@@ -26,7 +26,6 @@ public class Pagamento extends ObjetoIdentificado{
 	
 	private Float valor;
 	
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TipoPagamento tipo;
 

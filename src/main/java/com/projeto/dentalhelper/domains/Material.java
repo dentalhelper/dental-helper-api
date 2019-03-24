@@ -26,7 +26,7 @@ public class Material extends ObjetoIdentificado{
 	@Size( max = 50)
 	private String fabricante;	
 	
-	@OneToMany()
+	@OneToMany(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "codigo_material")
 	private List<AtributoMaterial> atributoMateriais;
 	
