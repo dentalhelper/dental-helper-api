@@ -35,7 +35,7 @@ public class Despesa extends ObjetoIdentificado{
 	@JoinColumn(name = "codigo_categoria")
 	private CategoriaDespesa categoria;
 	
-
+	@NotNull
 	@JoinColumn(name = "codigo_pagamento")
 	@OneToOne(cascade = CascadeType.REMOVE)
 	private Pagamento pagamento;

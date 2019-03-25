@@ -16,8 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.domains.Material;
 import com.projeto.dentalhelper.events.RecursoCriadoEvent;
+import com.projeto.dentalhelper.repositories.filter.MaterialFilter;
 import com.projeto.dentalhelper.resources.api.MaterialApi;
 import com.projeto.dentalhelper.services.MaterialService;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
@@ -64,8 +66,8 @@ public class MaterialResource implements MaterialApi{
 	}
 	
 	@Override
-	public List<Material> getAll() {
-		List<Material> objetos = service.buscarTodos();
+	public List<Material> getByFilter(MaterialFilter filter) {
+		List<Material> objetos = service.filtrar(filter);
 
 		return adicionarReferencia(objetos);
 	}
