@@ -47,10 +47,10 @@ public class DespesaRepositoryImpl implements DespesaRepositoryQuery{
 			
 		}
 		if(filter.getDataPagamentoDe() != null) {
-			predicates.add(builder.greaterThanOrEqualTo(root.join("pagamento").<Date>get("data_pagamento"), filter.getDataPagamentoDe()));
+			predicates.add(builder.greaterThanOrEqualTo(root.join("pagamento").<Date>get("dataPagamento"), filter.getDataPagamentoDe()));
 		}
 		if(filter.getDataPagamentoAte() != null) {
-			predicates.add(builder.lessThanOrEqualTo(root.join("pagamento").<Date>get("data_pagamento"), filter.getDataPagamentoAte()));
+			predicates.add(builder.lessThanOrEqualTo(root.join("pagamento").<Date>get("dataPagamento"), filter.getDataPagamentoAte()));
 		}
 		if(filter.getDescricao() != null) {
 			predicates.add(builder.like(builder.lower(root.get("descricao")), "%" + filter.getDescricao().toLowerCase() + "%"));
