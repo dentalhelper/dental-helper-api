@@ -15,6 +15,7 @@ public class Pagamento extends ObjetoIdentificado {
 	private static final long serialVersionUID = 1L;
 
 	@NotNull
+	@Temporal(TemporalType.DATE)
 	private Date dataPagamento;
 
 	@NotNull
@@ -29,16 +30,16 @@ public class Pagamento extends ObjetoIdentificado {
 		return dataPagamento;
 	}
 
-	public String getForma() {
-		return FormaDePagamento.toEnum(forma).getDescricao();
+	public FormaDePagamento getForma() {
+		return FormaDePagamento.toEnum(forma);
 	}
 
 	public Float getValor() {
 		return valor;
 	}
 
-	public String getTipo() {
-		return TipoPagamento.toEnum(tipo).getDescricao();
+	public TipoPagamento getTipo() {
+		return TipoPagamento.toEnum(tipo);
 	}
 
 	public void setDataPagamento(Date dataPagamento) {
