@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Procedimento;
@@ -63,8 +64,8 @@ public class ProcedimentoResource implements ProcedimentoApi{
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, codigo));
 	}
 
-	public List<Procedimento> getAll() {
-		List<Procedimento> objetos = service.buscarTodos();
+	public List<Procedimento> getByNome(@RequestParam(required = false, defaultValue = "%") String nome) {
+		List<Procedimento> objetos = service.pesquisar(nome);
 		return adicionarReferencia(objetos);
 	}
 

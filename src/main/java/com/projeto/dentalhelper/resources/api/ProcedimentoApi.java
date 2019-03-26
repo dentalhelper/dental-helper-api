@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.projeto.dentalhelper.domains.Procedimento;
 
@@ -28,9 +29,9 @@ public interface ProcedimentoApi {
 	public ResponseEntity<Procedimento> post(@Valid @RequestBody Procedimento objeto,
 			HttpServletResponse response);
 
-	@ApiOperation(value="Busca todas os procedimentos")
+	@ApiOperation(value="Busca todos os procedimentos ou procedimentos filtrados pelo nome")
 	@GetMapping
-	public List<Procedimento> getAll();
+	public List<Procedimento> getByNome(@RequestParam(required = false, defaultValue = "%") String nome);
 	
 	@ApiOperation(value="Busca um procedimento por código")
 	@GetMapping(value = "/{codigo}")

@@ -35,6 +35,10 @@ public class ProcedimentoService extends AbstractService<Procedimento, Procedime
 		return repository.findByNomeEquals(nome);
 	}
 	
+	public List<Procedimento> pesquisar(String nome) {
+		return repository.findByNomeContaining(nome);
+	}
+	
 	private Procedimento obterProcedimentoExistente(List<Procedimento> listaDeObjetos) {
 		return listaDeObjetos.get(PRIMEIRO_ITEM);
 	}
