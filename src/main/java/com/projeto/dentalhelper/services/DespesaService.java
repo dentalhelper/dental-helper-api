@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.projeto.dentalhelper.domains.CategoriaDespesa;
 import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.domains.Pagamento;
 import com.projeto.dentalhelper.domains.enums.TipoPagamento;
@@ -20,6 +20,9 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository>{
 	@Autowired
 	private PagamentoService pagamentoService;
 	
+	@Autowired
+	private CategoriaDespesaService categoriaService;
+	
 	public List<Despesa> filtrar(DespesaFilter filter){
 		
 		return repository.filtrar(filter);
@@ -31,8 +34,9 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository>{
 	public Despesa salvar(Despesa objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
 		
-		if(objeto.getDescricao() == null || objeto.getDescricao() == "") {
-			objeto.setDescricao(objeto.getCategoria().getNome());
+		if(objeto.getDescricao() == null) {
+			CategoriaDespesa cat = categoriaService.buscarPorCodigo(objeto.getCategoria().getCodigo());
+			objeto.setDescricao(cat.getNome());
 		}
 
 		objeto.getPagamento().setValor(objeto.getValor());
@@ -49,9 +53,17 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository>{
 	}
 	
 	@Override
-	public Despesa atualizar(Long codigo, Despesa objetoModificado) {	
+	public Despesa atualizar(Long codigo, Despesa objetoModificado) throws ServiceApplicationException{	
+		
 		objetoModificado.getPagamento().setValor(objetoModificado.getValor());
 		objetoModificado.getPagamento().setTipo(TipoPagamento.DESPESA);
+		
+		if(objetoModificado.getDescricao() == null) {
+			CategoriaDespesa cat = categoriaService.buscarPorCodigo(objetoModificado.getCategoria().getCodigo());
+			objetoModificado.setDescricao(cat.getNome());
+		}
+		
+		
 		Despesa objetoAtualizado = buscarPorCodigo(codigo);
 		
 		Pagamento pagamento = pagamentoService.buscarPorCodigo(objetoAtualizado.getPagamento().getCodigo());

@@ -29,7 +29,7 @@ public class MaterialService extends AbstractService<Material, MaterialRepositor
 	}
 	
 	@Override
-	public Material atualizar(Long codigo, Material objetoModificado) {	
+	public Material atualizar(Long codigo, Material objetoModificado) throws ServiceApplicationException{	
 		Material objetoAtualizado = buscarPorCodigo(codigo);
 		
 		

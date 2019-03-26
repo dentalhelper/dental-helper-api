@@ -80,8 +80,17 @@ public class ProcedimentoResource implements ProcedimentoApi{
 	}
 
 	public ResponseEntity<Procedimento> put(Long codigo, @Valid Procedimento objetoModificado) {
-		Procedimento objetoEditado = service.atualizar(codigo, objetoModificado);
+		Procedimento objetoEditado = null;
+		try {
+			objetoEditado = atualizar(codigo, objetoModificado);
+		} catch (ServiceApplicationException e) {
+			lancarExceptionComLocation(e);
+		}
 		return ResponseEntity.ok(objetoEditado);
+	}
+	
+	private Procedimento atualizar(Long codigo, Procedimento objetoModificado) throws ServiceApplicationException {
+		return service.atualizar(codigo, objetoModificado);
 	}
 
 	public ResponseEntity<Void> delete(Long codigo) {

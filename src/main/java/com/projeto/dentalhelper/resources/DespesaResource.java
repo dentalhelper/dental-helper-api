@@ -33,7 +33,7 @@ public class DespesaResource implements DespesaApi{
 	private ApplicationEventPublisher publisher;
 
 
-	@Override
+
 	public ResponseEntity<Despesa> post(@Valid Despesa objeto, HttpServletResponse response) {
 		Despesa objetoSalvo = null;
 		
@@ -64,27 +64,35 @@ public class DespesaResource implements DespesaApi{
 		objeto.add(linkTo(methodOn(this.getClass()).getByCodigo(codigo)).withSelfRel());
 	}
 	
-	@Override
+
 	public List<Despesa> getByFilter(DespesaFilter filter) {
 		List<Despesa> objetos = service.filtrar(filter);
 
 		return adicionarReferencia(objetos);
 	}
 
-	@Override
+
 	public ResponseEntity<Despesa> getByCodigo(@PathVariable Long codigo) {
 		Despesa objeto = service.buscarPorCodigo(codigo);
 		adicionarLink(objeto, codigo);
 		return objeto != null ? ResponseEntity.ok(objeto) : ResponseEntity.notFound().build();
 	}
 
-	@Override
+
 	public ResponseEntity<Despesa> put(Long codigo, @Valid Despesa objetoModificado) {
-		Despesa objetoEditado = service.atualizar(codigo, objetoModificado);
+		Despesa objetoEditado = null;
+		try {
+			objetoEditado = atualizar(codigo, objetoModificado);
+		} catch (ServiceApplicationException e) {}
 		return ResponseEntity.ok(objetoEditado);
 	}
+	
+	private Despesa atualizar(Long codigo,Despesa objetoModificado) throws ServiceApplicationException {
+		return service.atualizar(codigo, objetoModificado);
+	}
+	
 
-	@Override
+
 	public ResponseEntity<Void> delete(Long codigo) {
 		service.deletar(codigo);
 		return ResponseEntity.noContent().build();

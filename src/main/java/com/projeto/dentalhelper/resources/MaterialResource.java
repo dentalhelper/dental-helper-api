@@ -34,7 +34,7 @@ public class MaterialResource implements MaterialApi{
 	private ApplicationEventPublisher publisher;
 
 
-	@Override
+
 	public ResponseEntity<Material> post(@Valid Material objeto, HttpServletResponse response) {
 		Material objetoSalvo = null;
 		
@@ -65,27 +65,34 @@ public class MaterialResource implements MaterialApi{
 		objeto.add(linkTo(methodOn(this.getClass()).getByCodigo(codigo)).withSelfRel());
 	}
 	
-	@Override
+
 	public List<Material> getByFilter(MaterialFilter filter) {
 		List<Material> objetos = service.filtrar(filter);
 
 		return adicionarReferencia(objetos);
 	}
 
-	@Override
+
 	public ResponseEntity<Material> getByCodigo(@PathVariable Long codigo) {
 		Material objeto = service.buscarPorCodigo(codigo);
 		adicionarLink(objeto, codigo);
 		return objeto != null ? ResponseEntity.ok(objeto) : ResponseEntity.notFound().build();
 	}
 
-	@Override
+
 	public ResponseEntity<Material> put(Long codigo, @Valid Material objetoModificado) {
-		Material objetoEditado = service.atualizar(codigo, objetoModificado);
+		Material objetoEditado = null;
+		try {
+			objetoEditado = atualizar(codigo, objetoModificado);
+		} catch (ServiceApplicationException e) {}
 		return ResponseEntity.ok(objetoEditado);
 	}
+	
+	private Material atualizar(Long codigo, Material objetoModificado) throws ServiceApplicationException {
+		return service.atualizar(codigo, objetoModificado);
+	}
 
-	@Override
+
 	public ResponseEntity<Void> delete(Long codigo) {
 		service.deletar(codigo);
 		return ResponseEntity.noContent().build();

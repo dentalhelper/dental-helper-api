@@ -2,6 +2,7 @@ package com.projeto.dentalhelper.services;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Procedimento;
@@ -18,6 +19,9 @@ public class ProcedimentoService extends AbstractService<Procedimento, Procedime
 	public Procedimento salvar(Procedimento objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
 		nomeDoProcedimentoExiste(objeto);
+		if(objeto.getDescricao() == null) {
+			objeto.setDescricao(objeto.getNome());
+		}
 		return repository.save(objeto);
 	}
 	
@@ -29,6 +33,21 @@ public class ProcedimentoService extends AbstractService<Procedimento, Procedime
 			Procedimento procedimentoExistente = obterProcedimentoExistente(listaDeObjetos);
 			throw new RecursoNomeDuplicadoException(Long.toString(procedimentoExistente.getCodigo()));
 		}
+	}
+	
+	
+	@Override
+	public Procedimento atualizar(Long codigo, Procedimento objetoModificado) throws ServiceApplicationException{
+
+		nomeDoProcedimentoExiste(objetoModificado);
+
+		Procedimento objetoAtualizado = buscarPorCodigo(codigo);
+		if(objetoModificado.getDescricao() == null) {
+			objetoModificado.setDescricao(objetoModificado.getNome());
+		}
+		
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
+		return repository.save(objetoAtualizado);
 	}
 	
 	public List<Procedimento> buscarPeloNome(String nome) {

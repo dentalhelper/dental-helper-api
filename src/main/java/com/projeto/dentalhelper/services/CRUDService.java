@@ -14,7 +14,7 @@ public interface CRUDService<O extends ObjetoIdentificado> {
 
 	O buscarPorCodigo(Long codigo) throws ServiceApplicationRuntimeException;
 
-	O atualizar(Long codigo, O objetoModificado) throws ServiceApplicationRuntimeException;
+	O atualizar(Long codigo, O objetoModificado) throws ServiceApplicationRuntimeException, ServiceApplicationException;
 
 	void deletar(Long codigo) throws ServiceApplicationRuntimeException;
 }

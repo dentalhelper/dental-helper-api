@@ -23,7 +23,7 @@ public class Procedimento extends ObjetoIdentificado{
 	@Column(name = "valor")
 	private Float valorBase;
 	
-	@NotNull
+
 	@Size(max = 50)
 	private String descricao;
 	

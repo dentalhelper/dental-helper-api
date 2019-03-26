@@ -30,7 +30,7 @@ public class Despesa extends ObjetoIdentificado{
 	@Size( max = 50)
 	private String descricao;
 
-	
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "codigo_categoria")
 	private CategoriaDespesa categoria;

@@ -35,7 +35,7 @@ public abstract class AbstractService<O extends ObjetoIdentificado, R extends Jp
 	}
 
 	@Override
-	public O atualizar(Long codigo, O objetoModificado) {
+	public O atualizar(Long codigo, O objetoModificado) throws ServiceApplicationException{
 		O objetoAtualizado = buscarPorCodigo(codigo);
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
 		return repository.save(objetoAtualizado);

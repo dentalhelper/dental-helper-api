@@ -76,8 +76,17 @@ public class CategoriaDespesaResource implements CategoriaDespesaApi {
 	}
 
 	public ResponseEntity<CategoriaDespesa> put(Long codigo, @Valid CategoriaDespesa objetoModificado) {
-		CategoriaDespesa objetoEditado = service.atualizar(codigo, objetoModificado);
+		CategoriaDespesa objetoEditado = null;
+		try {
+			objetoEditado = atualizar(codigo, objetoModificado);
+		} catch (ServiceApplicationException e) {
+			lancarExceptionComLocation(e);
+		}
 		return ResponseEntity.ok(objetoEditado);
+	}
+	
+	private CategoriaDespesa atualizar(Long codigo, CategoriaDespesa objetoModificado) throws ServiceApplicationException {
+		return service.atualizar(codigo, objetoModificado);
 	}
 
 	public ResponseEntity<Void> delete(Long codigo) {
