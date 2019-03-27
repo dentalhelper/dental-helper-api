@@ -19,7 +19,7 @@ public class ProcedimentoService extends AbstractService<Procedimento, Procedime
 	public Procedimento salvar(Procedimento objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
 		nomeDoProcedimentoExiste(objeto);
-		if(objeto.getDescricao() == null) {
+		if(objeto.getDescricao() == null || objeto.getDescricao() == "") {
 			objeto.setDescricao(objeto.getNome());
 		}
 		return repository.save(objeto);
@@ -42,7 +42,7 @@ public class ProcedimentoService extends AbstractService<Procedimento, Procedime
 		nomeDoProcedimentoExiste(objetoModificado);
 
 		Procedimento objetoAtualizado = buscarPorCodigo(codigo);
-		if(objetoModificado.getDescricao() == null) {
+		if(objetoModificado.getDescricao() == null || objetoModificado.getDescricao() == "") {
 			objetoModificado.setDescricao(objetoModificado.getNome());
 		}
 		

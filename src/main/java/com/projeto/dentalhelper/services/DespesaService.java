@@ -34,7 +34,7 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository>{
 	public Despesa salvar(Despesa objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
 		
-		if(objeto.getDescricao() == null) {
+		if(objeto.getDescricao() == null || objeto.getDescricao() == "") {
 			CategoriaDespesa cat = categoriaService.buscarPorCodigo(objeto.getCategoria().getCodigo());
 			objeto.setDescricao(cat.getNome());
 		}
@@ -58,7 +58,7 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository>{
 		objetoModificado.getPagamento().setValor(objetoModificado.getValor());
 		objetoModificado.getPagamento().setTipo(TipoPagamento.DESPESA);
 		
-		if(objetoModificado.getDescricao() == null) {
+		if(objetoModificado.getDescricao() == null || objetoModificado.getDescricao() == "") {
 			CategoriaDespesa cat = categoriaService.buscarPorCodigo(objetoModificado.getCategoria().getCodigo());
 			objetoModificado.setDescricao(cat.getNome());
 		}
