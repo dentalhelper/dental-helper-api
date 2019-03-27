@@ -23,8 +23,12 @@ public class MaterialService extends AbstractService<Material, MaterialRepositor
 	public Material salvar(Material objeto) throws ServiceApplicationException {
 		
 		objeto.setCodigo(null);	
-		for(AtributoMaterial a: objeto.getAtributoMateriais()) {
-			atributoMaterialService.salvar(a);
+		if(objeto.getAtributoMateriais() != null) {
+			if(objeto.getAtributoMateriais().size() > 0) {
+				for(AtributoMaterial a: objeto.getAtributoMateriais()) {
+					atributoMaterialService.salvar(a);
+				}
+			}
 		}
 		return repository.save(objeto);
 	}
@@ -33,41 +37,29 @@ public class MaterialService extends AbstractService<Material, MaterialRepositor
 	public Material atualizar(Long codigo, Material objetoModificado) throws ServiceApplicationException{	
 		Material objetoAtualizado = buscarPorCodigo(codigo);
 		
-		
-//		List<AtributoMaterial> atributosModificados = objetoModificado.getAtributoMateriais();
-//		List<AtributoMaterial> atributos = objetoAtualizado.getAtributoMateriais();
-//		
-//
-//		for(int i = 0; i<atributos.size(); i++) {
-//			AtributoMaterial a = atributoMaterialService.buscarPorCodigo(new Long(atributos.get(i).getCodigo()));
-//			atributos.set(i, atributoMaterialService.atualizar(a.getCodigo(), atributosModificados.get(i)));
-//				
-//		}
-//
-//		if(atributosModificados.size() != atributos.size()) {
-//			for(int i = atributos.size(); i<atributosModificados.size();i++) {
-//				AtributoMaterial salvo = null;
-//				try {
-//					salvo = atributoMaterialService.salvar(atributosModificados.get(i));
-//				} catch (ServiceApplicationException e) {
-//
-//				}
-//				atributos.add(salvo);
-//			}
-//		}
-//		
-//		objetoModificado.setAtributoMateriais(atributos);
-		for(AtributoMaterial a : objetoAtualizado.getAtributoMateriais()) {
-			atributoMaterialService.deletar(a.getCodigo());
+		if(objetoAtualizado.getAtributoMateriais() != null) {
+			if(objetoAtualizado.getAtributoMateriais().size() > 0) {
+				for(AtributoMaterial a : objetoAtualizado.getAtributoMateriais()) {
+					atributoMaterialService.deletar(a.getCodigo());
+				}
+			}
 		}
+		
+		
 		objetoAtualizado.setAtributoMateriais(null);
 		
 		List<AtributoMaterial> atributos = new ArrayList<AtributoMaterial>();
-		for(AtributoMaterial a : objetoModificado.getAtributoMateriais()) {
-			atributos.add(atributoMaterialService.salvar(a));
-
-		}
 		
+		if(objetoModificado.getAtributoMateriais() != null) {
+			if(objetoModificado.getAtributoMateriais().size() > 0) {
+		
+				for(AtributoMaterial a : objetoModificado.getAtributoMateriais()) {
+					atributos.add(atributoMaterialService.salvar(a));
+		
+				}
+		
+			}
+		}
 		objetoModificado.setAtributoMateriais(atributos);
 		
 		
