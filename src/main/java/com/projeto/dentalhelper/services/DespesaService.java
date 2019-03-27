@@ -39,14 +39,13 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository>{
 			objeto.setDescricao(cat.getNome());
 		}
 
-		objeto.getPagamento().setValor(objeto.getValor());
-		
 		
 		Pagamento pagamento = objeto.getPagamento();
 		pagamento.setValor(objeto.getValor());
 		pagamento.setTipo(TipoPagamento.DESPESA);
 		
 		objeto.setPagamento(pagamentoService.salvar(pagamento));
+		
 		
 		
 		return repository.save(objeto);

@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -38,6 +39,7 @@ public class Despesa extends ObjetoIdentificado{
 	@NotNull
 	@JoinColumn(name = "codigo_pagamento")
 	@OneToOne(cascade = CascadeType.REMOVE)
+	@Valid
 	private Pagamento pagamento;
 
 	public Float getValor() {

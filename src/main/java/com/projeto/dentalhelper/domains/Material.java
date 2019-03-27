@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -28,6 +29,7 @@ public class Material extends ObjetoIdentificado{
 	
 	@OneToMany(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "codigo_material")
+	@Valid
 	private List<AtributoMaterial> atributoMateriais;
 	
 	public String getNome() {

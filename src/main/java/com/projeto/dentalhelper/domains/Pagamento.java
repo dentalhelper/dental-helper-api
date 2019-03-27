@@ -23,7 +23,7 @@ public class Pagamento extends ObjetoIdentificado {
 
 	private Float valor;
 
-	@NotNull
+
 	private Integer tipo;
 
 	public Date getDataPagamento() {
