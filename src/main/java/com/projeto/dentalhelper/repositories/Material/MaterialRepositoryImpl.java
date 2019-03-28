@@ -1,7 +1,6 @@
 package com.projeto.dentalhelper.repositories.Material;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -12,7 +11,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.domains.Material;
 import com.projeto.dentalhelper.repositories.filter.MaterialFilter;
 

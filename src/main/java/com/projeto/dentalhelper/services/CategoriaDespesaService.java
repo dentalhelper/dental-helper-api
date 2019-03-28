@@ -6,9 +6,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.CategoriaDespesa;
-import com.projeto.dentalhelper.domains.Procedimento;
 import com.projeto.dentalhelper.repositories.CategoriaDespesaRepository;
-import com.projeto.dentalhelper.services.exceptions.*;
+import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
 public class CategoriaDespesaService extends AbstractService<CategoriaDespesa, CategoriaDespesaRepository> {
