@@ -2,11 +2,13 @@ package com.projeto.dentalhelper.services;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.CategoriaDespesa;
 import com.projeto.dentalhelper.repositories.CategoriaDespesaRepository;
-import com.projeto.dentalhelper.services.exceptions.*;
+import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
 public class CategoriaDespesaService extends AbstractService<CategoriaDespesa, CategoriaDespesaRepository> {
@@ -36,6 +38,16 @@ public class CategoriaDespesaService extends AbstractService<CategoriaDespesa, C
 
 	private CategoriaDespesa obterCategoriaExistente(List<CategoriaDespesa> listaDeObjetos) {
 		return listaDeObjetos.get(PRIMEIRO_ITEM);
+	}
+	
+	public CategoriaDespesa atualizar(Long codigo, CategoriaDespesa objetoModificado) throws ServiceApplicationException{
+
+		nomeDeCategoriaExiste(objetoModificado);
+
+		CategoriaDespesa objetoAtualizado = buscarPorCodigo(codigo);
+		
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
+		return repository.save(objetoAtualizado);
 	}
 
 }

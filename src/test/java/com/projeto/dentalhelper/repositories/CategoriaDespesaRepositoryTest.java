@@ -19,6 +19,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.projeto.dentalhelper.domains.CategoriaDespesa;
+import com.projeto.dentalhelper.domains.ObjetoIdentificado;
 import com.projeto.dentalhelper.services.CategoriaDespesaService;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
 
@@ -54,7 +55,7 @@ public class CategoriaDespesaRepositoryTest {
 
 		exceptedException.expect(ObjetoNaoEncontradoException.class);
 		exceptedException.expectMessage("Objeto não encontrado! Id: " + categoria.getCodigo() + ", Tipo: "
-				+ CategoriaDespesa.class.getName());
+				+ ObjetoIdentificado.class.getName());
 
 		this.service.buscarPorCodigo(categoria.getCodigo());
 	}
@@ -128,7 +129,7 @@ public class CategoriaDespesaRepositoryTest {
 
 		exceptedException.expect(ObjetoNaoEncontradoException.class);
 		exceptedException.expectMessage(
-				"Objeto não encontrado! Id: " + idInexistente + ", Tipo: " + CategoriaDespesa.class.getName());
+				"Objeto não encontrado! Id: " + idInexistente + ", Tipo: " + ObjetoIdentificado.class.getName());
 
 		this.service.buscarPorCodigo(idInexistente);
 	}

@@ -110,8 +110,10 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpStatus status = HttpStatus.CONFLICT;
 		String mensagemUsuario = montarMensagemUsuario("recurso.nome-duplicado");
 		String mensagemDesenvolvedor = exception.toString();
-		List<ErroMensagem> responseBody = montarResponseBody(status, mensagemUsuario, mensagemDesenvolvedor);
-		
+		String resourceLocation = exception.getLinkRecurso();
+		List<ErroMensagemConflict> responseBody = Arrays.asList(new ErroMensagemConflict(mensagemUsuario,
+				mensagemDesenvolvedor, status.value(), System.currentTimeMillis(), resourceLocation));
+
 		return ResponseEntity.status(status).header("Location", exception.getLinkRecurso()).body(responseBody);
 	}
 

@@ -14,34 +14,34 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.projeto.dentalhelper.domains.CategoriaDespesa;
+import com.projeto.dentalhelper.domains.Material;
+import com.projeto.dentalhelper.repositories.filter.MaterialFilter;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@RequestMapping(value = "/categorias-despesa")
-public interface CategoriaDespesaApi {
-
-	@ApiOperation(value="Salva uma categoria")
+@RequestMapping(value = "/materiais")
+public interface MaterialApi {
+	
+	@ApiOperation(value="Salva um material")
 	@PostMapping(value = "/novo")
-	public ResponseEntity<CategoriaDespesa> post(@Valid @RequestBody CategoriaDespesa objeto,
+	public ResponseEntity<Material> post(@Valid @RequestBody Material objeto,
 			HttpServletResponse response);
-
-	@ApiOperation(value="Busca todas as categorias")
+	
+	@ApiOperation(value="Busca materiais por filtro")
 	@GetMapping
-	public List<CategoriaDespesa> getAll();
+	public List<Material> getByFilter(MaterialFilter filter);
 	
-	@ApiOperation(value="Busca uma categoria por código")
+	@ApiOperation(value="Busca um material por código")
 	@GetMapping(value = "/{codigo}")
-	public ResponseEntity<CategoriaDespesa> getByCodigo(@PathVariable Long codigo);
-
-	@ApiOperation(value="Atualiza uma categoria")
-	@PutMapping(value = "/{codigo}")
-	public ResponseEntity<CategoriaDespesa> put(@PathVariable Long codigo,
-			@Valid @RequestBody CategoriaDespesa objeto);
+	public ResponseEntity<Material> getByCodigo(@PathVariable Long codigo);
 	
-	@ApiOperation(value="Deleta uma categoria")
+	@ApiOperation(value="Atualiza um material e seus atributos")
+	@PutMapping(value = "/{codigo}")
+	public ResponseEntity <Material> put(@PathVariable Long codigo,@Valid @RequestBody Material objeto);
+	
+	@ApiOperation(value="Deleta um material com seus atributos")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = "Integridade de dados violada, não é possível excluir um recurso que está relacionado à outro."),
 			@ApiResponse(code = 404, message = "Código inexistente.") })

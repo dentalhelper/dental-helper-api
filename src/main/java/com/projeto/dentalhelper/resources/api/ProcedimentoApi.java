@@ -13,38 +13,40 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.projeto.dentalhelper.domains.CategoriaDespesa;
+import com.projeto.dentalhelper.domains.Procedimento;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@RequestMapping(value = "/categorias-despesa")
-public interface CategoriaDespesaApi {
-
-	@ApiOperation(value="Salva uma categoria")
+@RequestMapping(value = "/procedimentos")
+public interface ProcedimentoApi {
+	
+	@ApiOperation(value="Salva um procedimento")
 	@PostMapping(value = "/novo")
-	public ResponseEntity<CategoriaDespesa> post(@Valid @RequestBody CategoriaDespesa objeto,
+	public ResponseEntity<Procedimento> post(@Valid @RequestBody Procedimento objeto,
 			HttpServletResponse response);
 
-	@ApiOperation(value="Busca todas as categorias")
+	@ApiOperation(value="Busca todos os procedimentos ou procedimentos filtrados pelo nome")
 	@GetMapping
-	public List<CategoriaDespesa> getAll();
+	public List<Procedimento> getByNome(@RequestParam(required = false, defaultValue = "%") String nome);
 	
-	@ApiOperation(value="Busca uma categoria por código")
+	@ApiOperation(value="Busca um procedimento por código")
 	@GetMapping(value = "/{codigo}")
-	public ResponseEntity<CategoriaDespesa> getByCodigo(@PathVariable Long codigo);
+	public ResponseEntity<Procedimento> getByCodigo(@PathVariable Long codigo);
 
-	@ApiOperation(value="Atualiza uma categoria")
+	@ApiOperation(value="Atualiza um procedimento")
 	@PutMapping(value = "/{codigo}")
-	public ResponseEntity<CategoriaDespesa> put(@PathVariable Long codigo,
-			@Valid @RequestBody CategoriaDespesa objeto);
+	public ResponseEntity<Procedimento> put(@PathVariable Long codigo,
+			@Valid @RequestBody Procedimento objeto);
 	
-	@ApiOperation(value="Deleta uma categoria")
+	@ApiOperation(value="Deleta um procedimento")
 	@ApiResponses(value = {
-			@ApiResponse(code = 400, message = "Integridade de dados violada, não é possível excluir um recurso que está relacionado à outro."),
+//			@ApiResponse(code = 400, message = "Integridade de dados violada, não é possível excluir um recurso que está relacionado à outro."),
 			@ApiResponse(code = 404, message = "Código inexistente.") })
 	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> delete(@PathVariable Long codigo);
+
 }

@@ -31,11 +31,11 @@ public abstract class AbstractService<O extends ObjetoIdentificado, R extends Jp
 	public O buscarPorCodigo(Long codigo) {
 		Optional<O> objeto = repository.findById(codigo);
 		return objeto.orElseThrow(() -> new ObjetoNaoEncontradoException(
-				"Objeto não encontrado! Id: " + codigo + ", Tipo: " + CategoriaDespesa.class.getName()));
+				"Objeto não encontrado! Id: " + codigo + ", Tipo: " + ObjetoIdentificado.class.getName()));
 	}
 
 	@Override
-	public O atualizar(Long codigo, O objetoModificado) {
+	public O atualizar(Long codigo, O objetoModificado) throws ServiceApplicationException{
 		O objetoAtualizado = buscarPorCodigo(codigo);
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
 		return repository.save(objetoAtualizado);
@@ -52,7 +52,7 @@ public abstract class AbstractService<O extends ObjetoIdentificado, R extends Jp
 		}
 	}
 
-	private void lancarIntegridadeDeDadosException(DataIntegrityViolationException e) {
+	public void lancarIntegridadeDeDadosException(DataIntegrityViolationException e) {
 		throw new IntegridadeDeDadosException(
 				"Integridade de dados violada, não é possível excluir um recurso que está relacionado à outro.");
 	}
