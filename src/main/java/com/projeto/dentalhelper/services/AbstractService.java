@@ -31,7 +31,7 @@ public abstract class AbstractService<O extends ObjetoIdentificado, R extends Jp
 	public O buscarPorCodigo(Long codigo) {
 		Optional<O> objeto = repository.findById(codigo);
 		return objeto.orElseThrow(() -> new ObjetoNaoEncontradoException(
-				"Objeto não encontrado! Id: " + codigo + ", Tipo: " + CategoriaDespesa.class.getName()));
+				"Objeto não encontrado! Id: " + codigo + ", Tipo: " + ObjetoIdentificado.class.getName()));
 	}
 
 	@Override

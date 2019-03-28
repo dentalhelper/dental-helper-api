@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -27,7 +28,7 @@ public class Material extends ObjetoIdentificado{
 	@Size( max = 50)
 	private String fabricante;	
 	
-	@OneToMany(cascade = CascadeType.REMOVE)
+	@OneToMany(cascade = { CascadeType.REMOVE})
 	@JoinColumn(name = "codigo_material")
 	@Valid
 	private List<AtributoMaterial> atributoMateriais;
