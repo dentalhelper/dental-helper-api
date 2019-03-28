@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.domains.Material;
 import com.projeto.dentalhelper.events.RecursoCriadoEvent;
 import com.projeto.dentalhelper.repositories.filter.MaterialFilter;
@@ -32,8 +31,6 @@ public class MaterialResource implements MaterialApi{
 
 	@Autowired
 	private ApplicationEventPublisher publisher;
-
-
 
 	public ResponseEntity<Material> post(@Valid Material objeto, HttpServletResponse response) {
 		Material objetoSalvo = null;
