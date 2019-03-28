@@ -6,8 +6,10 @@ CREATE TABLE material(
 	
 )ENGINE=innoDB DEFAULT charset=utf8;
 
-INSERT INTO material(nome, fabricante) values ('pasta','colgate');
-INSERT INTO material(nome, fabricante) values ('fluor','colgate');
-INSERT INTO material(nome, fabricante) values ('corega','tabs');
-INSERT INTO material(nome, fabricante) values ('clareador','whitenning');
-INSERT INTO material(nome, fabricante) values ('braket','aroxys');
+INSERT INTO material
+(nome, fabricante) values 
+('Abaixador de Língua','Estilo'),
+('Aplicador','Cavibrush'),
+('Gesso Pedra','Durastone'),
+('Resina NT Premium','Coltene'),
+('Cimento Provisório','Hydropast');

@@ -66,7 +66,7 @@ public class MaterialRepositoryTest {
 	@Test
 	public void deveSalvarUmMaterialSemAtributo() throws Exception {
 		Material material = criarMaterialValido();
-		material.setAtributoMateriais(null);
+		material.getAtributoMateriais().clear();
 		material = this.service.salvar(material);
 
 		assertThat(material.getCodigo()).isNotNull();

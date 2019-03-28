@@ -10,8 +10,14 @@ CREATE TABLE atributo_material(
 	
 )ENGINE=innoDB DEFAULT charset=utf8;
 
-INSERT INTO atributo_material(nome, valor, codigo_material) values ('extra','silver',1);
-INSERT INTO atributo_material(nome, valor, codigo_material) values ('baby','show',2);
-INSERT INTO atributo_material(nome, valor, codigo_material) values ('vaptvolupt','treertyou',3);
-INSERT INTO atributo_material(nome, valor, codigo_material) values ('ponde','frigsfriort',4);
-INSERT INTO atributo_material(nome, valor, codigo_material) values ('growbs','anowwer',5);
+INSERT INTO atributo_material
+(nome, valor, codigo_material) values 
+('Tipo','Madeira',1),
+('Tipo','Micro',2),
+('Pontos de Dobra','2',2),
+('Tipo','III',3),
+('Peso','1 Kg',3),
+('Tipo','G1',4),
+('Local','Gengiva ',4),
+('pH','12.4',5),
+('Tipo','Biodinâmica',5);
