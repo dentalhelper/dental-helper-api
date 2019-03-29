@@ -18,19 +18,24 @@ public class ProcedimentoService extends AbstractService<Procedimento, Procedime
 	@Override
 	public Procedimento salvar(Procedimento objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
-		nomeDoProcedimentoExiste(objeto);
+		nomeDoProcedimentoExiste(objeto, null);
 		if(objeto.getDescricao() == null || objeto.getDescricao() == "") {
 			objeto.setDescricao(objeto.getNome());
 		}
 		return repository.save(objeto);
 	}
 	
-	private boolean nomeDoProcedimentoExiste(Procedimento objeto) throws RecursoNomeDuplicadoException {
+	private boolean nomeDoProcedimentoExiste(Procedimento objeto, Long codigoDoObjetoAtualizado) throws RecursoNomeDuplicadoException {
 		List<Procedimento> listaDeObjetos = buscarPeloNome(objeto.getNome());
 		if (listaDeObjetos.isEmpty()) {
 			return false;
 		} else {
 			Procedimento procedimentoExistente = obterProcedimentoExistente(listaDeObjetos);
+			if(codigoDoObjetoAtualizado != null) {
+				if(procedimentoExistente.getCodigo() == codigoDoObjetoAtualizado) {
+					return false;			
+				}
+			}
 			throw new RecursoNomeDuplicadoException(Long.toString(procedimentoExistente.getCodigo()));
 		}
 	}
@@ -39,7 +44,7 @@ public class ProcedimentoService extends AbstractService<Procedimento, Procedime
 	@Override
 	public Procedimento atualizar(Long codigo, Procedimento objetoModificado) throws ServiceApplicationException{
 
-		nomeDoProcedimentoExiste(objetoModificado);
+		nomeDoProcedimentoExiste(objetoModificado, codigo);
 
 		Procedimento objetoAtualizado = buscarPorCodigo(codigo);
 		if(objetoModificado.getDescricao() == null || objetoModificado.getDescricao() == "") {
