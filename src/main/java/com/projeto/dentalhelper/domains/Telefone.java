@@ -1,7 +1,10 @@
 package com.projeto.dentalhelper.domains;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -15,8 +18,13 @@ public class Telefone extends ObjetoIdentificado{
 	
 	@NotNull
 	private Integer ddd;
-	@NotNull
+	
+	@NotBlank
 	private String numero;
+	
+	@ManyToOne
+	@JoinColumn(name = "codigo_pessoa")
+	private Pessoa pessoa;
 	
 	public Integer getDdd() {
 		return ddd;
@@ -30,6 +38,13 @@ public class Telefone extends ObjetoIdentificado{
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
+	}
+	
 	
 	
 

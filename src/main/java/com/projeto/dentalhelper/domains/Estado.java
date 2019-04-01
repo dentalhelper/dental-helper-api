@@ -2,13 +2,18 @@ package com.projeto.dentalhelper.domains;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "estado")
-public class Estado {
+public class Estado extends ObjetoIdentificado{
 	
-	@NotNull
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	@NotBlank
 	private String nome;
 
 	public String getNome() {

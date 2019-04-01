@@ -1,12 +1,21 @@
 package com.projeto.dentalhelper.domains;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @MappedSuperclass
 public abstract class Pessoa extends ObjetoIdentificado{
@@ -17,22 +26,33 @@ public abstract class Pessoa extends ObjetoIdentificado{
 	private static final long serialVersionUID = 1L;
 
 	@Size( max = 50)
-	@NotNull
+	@NotBlank
 	private String nome;
 	
 	@NotNull
 	@Temporal(TemporalType.DATE)
 	private Date dataNascimento;
+	
 	@Size( max = 30)
+	@NotBlank
 	private String CPF;
+	
 	@Size( max = 20)
+	@NotBlank
 	private String RG;
+	
 	private String estadoCivil;
+	
 	@Size( max = 50)
 	private String email;
 	
-	private Telefone telefone;
+	@JsonIgnoreProperties("pessoa")
+	@Valid
+	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Telefone> telefones = new ArrayList<Telefone>();
 	
+	@OneToOne(cascade = CascadeType.REMOVE)
+	@Valid
 	private Endereco endereco;
 
 	public String getNome() {
@@ -83,13 +103,6 @@ public abstract class Pessoa extends ObjetoIdentificado{
 		this.email = email;
 	}
 
-	public Telefone getTelefone() {
-		return telefone;
-	}
-
-	public void setTelefone(Telefone telefone) {
-		this.telefone = telefone;
-	}
 
 	public Endereco getEndereco() {
 		return endereco;
@@ -98,6 +111,15 @@ public abstract class Pessoa extends ObjetoIdentificado{
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
+
+	public List<Telefone> getTelefones() {
+		return telefones;
+	}
+
+	public void setTelefones(List<Telefone> telefones) {
+		this.telefones = telefones;
+	}
+	
 	
 
 }

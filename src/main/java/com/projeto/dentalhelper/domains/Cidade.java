@@ -1,18 +1,26 @@
 package com.projeto.dentalhelper.domains;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "cidade")
-public class Cidade {
+public class Cidade extends ObjetoIdentificado{
 	
-	@NotNull
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@NotBlank
 	private String nome;
 	
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "codigo_estado")
 	private Estado estado;
 
 	public String getNome() {
