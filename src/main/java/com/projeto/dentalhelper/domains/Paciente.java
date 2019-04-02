@@ -1,12 +1,9 @@
 package com.projeto.dentalhelper.domains;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -14,8 +11,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.projeto.dentalhelper.domains.enums.CorDosDentes;
-import com.projeto.dentalhelper.domains.enums.EscalaDentes;
 import com.projeto.dentalhelper.domains.enums.FormaDoRosto;
 
 @Entity
@@ -34,12 +29,14 @@ public class Paciente extends Pessoa{
 	@NotBlank
 	private String profissao;
 	
-//	@Enumerated
-//	private CorDosDentes corDosDentes;
-//	@Enumerated
-//	private FormaDoRosto formaDoRosto;
-//	@Enumerated
-//	private EscalaDentes escalaDentes;
+
+	private String corDosDentes;
+
+	private Integer formaRosto;
+	
+	private String escalaDentes;
+	
+	
 	
 	private String fotoPerfil;
 	
@@ -62,30 +59,6 @@ public class Paciente extends Pessoa{
 		this.profissao = profissao;
 	}
 
-//	public CorDosDentes getCorDosDentes() {
-//		return corDosDentes;
-//	}
-//
-//	public void setCorDosDentes(CorDosDentes corDosDentes) {
-//		this.corDosDentes = corDosDentes;
-//	}
-//
-//	public FormaDoRosto getFormaDoRosto() {
-//		return formaDoRosto;
-//	}
-//
-//	public void setFormaDoRosto(FormaDoRosto formaDoRosto) {
-//		this.formaDoRosto = formaDoRosto;
-//	}
-//
-//	public EscalaDentes getEscalaDentes() {
-//		return escalaDentes;
-//	}
-//
-//	public void setEscalaDentes(EscalaDentes escalaDentes) {
-//		this.escalaDentes = escalaDentes;
-//	}
-
 	public String getFotoPerfil() {
 		return fotoPerfil;
 	}
@@ -101,6 +74,32 @@ public class Paciente extends Pessoa{
 	public void setAnamnese(Anamnese anamnese) {
 		this.anamnese = anamnese;
 	}
+
+	public String getCorDosDentes() {
+		return corDosDentes;
+	}
+
+	public FormaDoRosto getFormaRosto() {
+		return FormaDoRosto.toEnum(formaRosto);
+	}
+
+	public String getEscalaDentes() {
+		return escalaDentes;
+	}
+
+	public void setCorDosDentes(String corDosDentes) {
+		this.corDosDentes = corDosDentes;
+	}
+
+	public void setFormaRosto(FormaDoRosto formaRosto) {
+		this.formaRosto = formaRosto.getCodigo();
+	}
+
+	public void setEscalaDentes(String escalaDentes) {
+		this.escalaDentes = escalaDentes;
+	}
+	
+	
 	
 
 }
