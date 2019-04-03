@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.events.RecursoCriadoEvent;
 import com.projeto.dentalhelper.resources.api.PacienteAPI;
 import com.projeto.dentalhelper.services.PacienteService;
+import com.projeto.dentalhelper.services.exceptions.RecursoCpfOuRgDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @RestController
@@ -37,7 +39,7 @@ public class PacienteResource implements PacienteAPI{
 		try {
 			objetoSalvo = salvar(objeto);
 		} catch (ServiceApplicationException e) {
-			
+			lancarExceptionComLocation(e);
 		}
 		Long codigo = objetoSalvo.getCodigo();
 		adicionarHeaderLocation(response, codigo);
@@ -66,7 +68,7 @@ public class PacienteResource implements PacienteAPI{
 	}
 
 	@Override
-	public ResponseEntity<Paciente> getByCodigo(Long codigo) {
+	public ResponseEntity<Paciente> getByCodigo(@PathVariable Long codigo) {
 		Paciente objeto = service.buscarPorCodigo(codigo);
 		adicionarLink(objeto, codigo);
 		return objeto != null ? ResponseEntity.ok(objeto) : ResponseEntity.notFound().build();
@@ -77,7 +79,9 @@ public class PacienteResource implements PacienteAPI{
 		Paciente objetoEditado = null;
 		try {
 			objetoEditado = atualizar(codigo, objetoModificado);
-		} catch (ServiceApplicationException e) {}
+		} catch (ServiceApplicationException e) {
+			lancarExceptionComLocation(e);
+		}
 		return ResponseEntity.ok(objetoEditado);
 	}
 	
@@ -101,6 +105,14 @@ public class PacienteResource implements PacienteAPI{
 			objetosComReferencia.add(objeto);
 		}
 		return objetosComReferencia;
+	}
+	
+	private void lancarExceptionComLocation(ServiceApplicationException e) {
+		Paciente pacienteExistente = service.buscarPorCodigo(Long.parseLong(e.getMessage()));
+		adicionarLink(pacienteExistente, pacienteExistente.getCodigo());
+		throw new RecursoCpfOuRgDuplicadoRuntimeException(
+				"Já existe um paciente com esse cpf ou rg ",
+				pacienteExistente.getId().getHref());
 	}
 
 }

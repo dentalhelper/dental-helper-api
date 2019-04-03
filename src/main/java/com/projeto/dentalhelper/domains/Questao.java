@@ -7,8 +7,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "questao")
+//@Entity
+//@Table(name = "questao")
 public class Questao extends ObjetoIdentificado{
 	
 	/**

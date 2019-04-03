@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
+import com.projeto.dentalhelper.services.exceptions.RecursoCpfOuRgDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoRuntimeException;
 
 @ControllerAdvice
@@ -109,6 +110,20 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 
 		HttpStatus status = HttpStatus.CONFLICT;
 		String mensagemUsuario = montarMensagemUsuario("recurso.nome-duplicado");
+		String mensagemDesenvolvedor = exception.toString();
+		String resourceLocation = exception.getLinkRecurso();
+		List<ErroMensagemConflict> responseBody = Arrays.asList(new ErroMensagemConflict(mensagemUsuario,
+				mensagemDesenvolvedor, status.value(), System.currentTimeMillis(), resourceLocation));
+
+		return ResponseEntity.status(status).header("Location", exception.getLinkRecurso()).body(responseBody);
+	}
+	
+	@ExceptionHandler(RecursoCpfOuRgDuplicadoRuntimeException.class)
+	public ResponseEntity<Object> recursoNomeDuplicado(RecursoCpfOuRgDuplicadoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		HttpStatus status = HttpStatus.CONFLICT;
+		String mensagemUsuario = montarMensagemUsuario("recurso.cpfOuRg-duplicado");
 		String mensagemDesenvolvedor = exception.toString();
 		String resourceLocation = exception.getLinkRecurso();
 		List<ErroMensagemConflict> responseBody = Arrays.asList(new ErroMensagemConflict(mensagemUsuario,

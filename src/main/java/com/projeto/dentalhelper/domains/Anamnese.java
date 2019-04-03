@@ -15,8 +15,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@Entity
-@Table(name = "anamnese")
+//@Entity
+//@Table(name = "anamnese")
 public class Anamnese extends ObjetoIdentificado{
 	
 	/**

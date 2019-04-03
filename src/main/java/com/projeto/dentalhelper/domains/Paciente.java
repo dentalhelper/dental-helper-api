@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,6 +16,7 @@ import com.projeto.dentalhelper.domains.enums.FormaDoRosto;
 
 @Entity
 @Table (name = "paciente")
+@PrimaryKeyJoinColumn(name="codigo")
 public class Paciente extends Pessoa{
 
 	/**
@@ -22,26 +24,19 @@ public class Paciente extends Pessoa{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@NotNull
+
 	@Temporal(TemporalType.DATE)
 	private Date dataCriacaoFicha;
 	
 	@NotBlank
 	private String profissao;
 	
-
-	private String corDosDentes;
-
-	private Integer formaRosto;
-	
-	private String escalaDentes;
-	
 	
 	
 	private String fotoPerfil;
 	
-	@OneToOne(cascade = CascadeType.REMOVE)
-	private Anamnese anamnese;
+//	@OneToOne(cascade = CascadeType.REMOVE)
+//	private Anamnese anamnese;
 
 	public Date getDataCriacaoFicha() {
 		return dataCriacaoFicha;
@@ -67,37 +62,13 @@ public class Paciente extends Pessoa{
 		this.fotoPerfil = fotoPerfil;
 	}
 
-	public Anamnese getAnamnese() {
-		return anamnese;
-	}
-
-	public void setAnamnese(Anamnese anamnese) {
-		this.anamnese = anamnese;
-	}
-
-	public String getCorDosDentes() {
-		return corDosDentes;
-	}
-
-	public FormaDoRosto getFormaRosto() {
-		return FormaDoRosto.toEnum(formaRosto);
-	}
-
-	public String getEscalaDentes() {
-		return escalaDentes;
-	}
-
-	public void setCorDosDentes(String corDosDentes) {
-		this.corDosDentes = corDosDentes;
-	}
-
-	public void setFormaRosto(FormaDoRosto formaRosto) {
-		this.formaRosto = formaRosto.getCodigo();
-	}
-
-	public void setEscalaDentes(String escalaDentes) {
-		this.escalaDentes = escalaDentes;
-	}
+//	public Anamnese getAnamnese() {
+//		return anamnese;
+//	}
+//
+//	public void setAnamnese(Anamnese anamnese) {
+//		this.anamnese = anamnese;
+//	}
 	
 	
 	
