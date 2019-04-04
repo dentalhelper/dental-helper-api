@@ -20,12 +20,30 @@ public class PacienteRepositoryImpl implements PacienteRepositoryQuery{
 	EntityManager manager;
 
 	@Override
-	public List<Paciente> buscarPorCpfouRg(PacienteFilter filter) {
+	public List<Paciente> buscarPorCpf(PacienteFilter filter) {
+		
+		filter.setNome(null);
+		filter.setRg(null);
+		
+		return filtrar(filter);
+		
+	}
+	
+	@Override
+	public List<Paciente> buscarPorRg(PacienteFilter filter) {
+		
+		filter.setNome(null);
+		filter.setCpf(null);
+		
+		return filtrar(filter);
+		
+	}
+	
+	@Override
+	public List<Paciente> filtrar(PacienteFilter filter) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Paciente> criteria = builder.createQuery(Paciente.class);
 		Root<Paciente> root = criteria.from(Paciente.class);
-		
-		filter.setNome(null);
 		
 		Predicate[] predicates = criarRestricoes(filter, builder, root);
 		criteria.where(predicates);
@@ -33,6 +51,9 @@ public class PacienteRepositoryImpl implements PacienteRepositoryQuery{
 		TypedQuery<Paciente> query = manager.createQuery(criteria);
 		return query.getResultList();
 	}
+	
+	
+	
 	
 	private Predicate[] criarRestricoes(PacienteFilter filter, CriteriaBuilder builder, Root<Paciente> root) {
 
@@ -45,6 +66,10 @@ public class PacienteRepositoryImpl implements PacienteRepositoryQuery{
 		
 		if(filter.getRg() != null) {
 			predicates.add(builder.equal(root.get("RG"), filter.getRg()));
+		}
+		
+		if(filter.getNome() != null) {
+			predicates.add(builder.like(builder.lower(root.get("nome")), "%" + filter.getNome().toLowerCase() + "%"));
 		}
 		
 		return predicates.toArray(new Predicate[predicates.size()]);

@@ -8,10 +8,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.domains.Procedimento;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
-import com.projeto.dentalhelper.services.exceptions.RecursoCpfOuRgDuplicadoException;
-import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
@@ -24,7 +25,8 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	public Paciente salvar(Paciente objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
 		
-		rgOuCpfJaExiste(objeto, null);
+		CpfJaExiste(objeto, null);
+		RgJaExiste(objeto, null);
 		
 		Calendar calendar = new GregorianCalendar();
 		objeto.setDataCriacaoFicha(calendar.getTime());
@@ -38,7 +40,8 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	public Paciente atualizar(Long codigo, Paciente objetoModificado) throws ServiceApplicationException {
 		Paciente objetoAtualizado = buscarPorCodigo(codigo);
 		
-		rgOuCpfJaExiste(objetoModificado, codigo);
+		CpfJaExiste(objetoModificado, codigo);
+		RgJaExiste(objetoModificado, codigo);
 		
 		objetoModificado.setDataCriacaoFicha(objetoAtualizado.getDataCriacaoFicha());
 		
@@ -52,12 +55,30 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		return repository.save(objetoAtualizado);
 	}
 	
-	private boolean rgOuCpfJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoCpfOuRgDuplicadoException {
+	
+	public List<Paciente> pesquisar(String filtro){
+		
+		String cpf = filtro.trim();
+		char[] c = cpf.toCharArray();
+		
+		PacienteFilter filter = new PacienteFilter();
+		
+		if(Character.isDigit(c[0])) {
+			filter.setCpf(cpf);
+			return repository.buscarPorCpf(filter);
+		}
+		
+		filter.setNome(filtro);
+		return repository.filtrar(filter);
+		
+	}
+	
+	
+	private boolean CpfJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoCpfDuplicadoException {
 		PacienteFilter filter = new PacienteFilter();
 		filter.setCpf(objeto.getCPF());
-		filter.setRg(objeto.getRG());
 		
-		List<Paciente> listaDeObjetos = repository.buscarPorCpfouRg(filter);
+		List<Paciente> listaDeObjetos = repository.buscarPorCpf(filter);
 		
 		if(listaDeObjetos.isEmpty()) {
 			return false;
@@ -68,14 +89,37 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 					return false;
 				}
 			}
-			throw new RecursoCpfOuRgDuplicadoException(Long.toString(pacienteExistente.getCodigo()));
+			throw new RecursoCpfDuplicadoException(Long.toString(pacienteExistente.getCodigo()));
 		}
 		
 	}
 	
+	private boolean RgJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoRgDuplicadoException {
+		PacienteFilter filter = new PacienteFilter();
+		filter.setRg(objeto.getRG());
+		
+		List<Paciente> listaDeObjetos = repository.buscarPorRg(filter);
+		
+		if(listaDeObjetos.isEmpty()) {
+			return false;
+		} else {
+			Paciente pacienteExistente = obterPacienteExistente(listaDeObjetos);
+			if(codigoDoObjetoAtualizado != null) {
+				if(pacienteExistente.getCodigo() == codigoDoObjetoAtualizado) {
+					return false;
+				}
+			}
+			throw new RecursoRgDuplicadoException(Long.toString(pacienteExistente.getCodigo()));
+		}
+		
+	}
+	
+	
+	
 	private Paciente obterPacienteExistente(List<Paciente> listaDeObjetos) {
 		return listaDeObjetos.get(PRIMEIRO_ITEM);
 	}
+	
 	
 	
 

@@ -7,6 +7,10 @@ import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 
 public interface PacienteRepositoryQuery {
 	
-	public List<Paciente> buscarPorCpfouRg(PacienteFilter Filter);
+	public List<Paciente> buscarPorCpf(PacienteFilter Filter);
+	
+	public List<Paciente> buscarPorRg(PacienteFilter filter);
+	
+	public List<Paciente> filtrar(PacienteFilter filter);
 
 }

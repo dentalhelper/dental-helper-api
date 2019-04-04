@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.projeto.dentalhelper.domains.Paciente;
 
@@ -28,9 +29,9 @@ public interface PacienteAPI {
 	public ResponseEntity<Paciente> post(@Valid @RequestBody Paciente objeto,
 			HttpServletResponse response);
 	
-	@ApiOperation(value="Busca todos os pacientes")
+	@ApiOperation(value="Busca pacientes pelo nome ou um paciente pelo cpf")
 	@GetMapping
-	public List<Paciente> getAll();
+	public List<Paciente> getByFilter(@RequestParam(required = false, defaultValue = "%") String filtro);
 	
 	@ApiOperation(value="Busca um paciente por código")
 	@GetMapping(value = "/{codigo}")

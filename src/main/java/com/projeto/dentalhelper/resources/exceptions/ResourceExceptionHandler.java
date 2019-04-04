@@ -27,8 +27,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
-import com.projeto.dentalhelper.services.exceptions.RecursoCpfOuRgDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
@@ -118,12 +119,26 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(status).header("Location", exception.getLinkRecurso()).body(responseBody);
 	}
 	
-	@ExceptionHandler(RecursoCpfOuRgDuplicadoRuntimeException.class)
-	public ResponseEntity<Object> recursoNomeDuplicado(RecursoCpfOuRgDuplicadoRuntimeException exception,
+	@ExceptionHandler(RecursoCpfDuplicadoRuntimeException.class)
+	public ResponseEntity<Object> recursoNomeDuplicado(RecursoCpfDuplicadoRuntimeException exception,
 			WebRequest request, HttpServletResponse response) {
 
 		HttpStatus status = HttpStatus.CONFLICT;
-		String mensagemUsuario = montarMensagemUsuario("recurso.cpfOuRg-duplicado");
+		String mensagemUsuario = montarMensagemUsuario("recurso.cpf-duplicado");
+		String mensagemDesenvolvedor = exception.toString();
+		String resourceLocation = exception.getLinkRecurso();
+		List<ErroMensagemConflict> responseBody = Arrays.asList(new ErroMensagemConflict(mensagemUsuario,
+				mensagemDesenvolvedor, status.value(), System.currentTimeMillis(), resourceLocation));
+
+		return ResponseEntity.status(status).header("Location", exception.getLinkRecurso()).body(responseBody);
+	}
+	
+	@ExceptionHandler(RecursoRgDuplicadoRuntimeException.class)
+	public ResponseEntity<Object> recursoNomeDuplicado(RecursoRgDuplicadoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		HttpStatus status = HttpStatus.CONFLICT;
+		String mensagemUsuario = montarMensagemUsuario("recurso.rg-duplicado");
 		String mensagemDesenvolvedor = exception.toString();
 		String resourceLocation = exception.getLinkRecurso();
 		List<ErroMensagemConflict> responseBody = Arrays.asList(new ErroMensagemConflict(mensagemUsuario,

@@ -14,13 +14,17 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.domains.Procedimento;
 import com.projeto.dentalhelper.events.RecursoCriadoEvent;
 import com.projeto.dentalhelper.resources.api.PacienteAPI;
 import com.projeto.dentalhelper.services.PacienteService;
-import com.projeto.dentalhelper.services.exceptions.RecursoCpfOuRgDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @RestController
@@ -60,12 +64,6 @@ public class PacienteResource implements PacienteAPI{
 	}
 	
 
-	@Override
-	public List<Paciente> getAll() {
-		List<Paciente> objetos = service.buscarTodos();
-
-		return adicionarReferencia(objetos);
-	}
 
 	@Override
 	public ResponseEntity<Paciente> getByCodigo(@PathVariable Long codigo) {
@@ -110,9 +108,21 @@ public class PacienteResource implements PacienteAPI{
 	private void lancarExceptionComLocation(ServiceApplicationException e) {
 		Paciente pacienteExistente = service.buscarPorCodigo(Long.parseLong(e.getMessage()));
 		adicionarLink(pacienteExistente, pacienteExistente.getCodigo());
-		throw new RecursoCpfOuRgDuplicadoRuntimeException(
-				"Já existe um paciente com esse cpf ou rg ",
-				pacienteExistente.getId().getHref());
+		if(e instanceof RecursoCpfDuplicadoException) {
+			throw new RecursoCpfDuplicadoRuntimeException(
+					"Já existe um paciente com esse cpf: " + pacienteExistente.getCPF(), pacienteExistente.getId().getHref());
+		}
+		
+		
+		throw new RecursoRgDuplicadoRuntimeException(
+				"Já existe um paciente com esse rg: " + pacienteExistente.getRG() ,pacienteExistente.getId().getHref());
+	}
+
+	@Override
+	public List<Paciente> getByFilter(@RequestParam(required = false, defaultValue = "%") String filtro) {
+		List<Paciente> objetos = service.pesquisar(filtro);
+		return adicionarReferencia(objetos);
+		
 	}
 
 }
