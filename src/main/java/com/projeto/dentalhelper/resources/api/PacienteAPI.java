@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -31,7 +32,7 @@ public interface PacienteAPI {
 	
 	@ApiOperation(value="Busca pacientes pelo nome ou um paciente pelo cpf")
 	@GetMapping
-	public List<Paciente> getByFilter(@RequestParam(required = false, defaultValue = "%") String filtro);
+	public ResponseEntity<List<PacienteResumoDTO>> getByFilter(@RequestParam(required = false, defaultValue = "%") String filtro);
 	
 	@ApiOperation(value="Busca um paciente por código")
 	@GetMapping(value = "/{codigo}")

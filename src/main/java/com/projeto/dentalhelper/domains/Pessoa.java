@@ -18,42 +18,40 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.projeto.dentalhelper.domains.enums.EstadoCivil;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Pessoa extends ObjetoIdentificado{
-	
-	/**
-	 * 
-	 */
+public abstract class Pessoa extends ObjetoIdentificado {
+
 	private static final long serialVersionUID = 1L;
 
-	@Size( max = 50)
+	@Size(max = 50)
 	@NotBlank
 	private String nome;
-	
+
 	@NotNull
 	@Temporal(TemporalType.DATE)
 	private Date dataNascimento;
-	
-	@Size( max = 30)
+
+	@Size(max = 30)
 	@NotBlank
-	private String CPF;
-	
-	@Size( max = 20)
+	private String cPF;
+
+	@Size(max = 20)
 	@NotBlank
-	private String RG;
-	
-	private String estadoCivil;
-	
-	@Size( max = 50)
+	private String rG;
+
+	private Integer estadoCivil;
+
+	@Size(max = 50)
 	private String email;
-	
+
 	@JsonIgnoreProperties("pessoa")
 	@Valid
 	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Telefone> telefones = new ArrayList<Telefone>();
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@Valid
 	private Endereco endereco;
@@ -74,28 +72,28 @@ public abstract class Pessoa extends ObjetoIdentificado{
 		this.dataNascimento = dataNascimento;
 	}
 
-	public String getCPF() {
-		return CPF;
+	public String getcPF() {
+		return cPF;
 	}
 
-	public void setCPF(String cPF) {
-		CPF = cPF;
+	public void setcPF(String cPF) {
+		this.cPF = cPF;
 	}
 
-	public String getRG() {
-		return RG;
+	public String getrG() {
+		return rG;
 	}
 
-	public void setRG(String rG) {
-		RG = rG;
+	public void setrG(String rG) {
+		this.rG = rG;
 	}
 
-	public String getEstadoCivil() {
-		return estadoCivil;
+	public EstadoCivil getEstadoCivil() {
+		return EstadoCivil.toEnum(estadoCivil);
 	}
 
-	public void setEstadoCivil(String estadoCivil) {
-		this.estadoCivil = estadoCivil;
+	public void setEstadoCivil(EstadoCivil estadoCivil) {
+		this.estadoCivil = estadoCivil.getCodigo();
 	}
 
 	public String getEmail() {
@@ -106,6 +104,13 @@ public abstract class Pessoa extends ObjetoIdentificado{
 		this.email = email;
 	}
 
+	public List<Telefone> getTelefones() {
+		return telefones;
+	}
+
+	public void setTelefones(List<Telefone> telefones) {
+		this.telefones = telefones;
+	}
 
 	public Endereco getEndereco() {
 		return endereco;
@@ -114,15 +119,9 @@ public abstract class Pessoa extends ObjetoIdentificado{
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
-
-	public List<Telefone> getTelefones() {
-		return telefones;
-	}
-
-	public void setTelefones(List<Telefone> telefones) {
-		this.telefones = telefones;
-	}
 	
-	
+	public String getTelefonePrincipal() {
+		return this.telefones.size() > 0 ? this.telefones.get(0).getNumero() : "";
+	}
 
 }

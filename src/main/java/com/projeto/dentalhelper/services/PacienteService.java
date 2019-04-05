@@ -76,7 +76,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	private boolean CpfJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoCpfDuplicadoException {
 		PacienteFilter filter = new PacienteFilter();
-		filter.setCpf(objeto.getCPF());
+		filter.setCpf(objeto.getcPF());
 		
 		List<Paciente> listaDeObjetos = repository.buscarPorCpf(filter);
 		
@@ -96,7 +96,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	private boolean RgJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoRgDuplicadoException {
 		PacienteFilter filter = new PacienteFilter();
-		filter.setRg(objeto.getRG());
+		filter.setRg(objeto.getrG());
 		
 		List<Paciente> listaDeObjetos = repository.buscarPorRg(filter);
 		

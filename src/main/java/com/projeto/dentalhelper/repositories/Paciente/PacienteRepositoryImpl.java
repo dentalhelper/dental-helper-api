@@ -61,11 +61,11 @@ public class PacienteRepositoryImpl implements PacienteRepositoryQuery{
 		
 		
 		if(filter.getCpf() != null) {
-			predicates.add(builder.equal(root.get("CPF"), filter.getCpf()));
+			predicates.add(builder.equal(root.get("cPF"), filter.getCpf()));
 		}
 		
 		if(filter.getRg() != null) {
-			predicates.add(builder.equal(root.get("RG"), filter.getRg()));
+			predicates.add(builder.equal(root.get("rG"), filter.getRg()));
 		}
 		
 		if(filter.getNome() != null) {

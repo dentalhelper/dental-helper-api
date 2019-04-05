@@ -1,7 +1,6 @@
 CREATE TABLE telefone(
 
 	codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-	ddd INT(3),
 	numero VARCHAR(15) NOT NULL,
 	codigo_pessoa BIGINT(20),
 	
@@ -10,5 +9,7 @@ CREATE TABLE telefone(
 )ENGINE=innoDB DEFAULT charset=utf8;
 
 INSERT INTO telefone
-(ddd, numero, codigo_pessoa) values
-(81, '986754231', 1)
+(numero, codigo_pessoa) values
+('83986754231', 1),
+('83988585233', 1),
+('84986754441', 2);
