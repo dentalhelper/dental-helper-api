@@ -28,11 +28,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
+
+	private static final HttpStatus CONFLICT = HttpStatus.CONFLICT;
 
 	@Autowired
 	private MessageSource messageSource;
@@ -109,42 +112,24 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> recursoNomeDuplicado(RecursoNomeDuplicadoRuntimeException exception,
 			WebRequest request, HttpServletResponse response) {
 
-		HttpStatus status = HttpStatus.CONFLICT;
-		String mensagemUsuario = montarMensagemUsuario("recurso.nome-duplicado");
-		String mensagemDesenvolvedor = exception.toString();
-		String resourceLocation = exception.getLinkRecurso();
-		List<ErroMensagemConflict> responseBody = Arrays.asList(new ErroMensagemConflict(mensagemUsuario,
-				mensagemDesenvolvedor, status.value(), System.currentTimeMillis(), resourceLocation));
-
-		return ResponseEntity.status(status).header("Location", exception.getLinkRecurso()).body(responseBody);
+		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.nome-duplicado");
+		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
 	}
-	
+
 	@ExceptionHandler(RecursoCpfDuplicadoRuntimeException.class)
-	public ResponseEntity<Object> recursoNomeDuplicado(RecursoCpfDuplicadoRuntimeException exception,
+	public ResponseEntity<Object> recursoCpfDuplicado(RecursoCpfDuplicadoRuntimeException exception,
 			WebRequest request, HttpServletResponse response) {
 
-		HttpStatus status = HttpStatus.CONFLICT;
-		String mensagemUsuario = montarMensagemUsuario("recurso.cpf-duplicado");
-		String mensagemDesenvolvedor = exception.toString();
-		String resourceLocation = exception.getLinkRecurso();
-		List<ErroMensagemConflict> responseBody = Arrays.asList(new ErroMensagemConflict(mensagemUsuario,
-				mensagemDesenvolvedor, status.value(), System.currentTimeMillis(), resourceLocation));
-
-		return ResponseEntity.status(status).header("Location", exception.getLinkRecurso()).body(responseBody);
+		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.cpf-duplicado");
+		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
 	}
-	
+
 	@ExceptionHandler(RecursoRgDuplicadoRuntimeException.class)
-	public ResponseEntity<Object> recursoNomeDuplicado(RecursoRgDuplicadoRuntimeException exception,
-			WebRequest request, HttpServletResponse response) {
+	public ResponseEntity<Object> recursoRgDuplicado(RecursoRgDuplicadoRuntimeException exception, WebRequest request,
+			HttpServletResponse response) {
 
-		HttpStatus status = HttpStatus.CONFLICT;
-		String mensagemUsuario = montarMensagemUsuario("recurso.rg-duplicado");
-		String mensagemDesenvolvedor = exception.toString();
-		String resourceLocation = exception.getLinkRecurso();
-		List<ErroMensagemConflict> responseBody = Arrays.asList(new ErroMensagemConflict(mensagemUsuario,
-				mensagemDesenvolvedor, status.value(), System.currentTimeMillis(), resourceLocation));
-
-		return ResponseEntity.status(status).header("Location", exception.getLinkRecurso()).body(responseBody);
+		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.rg-duplicado");
+		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
 	}
 
 	private List<ErroMensagem> montarResponseBody(HttpStatus status, String mensagemUsuario,
@@ -155,6 +140,16 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private String montarMensagemUsuario(String sourceMessage) {
 		return messageSource.getMessage(sourceMessage, null, LocaleContextHolder.getLocale());
+	}
+
+	private List<ErroMensagemConflict> montarResponseBodyConflict(RecursoDuplicadoRuntimeException exception,
+			String messageProperty) {
+		String mensagemUsuario = montarMensagemUsuario(messageProperty);
+		String mensagemDesenvolvedor = exception.toString();
+		String resourceLocation = exception.getLinkRecurso();
+		List<ErroMensagemConflict> responseBody = Arrays.asList(new ErroMensagemConflict(mensagemUsuario,
+				mensagemDesenvolvedor, CONFLICT.value(), System.currentTimeMillis(), resourceLocation));
+		return responseBody;
 	}
 
 	private List<ErroMensagem> criarListaDeErros(BindingResult bindingResult, HttpStatus status) {
