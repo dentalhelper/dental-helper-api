@@ -2,44 +2,50 @@ package com.projeto.dentalhelper.domains;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
-import com.projeto.dentalhelper.domains.enums.FormaDoRosto;
+import com.projeto.dentalhelper.domains.enums.EstadoCivil;
+import com.projeto.dentalhelper.domains.enums.Sexo;
 
 @Entity
-@Table (name = "paciente")
-@PrimaryKeyJoinColumn(name="codigo")
-public class Paciente extends Pessoa{
+@Table(name = "paciente")
+@PrimaryKeyJoinColumn(name = "codigo")
+public class Paciente extends Pessoa {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
 
 	@Temporal(TemporalType.DATE)
 	private Date dataCriacaoFicha;
-	
+
 	@NotBlank
 	private String profissao;
-	
-	
-	
+
 	private String fotoPerfil;
-	
-//	@OneToOne(cascade = CascadeType.REMOVE)
-//	private Anamnese anamnese;
+
+	// @OneToOne(cascade = CascadeType.REMOVE)
+	// private Anamnese anamnese;
 
 	public Date getDataCriacaoFicha() {
 		return dataCriacaoFicha;
+	}
+	
+	public Paciente() {
+		
+	}
+
+	public Paciente(String nome, Date dataNascimento, String cPF, String rG, EstadoCivil estadoCivil,Sexo sexo, String email,
+			String profissao, String fotoPerfil) {
+		super(nome, dataNascimento, cPF, rG, estadoCivil, sexo, email);
+		this.profissao = profissao;
+		this.fotoPerfil = fotoPerfil;
 	}
 
 	public void setDataCriacaoFicha(Date dataCriacaoFicha) {
@@ -62,15 +68,12 @@ public class Paciente extends Pessoa{
 		this.fotoPerfil = fotoPerfil;
 	}
 
-//	public Anamnese getAnamnese() {
-//		return anamnese;
-//	}
-//
-//	public void setAnamnese(Anamnese anamnese) {
-//		this.anamnese = anamnese;
-//	}
-	
-	
-	
+	// public Anamnese getAnamnese() {
+	// return anamnese;
+	// }
+	//
+	// public void setAnamnese(Anamnese anamnese) {
+	// this.anamnese = anamnese;
+	// }
 
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 import com.projeto.dentalhelper.events.RecursoCriadoEvent;
 import com.projeto.dentalhelper.resources.api.PacienteAPI;
@@ -38,11 +39,11 @@ public class PacienteResource implements PacienteAPI {
 	private ApplicationEventPublisher publisher;
 
 	@Override
-	public ResponseEntity<Paciente> post(@Valid Paciente objeto, HttpServletResponse response) {
-		Paciente objetoSalvo = null;
+	public ResponseEntity<Paciente> post(@Valid PacienteNovoDTO objetoDTO, HttpServletResponse response) {
+		Paciente objetoSalvo = service.fromDTO(objetoDTO);
 
 		try {
-			objetoSalvo = salvar(objeto);
+			objetoSalvo = salvar(objetoSalvo);
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -72,10 +73,12 @@ public class PacienteResource implements PacienteAPI {
 	}
 
 	@Override
-	public ResponseEntity<Paciente> put(Long codigo, @Valid Paciente objetoModificado) {
+	public ResponseEntity<Paciente> put(Long codigo, @Valid PacienteNovoDTO objetoDTOModificado) {
+		Paciente pacienteFromDTO = service.fromDTO(objetoDTOModificado);
+		pacienteFromDTO.setCodigo(codigo);
 		Paciente objetoEditado = null;
 		try {
-			objetoEditado = atualizar(codigo, objetoModificado);
+			objetoEditado = atualizar(codigo, pacienteFromDTO);
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}

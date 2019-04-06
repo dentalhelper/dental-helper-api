@@ -19,6 +19,16 @@ public class Telefone extends ObjetoIdentificado {
 	@JoinColumn(name = "codigo_pessoa")
 	private Pessoa pessoa;
 
+	public Telefone() {
+		
+	}
+	
+	public Telefone(String numero, Pessoa pessoa) {
+		super();
+		this.numero = numero;
+		this.pessoa = pessoa;
+	}
+
 	public String getNumero() {
 		return numero;
 	}

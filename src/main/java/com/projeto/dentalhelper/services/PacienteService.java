@@ -5,10 +5,17 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.projeto.dentalhelper.domains.Cidade;
+import com.projeto.dentalhelper.domains.Endereco;
 import com.projeto.dentalhelper.domains.Paciente;
-import com.projeto.dentalhelper.domains.Procedimento;
+import com.projeto.dentalhelper.domains.Telefone;
+import com.projeto.dentalhelper.domains.enums.EstadoCivil;
+import com.projeto.dentalhelper.domains.enums.Sexo;
+import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
+import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
@@ -18,6 +25,8 @@ import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 @Service
 public class PacienteService extends AbstractService<Paciente, PacienteRepository>{
 	
+	@Autowired
+	private CidadeRepository cidadeRepository;
 	
 	private static final int PRIMEIRO_ITEM = 0;
 	
@@ -39,7 +48,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	@Override
 	public Paciente atualizar(Long codigo, Paciente objetoModificado) throws ServiceApplicationException {
 		Paciente objetoAtualizado = buscarPorCodigo(codigo);
-		
+
 		CpfJaExiste(objetoModificado, codigo);
 		RgJaExiste(objetoModificado, codigo);
 		
@@ -51,7 +60,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		objetoAtualizado.getTelefones().forEach(telefone -> telefone.setPessoa(objetoAtualizado));
 		
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "sexo");
 		return repository.save(objetoAtualizado);
 	}
 	
@@ -121,6 +130,32 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	}
 	
 	
+	
+	public Paciente fromDTO(PacienteNovoDTO objetoDTO) {
+		Paciente paciente = new Paciente(objetoDTO.getNome(), objetoDTO.getDataNascimento(), 
+				objetoDTO.getcPF(), objetoDTO.getrG(), EstadoCivil.toEnum(objetoDTO.getEstadoCivil()), 
+				Sexo.toEnum(objetoDTO.getSexo()), objetoDTO.getEmail(), objetoDTO.getProfissao(), 
+				objetoDTO.getFotoPerfil());
+		
+		Cidade cidade = cidadeRepository.getOne(objetoDTO.getCodigoCidade());
+		
+		Endereco endereco = new Endereco(objetoDTO.getLogradouro(), objetoDTO.getNumero(), 
+				objetoDTO.getBairro(), objetoDTO.getCEP(), objetoDTO.getComplemento(), cidade);
+		
+		paciente.setEndereco(endereco);
+		
+		Telefone telefonePrincipal = new Telefone(objetoDTO.getTelefonePrincipal(), paciente);
+		
+		paciente.getTelefones().add(telefonePrincipal);
+		
+		if(objetoDTO.getTelefone2() != null) {
+			Telefone telefone2 = new Telefone(objetoDTO.getTelefone2(), paciente);
+			
+			paciente.getTelefones().add(telefone2);
+		}
+
+		return paciente;
+	}
 	
 
 }

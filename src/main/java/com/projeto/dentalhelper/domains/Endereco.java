@@ -35,6 +35,21 @@ public class Endereco extends ObjetoIdentificado{
 	@ManyToOne
 	@JoinColumn(name = "codigo_cidade")
 	private Cidade cidade;
+	
+	public Endereco() {
+		
+	}
+	
+	public Endereco(String logradouro, Integer numero,
+			String bairro, String cEP, String complemento, Cidade cidade) {
+		super();
+		this.logradouro = logradouro;
+		this.numero = numero;
+		this.bairro = bairro;
+		CEP = cEP;
+		this.complemento = complemento;
+		this.cidade = cidade;
+	}
 
 	public String getLogradouro() {
 		return logradouro;

@@ -14,4 +14,9 @@ INSERT INTO cidade
 ('Caruaru',2),
 ('Salvador',3),
 ('Maragogi',4),
-('Frei Caneca',5)
+('Maturéia',5),
+('Teixeira',1),
+('São Mamede',1),
+('Condado',1),
+('São José do Bonfim',1),
+('Vista Serrana',1);

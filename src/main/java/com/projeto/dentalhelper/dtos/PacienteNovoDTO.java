@@ -1,0 +1,171 @@
+package com.projeto.dentalhelper.dtos;
+
+import java.io.Serializable;
+import java.util.Date;
+
+public class PacienteNovoDTO implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private String nome;
+	private Date dataNascimento;
+	private String cPF;
+	private String rG;
+	private Integer estadoCivil;
+	private Integer sexo;
+	private String email;
+	private String profissao;
+	private String fotoPerfil;
+
+	private String telefonePrincipal;
+	private String telefone2;
+
+	private String logradouro;
+	private Integer numero;
+	private String bairro;
+	private String CEP;
+	private String complemento;
+
+	private Long codigoCidade;
+
+	public PacienteNovoDTO() {
+
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+	public String getcPF() {
+		return cPF;
+	}
+
+	public void setcPF(String cPF) {
+		this.cPF = cPF;
+	}
+
+	public String getrG() {
+		return rG;
+	}
+
+	public void setrG(String rG) {
+		this.rG = rG;
+	}
+
+	public Integer getEstadoCivil() {
+		return estadoCivil;
+	}
+
+	public void setEstadoCivil(Integer estadoCivil) {
+		this.estadoCivil = estadoCivil;
+	}
+
+	public Integer getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(Integer sexo) {
+		this.sexo = sexo;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getProfissao() {
+		return profissao;
+	}
+
+	public void setProfissao(String profissao) {
+		this.profissao = profissao;
+	}
+
+	public String getFotoPerfil() {
+		return fotoPerfil;
+	}
+
+	public void setFotoPerfil(String fotoPerfil) {
+		this.fotoPerfil = fotoPerfil;
+	}
+
+	public String getTelefonePrincipal() {
+		return telefonePrincipal;
+	}
+
+	public void setTelefonePrincipal(String telefonePrincipal) {
+		this.telefonePrincipal = telefonePrincipal;
+	}
+
+	public String getTelefone2() {
+		return telefone2;
+	}
+
+	public void setTelefone2(String telefone2) {
+		this.telefone2 = telefone2;
+	}
+
+	public String getLogradouro() {
+		return logradouro;
+	}
+
+	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
+	}
+
+	public Integer getNumero() {
+		return numero;
+	}
+
+	public void setNumero(Integer numero) {
+		this.numero = numero;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public String getCEP() {
+		return CEP;
+	}
+
+	public void setCEP(String cEP) {
+		CEP = cEP;
+	}
+
+	public String getComplemento() {
+		return complemento;
+	}
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
+
+	public Long getCodigoCidade() {
+		return codigoCidade;
+	}
+
+	public void setCodigoCidade(Long codigoCidade) {
+		this.codigoCidade = codigoCidade;
+	}
+
+}

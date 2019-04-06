@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +28,7 @@ public interface PacienteAPI {
 	
 	@ApiOperation(value="Salva um paciente")
 	@PostMapping(value = "/novo")
-	public ResponseEntity<Paciente> post(@Valid @RequestBody Paciente objeto,
+	public ResponseEntity<Paciente> post(@Valid @RequestBody PacienteNovoDTO objeto,
 			HttpServletResponse response);
 	
 	@ApiOperation(value="Busca pacientes pelo nome ou um paciente pelo cpf")
@@ -40,7 +41,7 @@ public interface PacienteAPI {
 	
 	@ApiOperation(value="Atualiza um paciente")
 	@PutMapping(value = "/{codigo}")
-	public ResponseEntity <Paciente> put(@PathVariable Long codigo,@Valid @RequestBody Paciente objeto);
+	public ResponseEntity <Paciente> put(@PathVariable Long codigo,@Valid @RequestBody PacienteNovoDTO objetoDTO);
 	
 	@ApiOperation(value="Deleta um paciente")
 	@ApiResponses(value = {
