@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
@@ -49,5 +50,10 @@ public interface PacienteAPI {
 			@ApiResponse(code = 404, message = "Código inexistente.") })
 	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> delete(@PathVariable Long codigo);
+	
+	
+	@ApiOperation(value="Atualiza a anamnese do paciente")
+	@PutMapping(value = "/{codigo}/anamnese")
+	public ResponseEntity <Paciente> put(@PathVariable Long codigo,@Valid @RequestBody Anamnese anamnese);
 
 }

@@ -15,9 +15,11 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
@@ -127,6 +129,18 @@ public class PacienteResource implements PacienteAPI {
 				.collect(Collectors.toList());
 		return ResponseEntity.ok().body(pacienteResumoDTO);
 
+	}
+
+	@Override
+	public ResponseEntity<Paciente> put(@PathVariable Long codigo,@Valid @RequestBody Anamnese anamnese) {
+		Paciente objetoEditado = null;
+		try {
+			objetoEditado = service.atualizarAnamnese(codigo, anamnese);
+		} catch (ServiceApplicationException e) {
+			lancarExceptionComLocation(e);
+		}
+		return ResponseEntity.ok(objetoEditado);
+		
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.projeto.dentalhelper.services;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -8,15 +9,19 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Cidade;
 import com.projeto.dentalhelper.domains.Endereco;
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.domains.Questao;
+import com.projeto.dentalhelper.domains.QuestaoPreDefinida;
 import com.projeto.dentalhelper.domains.Telefone;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
 import com.projeto.dentalhelper.domains.enums.Sexo;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
+import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
@@ -27,6 +32,9 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private QuestaoPreDefinidaRepository questoesRepository;
 	
 	private static final int PRIMEIRO_ITEM = 0;
 	
@@ -40,6 +48,21 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		Calendar calendar = new GregorianCalendar();
 		objeto.setDataCriacaoFicha(calendar.getTime());
 		
+		Anamnese anamnese = new Anamnese();
+		
+		List<QuestaoPreDefinida> questoesPreDefinidas = questoesRepository.findAll();
+		List<Questao> questoes = new ArrayList<Questao>();
+		for(QuestaoPreDefinida qP: questoesPreDefinidas) {
+			Questao q = new Questao();
+			q.setAnamnese(anamnese);
+			q.setDescricao(qP.getQuestao());
+			q.setInformAdicionais("");
+			questoes.add(q);
+		}
+		
+		anamnese.setQuestoes(questoes);
+		objeto.setAnamnese(anamnese);
+		
 		
 		return repository.save(objeto);
 	}
@@ -52,6 +75,8 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		CpfJaExiste(objetoModificado, codigo);
 		RgJaExiste(objetoModificado, codigo);
 		
+		
+		
 		objetoModificado.getEndereco().setCodigo(objetoAtualizado.getEndereco().getCodigo());
 		objetoModificado.getTelefones().get(0).setCodigo(objetoAtualizado.getTelefones().get(0).getCodigo());
 		
@@ -59,16 +84,52 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 			objetoModificado.getTelefones().get(1).setCodigo(objetoAtualizado.getTelefones().get(1).getCodigo());
 		}
 		
+			
 		
 		objetoModificado.setDataCriacaoFicha(objetoAtualizado.getDataCriacaoFicha());
 		objetoAtualizado.setEndereco(objetoModificado.getEndereco());
 		objetoAtualizado.getTelefones().clear();
 		objetoAtualizado.getTelefones().addAll(objetoModificado.getTelefones());
 		objetoAtualizado.getTelefones().forEach(telefone -> telefone.setPessoa(objetoAtualizado));
+
 		
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "sexo");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "sexo", "anamnese");
 		return repository.save(objetoAtualizado);
+	}
+	
+	public Paciente atualizarAnamnese(Long codigo, Anamnese anamnese) throws ServiceApplicationException {
+		Paciente paciente = buscarPorCodigo(codigo);
+		
+		Calendar calendar = new GregorianCalendar();
+		anamnese.setDataResp(calendar.getTime());
+		
+		List<Questao> questoes = new ArrayList<Questao>();
+		
+		if(paciente.getAnamnese()!=null) {
+			questoes = paciente.getAnamnese().getQuestoes();
+		}
+		
+		if(questoes.size() <= anamnese.getQuestoes().size()) {
+			for(int i = 0; i<questoes.size(); i++) {
+				anamnese.getQuestoes().get(i).setCodigo(questoes.get(i).getCodigo());
+			}
+		} else {
+			if(anamnese.getQuestoes().size() > 0) {
+				if(questoes.size() > 0) {
+					for(int i = 0; i<anamnese.getQuestoes().size(); i++) {
+						anamnese.getQuestoes().get(i).setCodigo(questoes.get(i).getCodigo());
+					}
+				}
+			}
+		}
+		
+		anamnese.getQuestoes().forEach(questao -> questao.setAnamnese(anamnese));
+		
+		paciente.setAnamnese(anamnese);
+		
+		
+		return repository.save(paciente);
 	}
 	
 	

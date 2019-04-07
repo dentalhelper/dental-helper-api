@@ -19,8 +19,10 @@ CREATE TABLE paciente(
 	data_criacao_ficha DATE NOT NULL,
 	profissao VARCHAR(30) NOT NULL,
 	foto_perfil VARCHAR(100),
+	codigo_anamnese BIGINT(20),
 	
-	 FOREIGN KEY (codigo) REFERENCES pessoa(codigo)
+	 FOREIGN KEY (codigo) REFERENCES pessoa(codigo),
+	 FOREIGN KEY (codigo_anamnese) REFERENCES anamnese(codigo)
 	
 )ENGINE=innoDB DEFAULT charset=utf8;
 
@@ -38,9 +40,9 @@ INSERT INTO pessoa
 
 
 INSERT INTO paciente
-(codigo, data_criacao_ficha, profissao, foto_perfil) values
-(1,'2019-03-10','Pedreiro',  '01010100'),
-(2,'2019-03-11','Recepcionista',  '01010101'),
-(3,'2019-03-12','Motorista',  '01010102'),
-(4,'2019-03-13','Advogada',  '01010103'),
-(5,'2019-03-14','Professor',  '01010104');
+(codigo, data_criacao_ficha, profissao, foto_perfil, codigo_anamnese) values
+(1,'2019-03-10','Pedreiro',  '01010100', 1),
+(2,'2019-03-11','Recepcionista',  '01010101', 2),
+(3,'2019-03-12','Motorista',  '01010102', 3),
+(4,'2019-03-13','Advogada',  '01010103', 4),
+(5,'2019-03-14','Professor',  '01010104', 5);

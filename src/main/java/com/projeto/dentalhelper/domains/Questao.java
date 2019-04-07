@@ -1,5 +1,6 @@
 package com.projeto.dentalhelper.domains;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -7,8 +8,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-//@Entity
-//@Table(name = "questao")
+import com.projeto.dentalhelper.domains.enums.RespostaQuestaoAnamnese;
+
+@Entity
+@Table(name = "questao")
 public class Questao extends ObjetoIdentificado{
 	
 	/**
@@ -19,10 +22,11 @@ public class Questao extends ObjetoIdentificado{
 	@NotBlank
 	private String descricao;
 	
-	@NotNull
-	private Boolean resposta;
+
+	private Integer resposta;
 	
-	private String informacoesAdicionais;
+	@Column(name = "inform_adicionais")
+	private String informAdicionais;
 	
 	@ManyToOne
 	@JoinColumn(name = "codigo_anamnese")
@@ -30,14 +34,6 @@ public class Questao extends ObjetoIdentificado{
 
 	public String getDescricao() {
 		return descricao;
-	}
-
-	public Boolean getResposta() {
-		return resposta;
-	}
-
-	public String getInformacoesAdicionais() {
-		return informacoesAdicionais;
 	}
 
 	public Anamnese getAnamnese() {
@@ -48,17 +44,30 @@ public class Questao extends ObjetoIdentificado{
 		this.descricao = descricao;
 	}
 
-	public void setResposta(Boolean resposta) {
-		this.resposta = resposta;
-	}
-
-	public void setInformacoesAdicionais(String informacoesAdicionais) {
-		this.informacoesAdicionais = informacoesAdicionais;
-	}
-
 	public void setAnamnese(Anamnese anamnese) {
 		this.anamnese = anamnese;
 	}
+
+	public RespostaQuestaoAnamnese getResposta() {
+		return RespostaQuestaoAnamnese.toEnum(resposta);
+	}
+
+	public void setResposta(RespostaQuestaoAnamnese resposta) {
+		this.resposta = resposta.getCodigo();
+	}
+
+	public String getInformAdicionais() {
+		return informAdicionais;
+	}
+
+	public void setInformAdicionais(String informAdicionais) {
+		this.informAdicionais = informAdicionais;
+	}
+	
+	
+	
+	
+	
 	
 	
 	

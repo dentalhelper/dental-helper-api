@@ -2,11 +2,16 @@ package com.projeto.dentalhelper.domains;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
@@ -29,8 +34,9 @@ public class Paciente extends Pessoa {
 
 	private String fotoPerfil;
 
-	// @OneToOne(cascade = CascadeType.REMOVE)
-	// private Anamnese anamnese;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "codigo_anamnese")
+	private Anamnese anamnese;
 
 	public Date getDataCriacaoFicha() {
 		return dataCriacaoFicha;
@@ -67,12 +73,12 @@ public class Paciente extends Pessoa {
 		this.fotoPerfil = fotoPerfil;
 	}
 
-	// public Anamnese getAnamnese() {
-	// return anamnese;
-	// }
-	//
-	// public void setAnamnese(Anamnese anamnese) {
-	// this.anamnese = anamnese;
-	// }
+	 public Anamnese getAnamnese() {
+	 return anamnese;
+	 }
+	
+	 public void setAnamnese(Anamnese anamnese) {
+	 this.anamnese = anamnese;
+	 }
 
 }
