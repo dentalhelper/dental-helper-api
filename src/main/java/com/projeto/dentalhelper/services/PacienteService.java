@@ -52,8 +52,15 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		CpfJaExiste(objetoModificado, codigo);
 		RgJaExiste(objetoModificado, codigo);
 		
-		objetoModificado.setDataCriacaoFicha(objetoAtualizado.getDataCriacaoFicha());
+		objetoModificado.getEndereco().setCodigo(objetoAtualizado.getEndereco().getCodigo());
+		objetoModificado.getTelefones().get(0).setCodigo(objetoAtualizado.getTelefones().get(0).getCodigo());
 		
+		if(objetoModificado.getTelefones().size() > 1 && objetoAtualizado.getTelefones().size() > 1) {
+			objetoModificado.getTelefones().get(1).setCodigo(objetoAtualizado.getTelefones().get(1).getCodigo());
+		}
+		
+		
+		objetoModificado.setDataCriacaoFicha(objetoAtualizado.getDataCriacaoFicha());
 		objetoAtualizado.setEndereco(objetoModificado.getEndereco());
 		objetoAtualizado.getTelefones().clear();
 		objetoAtualizado.getTelefones().addAll(objetoModificado.getTelefones());

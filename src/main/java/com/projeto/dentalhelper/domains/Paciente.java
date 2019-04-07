@@ -25,7 +25,6 @@ public class Paciente extends Pessoa {
 	@Temporal(TemporalType.DATE)
 	private Date dataCriacaoFicha;
 
-	@NotBlank
 	private String profissao;
 
 	private String fotoPerfil;

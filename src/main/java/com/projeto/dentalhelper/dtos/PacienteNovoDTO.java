@@ -3,29 +3,64 @@ package com.projeto.dentalhelper.dtos;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class PacienteNovoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Size(max = 50)
+	@NotBlank
 	private String nome;
+	
+	@NotNull
 	private Date dataNascimento;
+	
+	@Size(max = 30)
+	@NotBlank
 	private String cPF;
+	
+	@Size(max = 20)
+	@NotBlank
 	private String rG;
+	
 	private Integer estadoCivil;
+	
 	private Integer sexo;
+	
+	@Size(max = 50)
+	@Email
 	private String email;
+	
+	@NotBlank
 	private String profissao;
+	
 	private String fotoPerfil;
-
+	
+	@NotBlank
 	private String telefonePrincipal;
+	
 	private String telefone2;
-
+	
+	@NotBlank
+	@Size(min = 3)
 	private String logradouro;
+	
+	@NotNull
 	private Integer numero;
+	
+	@NotBlank
+	@Size(min = 3)
 	private String bairro;
+	@NotBlank
 	private String CEP;
+	
 	private String complemento;
 
+	@NotNull
 	private Long codigoCidade;
 
 	public PacienteNovoDTO() {

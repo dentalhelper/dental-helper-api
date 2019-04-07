@@ -28,28 +28,20 @@ public abstract class Pessoa extends ObjetoIdentificado {
 
 	private static final long serialVersionUID = 1L;
 
-	@Size(max = 50)
-	@NotBlank
 	private String nome;
 
-	@NotNull
 	@Temporal(TemporalType.DATE)
 	private Date dataNascimento;
 
-	@Size(max = 30)
-	@NotBlank
 	private String cPF;
 
-	@Size(max = 20)
-	@NotBlank
+
 	private String rG;
 
 	private Integer estadoCivil;
 	
 	private Integer sexo;
 
-	@Size(max = 50)
-	@Email
 	private String email;
 
 	@JsonIgnoreProperties("pessoa")

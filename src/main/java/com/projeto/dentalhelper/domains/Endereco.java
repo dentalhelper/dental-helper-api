@@ -18,16 +18,15 @@ public class Endereco extends ObjetoIdentificado{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@NotBlank
-	@Size(min = 3)
+
 	private String logradouro;
-	@NotNull
+	
+
 	private Integer numero;
 	
-	@NotBlank
-	@Size(min = 3)
+
 	private String bairro;
-	@NotBlank
+
 	private String CEP;
 	
 	private String complemento;
