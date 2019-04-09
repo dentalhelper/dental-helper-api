@@ -31,6 +31,7 @@ import com.projeto.dentalhelper.services.PacienteService;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @RestController
@@ -145,7 +146,7 @@ public class PacienteResource implements PacienteAPI {
 		try {
 			objetoEditado = service.atualizarAnamnese(codigo, anamnese);
 		} catch (ServiceApplicationException e) {
-			lancarExceptionComLocation(e);
+			throw new RespostaInvalidaRuntimeException(e.getMessage());
 		}
 		return ResponseEntity.ok(objetoEditado);
 		

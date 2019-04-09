@@ -35,6 +35,8 @@ import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeEx
 import com.projeto.dentalhelper.services.exceptions.RecursoDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaException;
+import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaRuntimeException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
@@ -88,6 +90,18 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return ResponseEntity.status(status).body(responseBody);
 	}
+	
+//	@ExceptionHandler({ RespostaInvalidaException.class })
+//	public ResponseEntity<Object> respostaInvalida(RespostaInvalidaException exception,
+//			HttpServletRequest request) {
+//
+//		HttpStatus status = HttpStatus.NOT_FOUND;
+//		String mensagemUsuario = montarMensagemUsuario("recurso.resposta-invalida");
+//		String mensagemDesenvolvedor = exception.toString();
+//		List<ErroMensagem> responseBody = montarResponseBody(status, mensagemUsuario, mensagemDesenvolvedor);
+//
+//		return ResponseEntity.status(status).body(responseBody);
+//	}
 
 	@ExceptionHandler({ DataIntegrityViolationException.class })
 	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException exception,
@@ -119,6 +133,21 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 
 		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.nome-duplicado");
 		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
+	}
+	
+	@ExceptionHandler(RespostaInvalidaRuntimeException.class)
+	public ResponseEntity<Object> recursoNomeDuplicado(RespostaInvalidaRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+		
+		
+		
+		String mensagemUsuario = montarMensagemUsuario("recurso.resposta-invalida");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
 
 	@ExceptionHandler(RecursoCpfDuplicadoRuntimeException.class)
@@ -197,6 +226,8 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 				mensagemDesenvolvedor, CONFLICT.value(), System.currentTimeMillis(), resourceLocation));
 		return responseBody;
 	}
+	
+	
 
 	private List<ErroMensagem> criarListaDeErros(BindingResult bindingResult, HttpStatus status) {
 		List<ErroMensagem> erros = new ArrayList<>();

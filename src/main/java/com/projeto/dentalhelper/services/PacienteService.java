@@ -30,6 +30,7 @@ import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 import com.projeto.dentalhelper.services.storage.S3Service;
 
@@ -90,6 +91,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 				&& StringUtils.hasText(objetoAtualizado.getFotoPerfil())) {
 			s3Service.remover(objetoAtualizado.getFotoPerfil());
 			objetoAtualizado.setUrlDaFoto(null);
+			objetoModificado.setUrlDaFoto(null);
 		} else if(StringUtils.hasText(objetoModificado.getFotoPerfil()) 
 				&& !objetoModificado.getFotoPerfil().equals(objetoAtualizado.getFotoPerfil())) {
 			s3Service.substituir(objetoAtualizado.getFotoPerfil(), objetoModificado.getFotoPerfil());
@@ -119,6 +121,18 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	public Paciente atualizarAnamnese(Long codigo, Anamnese anamnese) throws ServiceApplicationException {
 		Paciente paciente = buscarPorCodigo(codigo);
 		
+		if(anamnese.getQuestoes() == null || anamnese.getQuestoes().size() == 0) {
+			throw new RespostaInvalidaException("Questões não pode estar em branco");
+		}
+		
+		
+		for(Questao q: anamnese.getQuestoes()) {
+			if(q.getResposta() == null) {
+				throw new RespostaInvalidaException("Resposta inválida para a pergunta: " +q.getDescricao());
+			}
+		}
+		
+		
 		Calendar calendar = new GregorianCalendar();
 		anamnese.setDataResp(calendar.getTime());
 		
@@ -143,6 +157,9 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		}
 		
 		anamnese.getQuestoes().forEach(questao -> questao.setAnamnese(anamnese));
+		
+		anamnese.setCodigo(paciente.getAnamnese().getCodigo());
+		
 		
 		paciente.setAnamnese(anamnese);
 		
