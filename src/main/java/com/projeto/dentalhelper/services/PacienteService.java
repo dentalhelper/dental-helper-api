@@ -1,5 +1,6 @@
 package com.projeto.dentalhelper.services;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -8,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Cidade;
@@ -26,12 +28,16 @@ import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
+import com.projeto.dentalhelper.services.storage.S3Service;
 
 @Service
 public class PacienteService extends AbstractService<Paciente, PacienteRepository>{
 	
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	@Autowired
 	private QuestaoPreDefinidaRepository questoesRepository;
@@ -225,5 +231,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		return paciente;
 	}
 	
-
+	public URI enviarFotoDoPaciente(MultipartFile multipartFile) {
+		return s3Service.enviarArquivo(multipartFile);
+	}
 }
