@@ -80,6 +80,19 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 
+		<!-- AmazonS3 -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>LATEST</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>LATEST</version>
+		</dependency>
+
 		<!-- SWAGGER -->
 		<dependency>
 			<groupId>io.springfox</groupId>
