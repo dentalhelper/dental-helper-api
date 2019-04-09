@@ -6,9 +6,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class DentalHelperApiProperty {
 
 	private final S3 s3 = new S3();
+	
+	private final Imagem imagem = new Imagem();
 
 	public S3 getS3() {
 		return s3;
+	}
+
+	public Imagem getImagem() {
+		return imagem;
 	}
 
 	public static class S3 {
@@ -49,5 +55,18 @@ public class DentalHelperApiProperty {
 			this.region = region;
 		}
 
+	}
+	
+	public static class Imagem{
+		private Integer tamanho = 200;
+
+		public Integer getTamanho() {
+			return tamanho;
+		}
+
+		public void setTamanho(Integer tamanho) {
+			this.tamanho = tamanho;
+		}
+		
 	}
 }

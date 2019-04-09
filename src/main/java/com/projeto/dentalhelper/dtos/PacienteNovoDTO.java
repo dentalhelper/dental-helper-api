@@ -15,49 +15,51 @@ public class PacienteNovoDTO implements Serializable {
 	@Size(max = 50)
 	@NotBlank
 	private String nome;
-	
+
 	@NotNull
 	private Date dataNascimento;
-	
+
 	@Size(max = 30)
 	@NotBlank
 	private String cPF;
-	
+
 	@Size(max = 20)
 	@NotBlank
 	private String rG;
-	
+
 	private Integer estadoCivil;
-	
+
 	private Integer sexo;
-	
+
 	@Size(max = 50)
 	@Email
 	private String email;
-	
+
 	@NotBlank
 	private String profissao;
-	
+
 	private String fotoPerfil;
-	
+
+	private String urlDaFoto;
+
 	@NotBlank
 	private String telefonePrincipal;
-	
+
 	private String telefone2;
-	
+
 	@NotBlank
 	@Size(min = 3)
 	private String logradouro;
-	
+
 	@NotNull
 	private Integer numero;
-	
+
 	@NotBlank
 	@Size(min = 3)
 	private String bairro;
 	@NotBlank
 	private String CEP;
-	
+
 	private String complemento;
 
 	@NotNull
@@ -137,6 +139,14 @@ public class PacienteNovoDTO implements Serializable {
 
 	public void setFotoPerfil(String fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
+	}
+
+	public String getUrlDaFoto() {
+		return urlDaFoto;
+	}
+
+	public void setUrlDaFoto(String urlDaFoto) {
+		this.urlDaFoto = urlDaFoto;
 	}
 
 	public String getTelefonePrincipal() {

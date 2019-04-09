@@ -3,7 +3,6 @@ package com.projeto.dentalhelper.resources;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.projeto.dentalhelper.domains.Anamnese;
+import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
@@ -70,9 +70,9 @@ public class PacienteResource implements PacienteAPI {
 	}
 	
 	@Override
-	public ResponseEntity<Void> postImage(MultipartFile file) {
-		URI uri = service.enviarFotoDoPaciente(file);
-		return ResponseEntity.created(uri).build();
+	public ResponseEntity<Foto> postImage(MultipartFile file) {
+		Foto foto = service.enviarFotoDoPaciente(file);
+		return ResponseEntity.status(HttpStatus.CREATED).body(foto);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.projeto.dentalhelper.domains.Anamnese;
+import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
@@ -34,7 +35,7 @@ public interface PacienteAPI {
 
 	@ApiOperation(value = "Salva a imagem do Paciente")
 	@PostMapping(value = "/{foto}")
-	public ResponseEntity<Void> postImage(@RequestParam(name = "file") MultipartFile file);
+	public ResponseEntity<Foto> postImage(@RequestParam(name = "file") MultipartFile file);
 
 	@ApiOperation(value = "Busca pacientes pelo nome ou um paciente pelo cpf")
 	@GetMapping

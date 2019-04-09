@@ -1,6 +1,5 @@
 package com.projeto.dentalhelper.services;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -8,12 +7,15 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Cidade;
 import com.projeto.dentalhelper.domains.Endereco;
+import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.domains.Questao;
 import com.projeto.dentalhelper.domains.QuestaoPreDefinida;
@@ -25,6 +27,7 @@ import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
+import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
@@ -69,7 +72,9 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		anamnese.setQuestoes(questoes);
 		objeto.setAnamnese(anamnese);
 		
-		
+		if(StringUtils.hasText(objeto.getFotoPerfil())) {
+			s3Service.salvar(objeto.getFotoPerfil());
+		}
 		return repository.save(objeto);
 	}
 	
@@ -81,7 +86,14 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		CpfJaExiste(objetoModificado, codigo);
 		RgJaExiste(objetoModificado, codigo);
 		
-		
+		if(StringUtils.isEmpty(objetoModificado.getFotoPerfil()) 
+				&& StringUtils.hasText(objetoAtualizado.getFotoPerfil())) {
+			s3Service.remover(objetoAtualizado.getFotoPerfil());
+			objetoAtualizado.setUrlDaFoto(null);
+		} else if(StringUtils.hasText(objetoModificado.getFotoPerfil()) 
+				&& !objetoModificado.getFotoPerfil().equals(objetoAtualizado.getFotoPerfil())) {
+			s3Service.substituir(objetoAtualizado.getFotoPerfil(), objetoModificado.getFotoPerfil());
+		}
 		
 		objetoModificado.getEndereco().setCodigo(objetoAtualizado.getEndereco().getCodigo());
 		objetoModificado.getTelefones().get(0).setCodigo(objetoAtualizado.getTelefones().get(0).getCodigo());
@@ -197,6 +209,22 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		
 	}
 	
+	public void deletar (Long codigo)   {
+		Paciente objetoAtualizado = buscarPorCodigo(codigo);
+		try {
+			repository.deleteById(codigo);
+			s3Service.remover(objetoAtualizado.getFotoPerfil());
+
+		} catch (DataIntegrityViolationException e) {
+			lancarIntegridadeDeDadosException(e);
+		}
+	}
+
+	public void lancarIntegridadeDeDadosException(DataIntegrityViolationException e) {
+		throw new IntegridadeDeDadosException(
+				"Integridade de dados violada, não é possível excluir um recurso que está relacionado à outro.");
+	}
+	
 	
 	
 	private Paciente obterPacienteExistente(List<Paciente> listaDeObjetos) {
@@ -209,7 +237,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		Paciente paciente = new Paciente(objetoDTO.getNome(), objetoDTO.getDataNascimento(), 
 				objetoDTO.getcPF(), objetoDTO.getrG(), EstadoCivil.toEnum(objetoDTO.getEstadoCivil()), 
 				Sexo.toEnum(objetoDTO.getSexo()), objetoDTO.getEmail(), objetoDTO.getProfissao(), 
-				objetoDTO.getFotoPerfil());
+				objetoDTO.getFotoPerfil(), objetoDTO.getUrlDaFoto());
 		
 		Cidade cidade = cidadeRepository.getOne(objetoDTO.getCodigoCidade());
 		
@@ -231,7 +259,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		return paciente;
 	}
 	
-	public URI enviarFotoDoPaciente(MultipartFile multipartFile) {
+	public Foto enviarFotoDoPaciente(MultipartFile multipartFile) {
 		return s3Service.enviarArquivo(multipartFile);
 	}
 }

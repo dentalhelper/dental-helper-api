@@ -4,15 +4,12 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
 import com.projeto.dentalhelper.domains.enums.Sexo;
@@ -22,9 +19,6 @@ import com.projeto.dentalhelper.domains.enums.Sexo;
 @PrimaryKeyJoinColumn(name = "codigo")
 public class Paciente extends Pessoa {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Temporal(TemporalType.DATE)
@@ -34,6 +28,8 @@ public class Paciente extends Pessoa {
 
 	private String fotoPerfil;
 
+	private String urlDaFoto;
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "codigo_anamnese")
 	private Anamnese anamnese;
@@ -41,16 +37,17 @@ public class Paciente extends Pessoa {
 	public Date getDataCriacaoFicha() {
 		return dataCriacaoFicha;
 	}
-	
+
 	public Paciente() {
-		
+
 	}
 
-	public Paciente(String nome, Date dataNascimento, String cPF, String rG, EstadoCivil estadoCivil,Sexo sexo, String email,
-			String profissao, String fotoPerfil) {
+	public Paciente(String nome, Date dataNascimento, String cPF, String rG, EstadoCivil estadoCivil, Sexo sexo,
+			String email, String profissao, String fotoPerfil, String urlDaFoto) {
 		super(nome, dataNascimento, cPF, rG, estadoCivil, sexo, email);
 		this.profissao = profissao;
 		this.fotoPerfil = fotoPerfil;
+		this.urlDaFoto = urlDaFoto;
 	}
 
 	public void setDataCriacaoFicha(Date dataCriacaoFicha) {
@@ -73,12 +70,20 @@ public class Paciente extends Pessoa {
 		this.fotoPerfil = fotoPerfil;
 	}
 
-	 public Anamnese getAnamnese() {
-	 return anamnese;
-	 }
-	
-	 public void setAnamnese(Anamnese anamnese) {
-	 this.anamnese = anamnese;
-	 }
+	public String getUrlDaFoto() {
+		return urlDaFoto;
+	}
+
+	public void setUrlDaFoto(String urlDaFoto) {
+		this.urlDaFoto = urlDaFoto;
+	}
+
+	public Anamnese getAnamnese() {
+		return anamnese;
+	}
+
+	public void setAnamnese(Anamnese anamnese) {
+		this.anamnese = anamnese;
+	}
 
 }
