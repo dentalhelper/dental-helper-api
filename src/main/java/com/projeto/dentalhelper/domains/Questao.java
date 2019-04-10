@@ -7,6 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.projeto.dentalhelper.domains.enums.RespostaQuestaoAnamnese;
 
@@ -18,7 +19,7 @@ public class Questao extends ObjetoIdentificado{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+	@Size(max = 135)
 	@NotBlank
 	private String descricao;
 	
@@ -48,14 +49,6 @@ public class Questao extends ObjetoIdentificado{
 		this.anamnese = anamnese;
 	}
 
-	public RespostaQuestaoAnamnese getResposta() {
-		return RespostaQuestaoAnamnese.toEnum(resposta);
-	}
-
-	public void setResposta(RespostaQuestaoAnamnese resposta) {
-		this.resposta = resposta.getCodigo();
-	}
-
 	public String getInformAdicionais() {
 		return informAdicionais;
 	}
@@ -63,6 +56,16 @@ public class Questao extends ObjetoIdentificado{
 	public void setInformAdicionais(String informAdicionais) {
 		this.informAdicionais = informAdicionais;
 	}
+
+	public RespostaQuestaoAnamnese getResposta() {
+		return RespostaQuestaoAnamnese.toEnum(resposta);
+	}
+
+	public void setResposta(RespostaQuestaoAnamnese resposta) {
+		this.resposta = resposta.getCodigo();
+	}
+	
+	
 	
 	
 	

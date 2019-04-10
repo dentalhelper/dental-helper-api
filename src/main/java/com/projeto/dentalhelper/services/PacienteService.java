@@ -122,7 +122,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		Paciente paciente = buscarPorCodigo(codigo);
 		
 		if(anamnese.getQuestoes() == null || anamnese.getQuestoes().size() == 0) {
-			throw new RespostaInvalidaException("Questões não pode estar em branco");
+			throw new RespostaInvalidaException("Questões não podem estar em branco");
 		}
 		
 		
