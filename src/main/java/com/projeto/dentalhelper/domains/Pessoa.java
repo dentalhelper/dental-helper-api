@@ -13,10 +13,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
@@ -35,11 +31,10 @@ public abstract class Pessoa extends ObjetoIdentificado {
 
 	private String cPF;
 
-
 	private String rG;
 
 	private Integer estadoCivil;
-	
+
 	private Integer sexo;
 
 	private String email;
@@ -56,7 +51,8 @@ public abstract class Pessoa extends ObjetoIdentificado {
 	public Pessoa() {
 	}
 
-	public Pessoa(String nome, Date dataNascimento, String cPF, String rG, EstadoCivil estadoCivil, Sexo sexo, String email) {
+	public Pessoa(String nome, Date dataNascimento, String cPF, String rG, EstadoCivil estadoCivil, Sexo sexo,
+			String email) {
 		super();
 		this.nome = nome;
 		this.dataNascimento = dataNascimento;
@@ -141,6 +137,10 @@ public abstract class Pessoa extends ObjetoIdentificado {
 
 	public String getTelefonePrincipal() {
 		return this.telefones.size() > 0 ? this.telefones.get(0).getNumero() : "";
+	}
+
+	public String getTelefoneSecundario() {
+		return (this.telefones.size() > 0 && this.telefones.size() == 2) ? this.telefones.get(1).getNumero() : "";
 	}
 
 }

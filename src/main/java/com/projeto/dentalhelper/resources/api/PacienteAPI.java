@@ -45,6 +45,10 @@ public interface PacienteAPI {
 	@ApiOperation(value = "Busca um paciente por código")
 	@GetMapping(value = "/{codigo}")
 	public ResponseEntity<Paciente> getByCodigo(@PathVariable Long codigo);
+	
+	@ApiOperation(value = "Busca dados cadastrais do paciente pelo código")
+	@GetMapping(value = "/{codigo}/edit")
+	public ResponseEntity<PacienteNovoDTO> getByCodigoForEdit(@PathVariable Long codigo);
 
 	@ApiOperation(value = "Atualiza um paciente")
 	@PutMapping(value = "/{codigo}")

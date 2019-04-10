@@ -139,6 +139,14 @@ public class PacienteResource implements PacienteAPI {
 		return ResponseEntity.ok().body(pacienteResumoDTO);
 
 	}
+	
+	@Override
+	public ResponseEntity<PacienteNovoDTO> getByCodigoForEdit(Long codigo) {
+		Paciente objeto = service.buscarPorCodigo(codigo);
+		adicionarLink(objeto, codigo);
+		PacienteNovoDTO pacienteDTO = new PacienteNovoDTO(objeto);
+		return ResponseEntity.ok().body(pacienteDTO);
+	}
 
 	@Override
 	public ResponseEntity<Paciente> put(@PathVariable Long codigo,@Valid @RequestBody Anamnese anamnese) {

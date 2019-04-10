@@ -8,6 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.projeto.dentalhelper.domains.Paciente;
+
 public class PacienteNovoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -67,6 +69,28 @@ public class PacienteNovoDTO implements Serializable {
 
 	public PacienteNovoDTO() {
 
+	}
+
+	public PacienteNovoDTO(Paciente paciente) {
+		super();
+		this.nome = paciente.getNome();
+		this.dataNascimento = paciente.getDataNascimento();
+		this.cPF = paciente.getcPF();
+		this.rG = paciente.getrG();
+		this.estadoCivil = paciente.getEstadoCivil().getCodigo();
+		this.sexo = paciente.getSexo().getCodigo();
+		this.email = paciente.getEmail();
+		this.profissao = paciente.getProfissao();
+		this.fotoPerfil = paciente.getFotoPerfil();
+		this.urlDaFoto = paciente.getUrlDaFoto();
+		this.telefonePrincipal = paciente.getTelefonePrincipal();
+		this.telefone2 = paciente.getTelefoneSecundario();
+		this.logradouro = paciente.getEndereco().getLogradouro();
+		this.numero = paciente.getEndereco().getNumero();
+		this.bairro = paciente.getEndereco().getBairro();
+		CEP = paciente.getEndereco().getCEP();
+		this.complemento = paciente.getEndereco().getComplemento();
+		this.codigoCidade = paciente.getEndereco().getCidade().getCodigo();
 	}
 
 	public String getNome() {

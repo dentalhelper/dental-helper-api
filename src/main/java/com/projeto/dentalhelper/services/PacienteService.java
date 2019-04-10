@@ -230,7 +230,9 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		Paciente objetoAtualizado = buscarPorCodigo(codigo);
 		try {
 			repository.deleteById(codigo);
+			if(objetoAtualizado.getFotoPerfil() == null || objetoAtualizado.getFotoPerfil() == "") {
 			s3Service.remover(objetoAtualizado.getFotoPerfil());
+		}
 
 		} catch (DataIntegrityViolationException e) {
 			lancarIntegridadeDeDadosException(e);
