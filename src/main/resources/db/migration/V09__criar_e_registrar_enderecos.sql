@@ -15,8 +15,8 @@ CREATE TABLE endereco(
 
 INSERT INTO endereco
 (logradouro, numero, bairro, cep, complemento, codigo_cidade) values
-('rua assis pereira', 43, 'centro', '55195-000', 'gafout', 1),
-('rua gonçalves altair', 21, 'centro', '55192-000', 'vizinho a igreja', 2),
-('rua pedrosa', 123, 'cohab', '55199-000', 'casa', 3),
-('avenida artur silva', 99, 'pedroso', '55198-080', 'proximo a ponte', 4),
-('avenida maria', 90, 'novo', '55290-088', 'apartamento', 5)
+('rua assis pereira', 43, 'centro', '55195000', 'gafout', 1),
+('rua gonçalves altair', 21, 'centro', '55192000', 'vizinho a igreja', 2),
+('rua pedrosa', 123, 'cohab', '55199000', 'casa', 3),
+('avenida artur silva', 99, 'pedroso', '55198080', 'proximo a ponte', 4),
+('avenida maria', 90, 'novo', '55290088', 'apartamento', 5)

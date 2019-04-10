@@ -33,11 +33,11 @@ CREATE TABLE paciente(
 
 INSERT INTO pessoa
 (cpf, rg, data_nascimento, email, estado_civil, sexo, nome, endereco_codigo) values
-('11111111111', '1.111.111', '1997-03-10', 'aaaa@gmail.com' ,1, 2, 'João Roberto', 1),
-('11111111112', '2.111.111', '1985-05-12', 'bbbb@gmail.com' ,2, 1, 'Julia Moraes', 2),
-('11111111113', '3.111.111', '1993-07-08', 'cccc@gmail.com' ,3, 2, 'Douglas Nascimento', 3),
-('11111111114', '4.111.111', '1999-12-11', 'dddd@gmail.com' ,4, 1, 'Marcela Rodrigues', 4),
-('20345498000131', '5.111.111', '1996-03-05', 'eeee@gmail.com' ,5, 2, 'Antônio Ferreira', 5);
+('11111111111', '1111111', '1997-03-10', 'aaaa@gmail.com' ,1, 2, 'João Roberto', 1),
+('11111111112', '2111111', '1985-05-12', 'bbbb@gmail.com' ,2, 1, 'Julia Moraes', 2),
+('11111111113', '3111111', '1993-07-08', 'cccc@gmail.com' ,3, 2, 'Douglas Nascimento', 3),
+('11111111114', '4111111', '1999-12-11', 'dddd@gmail.com' ,4, 1, 'Marcela Rodrigues', 4),
+('20345498000131', '5111111', '1996-03-05', 'eeee@gmail.com' ,5, 2, 'Antônio Ferreira', 5);
 
 
 INSERT INTO paciente

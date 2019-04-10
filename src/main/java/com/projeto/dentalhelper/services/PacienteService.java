@@ -27,6 +27,7 @@ import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
+import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
@@ -51,6 +52,29 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	@Override
 	public Paciente salvar(Paciente objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
+		
+		if(!objeto.getcPF().matches("[0-9]{11}")&&objeto.getcPF().length()<14){
+			throw new DadoInvalidoException("Formato de cpf inválido: "+objeto.getcPF());
+		}
+		else if(!objeto.getcPF().matches("[0-9]{14}")&&objeto.getcPF().length()>=14){
+			throw new DadoInvalidoException("Formato de cnpj inválido: "+objeto.getcPF());
+		}
+		else if(!objeto.getrG().matches("[0-9]{7}")){
+			throw new DadoInvalidoException("Formato de rg inválido: "+objeto.getrG());
+		}
+		else if(!objeto.getTelefonePrincipal().matches("[0-9]{11}")) {
+			throw new DadoInvalidoException("Formato de telefone inválido: "+objeto.getTelefonePrincipal());
+		}
+		else if(objeto.getTelefoneSecundario() != null && !objeto.getTelefoneSecundario().matches("[0-9]{11}")){
+			throw new DadoInvalidoException("Formato de telefone inválido: "+objeto.getTelefoneSecundario());
+		}
+		else if(!objeto.getEndereco().getCEP().matches("[0-9]{8}")){
+			throw new DadoInvalidoException("Formato de cep inválido: "+objeto.getEndereco().getCEP());
+		}
+		
+			
+		
+		
 		
 		CpfJaExiste(objeto, null);
 		RgJaExiste(objeto, null);
@@ -83,6 +107,25 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	@Override
 	public Paciente atualizar(Long codigo, Paciente objetoModificado) throws ServiceApplicationException {
 		Paciente objetoAtualizado = buscarPorCodigo(codigo);
+		
+		if(!objetoModificado.getcPF().matches("[0-9]{11}")&&objetoModificado.getcPF().length()<14){
+			throw new DadoInvalidoException("Formato de cpf inválido: "+objetoModificado.getcPF());
+		}
+		else if(!objetoModificado.getcPF().matches("[0-9]{14}")&&objetoModificado.getcPF().length()>=14){
+			throw new DadoInvalidoException("Formato de cnpj inválido: "+objetoModificado.getcPF());
+		}
+		else if(!objetoModificado.getrG().matches("[0-9]{7}")){
+			throw new DadoInvalidoException("Formato de rg inválido: "+objetoModificado.getrG());
+		}
+		else if(!objetoModificado.getTelefonePrincipal().matches("[0-9]{11}")) {
+			throw new DadoInvalidoException("Formato de telefone inválido: "+objetoModificado.getTelefonePrincipal());
+		}
+		else if(objetoModificado.getTelefoneSecundario() != null && !objetoModificado.getTelefoneSecundario().matches("[0-9]{11}")){
+			throw new DadoInvalidoException("Formato de telefone inválido: "+objetoModificado.getTelefoneSecundario());
+		}
+		else if(!objetoModificado.getEndereco().getCEP().matches("[0-9]{8}")){
+			throw new DadoInvalidoException("Formato de cep inválido: "+objetoModificado.getEndereco().getCEP());
+		}
 
 		CpfJaExiste(objetoModificado, codigo);
 		RgJaExiste(objetoModificado, codigo);
@@ -230,9 +273,12 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		Paciente objetoAtualizado = buscarPorCodigo(codigo);
 		try {
 			repository.deleteById(codigo);
-			if(objetoAtualizado.getFotoPerfil() == null || objetoAtualizado.getFotoPerfil() == "") {
-			s3Service.remover(objetoAtualizado.getFotoPerfil());
-		}
+			if(objetoAtualizado.getFotoPerfil() != null) {
+				if( objetoAtualizado.getFotoPerfil() != ""){
+					s3Service.remover(objetoAtualizado.getFotoPerfil());
+				}
+				
+			}
 
 		} catch (DataIntegrityViolationException e) {
 			lancarIntegridadeDeDadosException(e);

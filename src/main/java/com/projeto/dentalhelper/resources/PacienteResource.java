@@ -28,6 +28,8 @@ import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 import com.projeto.dentalhelper.events.RecursoCriadoEvent;
 import com.projeto.dentalhelper.resources.api.PacienteAPI;
 import com.projeto.dentalhelper.services.PacienteService;
+import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
+import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
@@ -49,6 +51,8 @@ public class PacienteResource implements PacienteAPI {
 
 		try {
 			objetoSalvo = salvar(objetoSalvo);
+		} catch (DadoInvalidoException e) {
+			throw new DadoInvalidoRunTimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -90,6 +94,8 @@ public class PacienteResource implements PacienteAPI {
 		Paciente objetoEditado = null;
 		try {
 			objetoEditado = atualizar(codigo, pacienteFromDTO);
+		} catch (DadoInvalidoException e) {
+			throw new DadoInvalidoRunTimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
