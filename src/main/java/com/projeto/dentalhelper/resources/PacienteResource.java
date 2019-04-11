@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 import com.projeto.dentalhelper.events.RecursoCriadoEvent;
@@ -165,5 +166,15 @@ public class PacienteResource implements PacienteAPI {
 		return ResponseEntity.ok(objetoEditado);
 		
 	}
+
+	@Override
+	public ResponseEntity<PacienteAnamneseDTO> getAnamneseByCodigoPaciente(@PathVariable Long codigo) {
+		Paciente objeto = service.buscarPorCodigo(codigo);
+		adicionarLink(objeto, codigo);
+		PacienteAnamneseDTO pacienteDTO = new PacienteAnamneseDTO(objeto);
+		return ResponseEntity.ok().body(pacienteDTO);
+	}
+	
+	
 
 }

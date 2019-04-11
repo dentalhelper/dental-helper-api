@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 
@@ -65,5 +66,9 @@ public interface PacienteAPI {
 	@ApiOperation(value = "Atualiza a anamnese do paciente")
 	@PutMapping(value = "/{codigo}/anamnese")
 	public ResponseEntity<Paciente> put(@PathVariable Long codigo, @Valid @RequestBody Anamnese anamnese);
+	
+	@ApiOperation(value = "Busca um paciente pelo código e retorna sua anamnese")
+	@GetMapping(value = "/{codigo}/anamnese")
+	public ResponseEntity<PacienteAnamneseDTO> getAnamneseByCodigoPaciente(@PathVariable Long codigo);
 
 }
