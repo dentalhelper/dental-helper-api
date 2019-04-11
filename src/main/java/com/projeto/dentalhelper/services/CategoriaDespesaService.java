@@ -18,16 +18,21 @@ public class CategoriaDespesaService extends AbstractService<CategoriaDespesa, C
 	@Override
 	public CategoriaDespesa salvar(CategoriaDespesa objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
-		nomeDeCategoriaExiste(objeto);
+		nomeDeCategoriaExiste(objeto, null);
 		return repository.save(objeto);
 	}
 
-	private boolean nomeDeCategoriaExiste(CategoriaDespesa objeto) throws RecursoNomeDuplicadoException {
+	private boolean nomeDeCategoriaExiste(CategoriaDespesa objeto, Long codigoDoObjetoAtualizado) throws RecursoNomeDuplicadoException {
 		List<CategoriaDespesa> listaDeObjetos = buscarPeloNome(objeto.getNome());
 		if (listaDeObjetos.isEmpty()) {
 			return false;
 		} else {
 			CategoriaDespesa categoriaExistente = obterCategoriaExistente(listaDeObjetos);
+			if(codigoDoObjetoAtualizado != null) {
+				if(categoriaExistente.getCodigo() == codigoDoObjetoAtualizado) {
+					return false;			
+				}
+			}
 			throw new RecursoNomeDuplicadoException(Long.toString(categoriaExistente.getCodigo()));
 		}
 	}
@@ -42,7 +47,7 @@ public class CategoriaDespesaService extends AbstractService<CategoriaDespesa, C
 	
 	public CategoriaDespesa atualizar(Long codigo, CategoriaDespesa objetoModificado) throws ServiceApplicationException{
 
-		nomeDeCategoriaExiste(objetoModificado);
+		nomeDeCategoriaExiste(objetoModificado, codigo);
 
 		CategoriaDespesa objetoAtualizado = buscarPorCodigo(codigo);
 		
