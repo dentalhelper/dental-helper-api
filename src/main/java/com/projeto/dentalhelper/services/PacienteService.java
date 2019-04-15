@@ -101,11 +101,15 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		}
 		
 		objetoModificado.getEndereco().setCodigo(objetoAtualizado.getEndereco().getCodigo());
-		objetoModificado.getTelefones().get(0).setCodigo(objetoAtualizado.getTelefones().get(0).getCodigo());
 		
-		if(objetoModificado.getTelefones().size() > 1 && objetoAtualizado.getTelefones().size() > 1) {
-			objetoModificado.getTelefones().get(1).setCodigo(objetoAtualizado.getTelefones().get(1).getCodigo());
+		if(objetoModificado.getTelefones().size() >=1 && objetoAtualizado.getTelefones().size() >=1) {
+			objetoModificado.getTelefones().get(0).setCodigo(objetoAtualizado.getTelefones().get(0).getCodigo());
+			
+			if(objetoModificado.getTelefones().size() > 1 && objetoAtualizado.getTelefones().size() > 1) {
+				objetoModificado.getTelefones().get(1).setCodigo(objetoAtualizado.getTelefones().get(1).getCodigo());
+			}
 		}
+			
 		
 			
 		
@@ -129,11 +133,11 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		}
 		
 		
-		for(Questao q: anamnese.getQuestoes()) {
-			if(q.getResposta() == null) {
-				throw new RespostaInvalidaException("Resposta inválida para a pergunta: " +q.getDescricao());
-			}
-		}
+//		for(Questao q: anamnese.getQuestoes()) {
+//			if(q.getResposta() == null) {
+//				throw new RespostaInvalidaException("Resposta inválida para a pergunta: " +q.getDescricao());
+//			}
+//		}
 		
 		
 		Calendar calendar = new GregorianCalendar();
