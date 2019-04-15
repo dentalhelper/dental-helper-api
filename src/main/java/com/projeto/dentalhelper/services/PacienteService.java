@@ -21,6 +21,7 @@ import com.projeto.dentalhelper.domains.Questao;
 import com.projeto.dentalhelper.domains.QuestaoPreDefinida;
 import com.projeto.dentalhelper.domains.Telefone;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
+import com.projeto.dentalhelper.domains.enums.RespostaQuestaoAnamnese;
 import com.projeto.dentalhelper.domains.enums.Sexo;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
@@ -67,6 +68,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 			q.setAnamnese(anamnese);
 			q.setDescricao(qP.getQuestao());
 			q.setInformAdicionais("");
+			q.setResposta(RespostaQuestaoAnamnese.NAO_SEI);
 			questoes.add(q);
 		}
 		
@@ -121,7 +123,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 
 		
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "sexo", "anamnese");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "anamnese");
 		return repository.save(objetoAtualizado);
 	}
 	
