@@ -7,34 +7,20 @@ import java.util.List;
 
 import javax.validation.ConstraintViolationException;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.projeto.dentalhelper.domains.CategoriaDespesa;
 import com.projeto.dentalhelper.domains.ObjetoIdentificado;
 import com.projeto.dentalhelper.services.CategoriaDespesaService;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
 
-@DataJpaTest
-@RunWith(SpringRunner.class)
-@TestPropertySource(locations = "classpath:test.properties")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ComponentScan(basePackageClasses = { CategoriaDespesaService.class })
-public class CategoriaDespesaRepositoryTest {
+public class CategoriaDespesaRepositoryTest extends AbstractRepositoryConfig {
 
 	@Autowired
 	private CategoriaDespesaService service;
-
-	@Rule
-	public ExpectedException exceptedException = ExpectedException.none();
 
 	@Test
 	public void deveSalvarUmaCategoria() throws Exception {
@@ -117,8 +103,7 @@ public class CategoriaDespesaRepositoryTest {
 		this.service.buscarPorCodigo(categoria.getCodigo());
 
 		assertThat(this.service.buscarPorCodigo(categoria.getCodigo())).isNotNull();
-		assertThat(this.service.buscarPorCodigo(categoria.getCodigo()).getNome())
-				.isEqualTo(categoria.getNome());
+		assertThat(this.service.buscarPorCodigo(categoria.getCodigo()).getNome()).isEqualTo(categoria.getNome());
 	}
 
 	@Test

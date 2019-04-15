@@ -27,7 +27,6 @@ import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
-import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;

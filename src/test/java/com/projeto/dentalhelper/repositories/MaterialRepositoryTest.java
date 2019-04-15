@@ -7,16 +7,9 @@ import java.util.List;
 
 import javax.validation.ConstraintViolationException;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.projeto.dentalhelper.builders.MaterialBuilder;
 import com.projeto.dentalhelper.domains.AtributoMaterial;
@@ -25,18 +18,11 @@ import com.projeto.dentalhelper.domains.ObjetoIdentificado;
 import com.projeto.dentalhelper.services.MaterialService;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
 
-@DataJpaTest
-@RunWith(SpringRunner.class)
-@TestPropertySource(locations = "classpath:test.properties")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ComponentScan(basePackageClasses = { MaterialService.class })
-public class MaterialRepositoryTest {
+public class MaterialRepositoryTest extends AbstractRepositoryConfig {
 	
 	@Autowired
 	private MaterialService service;
-	
-	@Rule
-	public ExpectedException exceptedException = ExpectedException.none();
 	
 	public Material criarMaterialValido() {
 		Material material = MaterialBuilder.novoMaterial();
@@ -159,8 +145,7 @@ public class MaterialRepositoryTest {
 		Material despesaBuscada = this.service.buscarPorCodigo(material.getCodigo());
 
 		assertThat(this.service.buscarPorCodigo(material.getCodigo())).isNotNull();
-		assertThat(this.service.buscarPorCodigo(material.getCodigo()).getNome())
-				.isEqualTo(despesaBuscada.getNome());
+		assertThat(this.service.buscarPorCodigo(material.getCodigo()).getNome()).isEqualTo(despesaBuscada.getNome());
 	}
 
 	@Test
