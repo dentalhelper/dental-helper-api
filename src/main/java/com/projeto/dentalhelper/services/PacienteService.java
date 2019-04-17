@@ -68,7 +68,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 			q.setAnamnese(anamnese);
 			q.setDescricao(qP.getQuestao());
 			q.setInformAdicionais("");
-			q.setResposta(RespostaQuestaoAnamnese.NAO_SEI);
+			q.setResposta(RespostaQuestaoAnamnese.NAO_RESPONDIDO);
 			questoes.add(q);
 		}
 		
@@ -135,11 +135,12 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		}
 		
 		
-//		for(Questao q: anamnese.getQuestoes()) {
-//			if(q.getResposta() == null) {
-//				throw new RespostaInvalidaException("Resposta inválida para a pergunta: " +q.getDescricao());
-//			}
-//		}
+		for(Questao q: anamnese.getQuestoes()) {
+			if(q.getInformAdicionais() == null || q.getInformAdicionais() == "") {
+				if(q.getResposta() == RespostaQuestaoAnamnese.NAO_RESPONDIDO)
+					throw new RespostaInvalidaException("Informações adicionais não podem estar em questões não respondidas.");
+			}
+		}
 		
 		
 		Calendar calendar = new GregorianCalendar();
