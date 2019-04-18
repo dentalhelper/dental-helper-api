@@ -135,12 +135,12 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		}
 		
 		
-		for(Questao q: anamnese.getQuestoes()) {
-			if(q.getInformAdicionais() == null || q.getInformAdicionais() == "") {
-				if(q.getResposta() == RespostaQuestaoAnamnese.NAO_RESPONDIDO)
-					throw new RespostaInvalidaException("Informações adicionais não podem estar em questões não respondidas.");
-			}
-		}
+//		for(Questao q: anamnese.getQuestoes()) {
+//			if(q.getInformAdicionais() == "") {
+//				if(q.getResposta() != RespostaQuestaoAnamnese.SIM && q.getResposta() != RespostaQuestaoAnamnese.NAO && q.getResposta() != RespostaQuestaoAnamnese.NAO_SEI)
+//					throw new RespostaInvalidaException("Informações adicionais não podem estar em questões não respondidas.");
+//			}
+//		}
 		
 		
 		Calendar calendar = new GregorianCalendar();

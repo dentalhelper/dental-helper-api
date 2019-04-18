@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 import com.projeto.dentalhelper.domains.enums.StatusAgendamento;
 
@@ -22,39 +21,62 @@ public class Agendamento extends ObjetoIdentificado{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@NotNull
+
 	@Column(name = "data_agendamento")
 	@Temporal(TemporalType.DATE)
 	private Date dataAgendamento;
 	
-	@NotNull
+
 	@Column(name = "hora_inicio")
 	@Temporal(TemporalType.TIME)
 	private Date horaInicio;
 	
-	@NotNull
+
 	@Column(name = "hora_fim")
 	@Temporal(TemporalType.TIME)
 	private Date horaFim;
 	
-	@NotNull
+
 	@Column(name = "status_agendamento")
 	private Integer statusAgendamento;
 	
 	private String observacao;
 	
-	@NotNull
+
+	@Column(name = "primeira_avaliacao")
 	private Boolean primeiraAvalicao;
 	
-	@NotNull
+
 	@ManyToOne
 	@JoinColumn(name = "codigo_paciente")
 	private Paciente paciente;
 	
-	@NotNull
+
 	@ManyToOne
 	@JoinColumn(name = "codigo_procedimento")
 	private Procedimento procedimento;
+	
+	public Agendamento() {
+		
+	}
+	
+	
+
+
+	public Agendamento(Date dataAgendamento, Date horaInicio, Date horaFim, StatusAgendamento statusAgendamento,
+			String observacao, Boolean primeiraAvalicao, Paciente paciente, Procedimento procedimento) {
+		super();
+		this.dataAgendamento = dataAgendamento;
+		this.horaInicio = horaInicio;
+		this.horaFim = horaFim;
+		this.statusAgendamento = (statusAgendamento==null) ? null : statusAgendamento.getCodigo();
+		this.observacao = observacao;
+		this.primeiraAvalicao = primeiraAvalicao;
+		this.paciente = paciente;
+		this.procedimento = procedimento;
+	}
+
+
 
 
 	public StatusAgendamento getStatusAgendamento() {
