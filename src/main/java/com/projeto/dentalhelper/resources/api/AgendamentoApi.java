@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
+import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -23,24 +24,26 @@ import io.swagger.annotations.ApiResponses;
 
 @RequestMapping(value = "/agendamentos")
 public interface AgendamentoApi {
-	
-	@ApiOperation(value="Salva um agendamento")
-	@PostMapping(value = "/novo")
-	public ResponseEntity<Agendamento> post(@Valid @RequestBody AgendamentoNovoDTO objeto, HttpServletResponse response);
 
-	@ApiOperation(value="Busca todas os agendamentos")
+	@ApiOperation(value = "Salva um agendamento")
+	@PostMapping(value = "/novo")
+	public ResponseEntity<Agendamento> post(@Valid @RequestBody AgendamentoNovoDTO objeto, HttpServletResponse response)
+			throws ServiceApplicationException;
+
+	@ApiOperation(value = "Busca todas os agendamentos")
 	@GetMapping
 	public List<Agendamento> getAll();
-	
-	@ApiOperation(value="Busca um agendamento por código")
+
+	@ApiOperation(value = "Busca um agendamento por código")
 	@GetMapping(value = "/{codigo}")
 	public ResponseEntity<Agendamento> getByCodigo(@PathVariable Long codigo);
 
-	@ApiOperation(value="Atualiza um agendamento")
+	@ApiOperation(value = "Atualiza um agendamento")
 	@PutMapping(value = "/{codigo}")
-	public ResponseEntity<Agendamento> put(@PathVariable Long codigo, @Valid @RequestBody AgendamentoNovoDTO objetoModificado);
-	
-	@ApiOperation(value="Deleta uma categoria")
+	public ResponseEntity<Agendamento> put(@PathVariable Long codigo,
+			@Valid @RequestBody AgendamentoNovoDTO objetoModificado) throws ServiceApplicationException;
+
+	@ApiOperation(value = "Deleta uma categoria")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = "Integridade de dados violada, não é possível excluir um recurso que está relacionado à outro."),
 			@ApiResponse(code = 404, message = "Código inexistente.") })

@@ -63,14 +63,8 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		
 		List<QuestaoPreDefinida> questoesPreDefinidas = questoesRepository.findAll();
 		List<Questao> questoes = new ArrayList<Questao>();
-		for(QuestaoPreDefinida qP: questoesPreDefinidas) {
-			Questao q = new Questao();
-			q.setAnamnese(anamnese);
-			q.setDescricao(qP.getQuestao());
-			q.setInformAdicionais("");
-			q.setResposta(RespostaQuestaoAnamnese.NAO_RESPONDIDO);
-			questoes.add(q);
-		}
+
+		questoesPreDefinidas.forEach(q -> questoes.add(gerarQuestao(q, anamnese)));	
 		
 		anamnese.setQuestoes(questoes);
 		objeto.setAnamnese(anamnese);
@@ -80,8 +74,12 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		}
 		return repository.save(objeto);
 	}
-	
-	
+
+	private Questao gerarQuestao(QuestaoPreDefinida q, Anamnese anamnese) {
+		return new Questao(q.getQuestao(), anamnese);
+	}
+
+
 	@Override
 	public Paciente atualizar(Long codigo, Paciente objetoModificado) throws ServiceApplicationException {
 		Paciente objetoAtualizado = buscarPorCodigo(codigo);
@@ -135,12 +133,12 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		}
 		
 		
-//		for(Questao q: anamnese.getQuestoes()) {
-//			if(q.getInformAdicionais() == "") {
-//				if(q.getResposta() != RespostaQuestaoAnamnese.SIM && q.getResposta() != RespostaQuestaoAnamnese.NAO && q.getResposta() != RespostaQuestaoAnamnese.NAO_SEI)
-//					throw new RespostaInvalidaException("Informações adicionais não podem estar em questões não respondidas.");
-//			}
-//		}
+		for(Questao q: anamnese.getQuestoes()) {
+			if(q.getInformAdicionais() != "") {
+				if(q.getResposta() == RespostaQuestaoAnamnese.NAO_RESPONDIDO)
+					throw new RespostaInvalidaException("Informações adicionais não podem estar em questões não respondidas.");
+			}
+		}
 		
 		
 		Calendar calendar = new GregorianCalendar();

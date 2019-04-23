@@ -42,8 +42,8 @@ INSERT INTO pessoa
 
 INSERT INTO paciente
 (codigo, data_criacao_ficha, profissao, foto_perfil, url_da_foto, codigo_anamnese) values
-(1,'2019-03-10','Pedreiro',  '7de255aa-9ecc-4b6d-aa4e-1e3b371e0a36_Foto-Joao1.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/7de255aa-9ecc-4b6d-aa4e-1e3b371e0a36_Foto-Joao1.jpg', 1),
-(2,'2019-03-11','Recepcionista',  'a2dffcce-63ea-4c2c-8f1c-ef5928ae91d3_julia-sperling_profile_1536x1152.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/a2dffcce-63ea-4c2c-8f1c-ef5928ae91d3_julia-sperling_profile_1536x1152.jpg', 2),
-(3,'2019-03-12','Motorista',  'bd97f7d0-f46e-4db1-83c1-1327d9ee5e05_7449284_x720.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/bd97f7d0-f46e-4db1-83c1-1327d9ee5e05_7449284_x720.jpg', 3),
-(4,'2019-03-13','Advogada',  'af92a2a3-65d4-4c5d-9594-7e629492adb3_marcelatavares_teatroressureiçao.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/af92a2a3-65d4-4c5d-9594-7e629492adb3_marcelatavares_teatroressurei%C3%A7ao.jpg', 4),
+(1,'2019-03-10','Pedreiro',  'bbddcc46-3b9f-4dd7-a777-6b9411e1ed70_joao.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/bbddcc46-3b9f-4dd7-a777-6b9411e1ed70_joao.jpg', 1),
+(2,'2019-03-11','Recepcionista',  'f248aef7-90c1-4195-bd3c-748c488c535e_julia-sperling.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/f248aef7-90c1-4195-bd3c-748c488c535e_julia-sperling.jpg', 2),
+(3,'2019-03-12','Motorista',  '0ddaa345-cc18-4fdd-a755-72f3b9b9d952_61TGQuDZX8L._SY606_.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/0ddaa345-cc18-4fdd-a755-72f3b9b9d952_61TGQuDZX8L._SY606_.jpg', 3),
+(4,'2019-03-13','Advogada',  '52cd8c4a-91d9-4b45-950e-89b659aba57c_marcelatavares.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/52cd8c4a-91d9-4b45-950e-89b659aba57c_marcelatavares.jpg', 4),
 (5,'2019-03-14','Professor',  '', 'https://s3-sa-east-1.amazonaws.com/dental-helper/noimage.png', 5);

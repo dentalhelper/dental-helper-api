@@ -21,13 +21,13 @@ public class RecursoCriadoListener implements ApplicationListener<RecursoCriadoE
 	public void onApplicationEvent(RecursoCriadoEvent event) {
 		HttpServletResponse response = event.getResponse();
 		Long id = event.getId();
-
-		adicionarHeaderLocation(response, id);
+		String path = event.getPath();
+		adicionarHeaderLocation(response, id, path);
 	}
 
-	private void adicionarHeaderLocation(HttpServletResponse response, Long id) {
+	private void adicionarHeaderLocation(HttpServletResponse response, Long id, String path) {
 		// Montando a URI da requisição atual
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(id).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().replacePath(path).path("/{id}").buildAndExpand(id).toUri();
 
 		// Criando o Header de retorno, que indica onde o recurso salvo poderá pode ser
 		// acessado (REST)
