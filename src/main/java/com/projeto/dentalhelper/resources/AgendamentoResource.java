@@ -17,6 +17,8 @@ import com.projeto.dentalhelper.resources.api.AgendamentoApi;
 import com.projeto.dentalhelper.services.AgendamentoService;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
+import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaException;
+import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @RestController
@@ -31,7 +33,8 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 		try {
 			objetoSalvo = service.fromDTO(objeto);
 			objetoSalvo = salvar(objetoSalvo);
-
+		} catch (DataAgendamentoInvalidaException e) {
+			throw new DataAgendamentoInvalidaRuntimeException(e.getMessage());
 		} catch (DadoInvalidoException e) {
 			throw new DadoInvalidoRunTimeException(e.getMessage());
 		}
@@ -62,6 +65,8 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 		try {
 			objetoEditado = service.fromDTO(objetoModificado);
 			objetoEditado = atualizar(codigo, objetoEditado);
+		} catch (DataAgendamentoInvalidaException e) {
+			throw new DataAgendamentoInvalidaRuntimeException(e.getMessage());
 		} catch (DadoInvalidoException e) {
 			throw new DadoInvalidoRunTimeException(e.getMessage());
 		}

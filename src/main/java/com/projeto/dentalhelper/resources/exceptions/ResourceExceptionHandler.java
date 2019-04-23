@@ -29,6 +29,7 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
+import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.FileException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
@@ -124,7 +125,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@ExceptionHandler(RespostaInvalidaRuntimeException.class)
-	public ResponseEntity<Object> recursoNomeDuplicado(RespostaInvalidaRuntimeException exception,
+	public ResponseEntity<Object> respostaInvalida(RespostaInvalidaRuntimeException exception,
 			WebRequest request, HttpServletResponse response) {
 		
 		
@@ -137,6 +138,21 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
+	
+	@ExceptionHandler(DataAgendamentoInvalidaRuntimeException.class)
+	public ResponseEntity<Object> dataAgendamentoInvalida(DataAgendamentoInvalidaRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+	
+		String mensagemUsuario = montarMensagemUsuario("agendamento.data-invalida");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	
 	
 	@ExceptionHandler(DadoInvalidoRunTimeException.class)
 	public ResponseEntity<Object> recursoNomeDuplicado(DadoInvalidoRunTimeException exception,
