@@ -25,7 +25,7 @@ public class AgendamentoNovoDTO implements Serializable{
 	@Pattern(regexp="^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$")
 	private String horaInicio;
 	
-	@NotBlank
+
 	@Pattern(regexp="^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$")
 	private String horaFim;
 	

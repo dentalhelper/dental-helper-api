@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Agendamento;
@@ -18,18 +19,29 @@ import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
 import com.projeto.dentalhelper.repositories.AgendamentoRepository;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaException;
+import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
 public class AgendamentoService extends AbstractService<Agendamento, AgendamentoRepository>{
 	
+	@Autowired
+	PacienteService pacienteService;
+	
+	@Autowired
+	ProcedimentoService procedimentoService;
 	
 	
 	@Override
 	public Agendamento salvar(Agendamento objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
 		
-		dataDeAgendamentoMaiorQueDataAtual(objeto.getDataAgendamento());
+		if(objeto.getHoraFim() == null) {
+			objeto.setHoraFim(adicionarTempoDeProcedimentoNaHora(objeto.getHoraInicio(), objeto.getProcedimento().getDuracaoMinutos()));
+		}
+		
+		dataDeAgendamentoMaiorIgualQueDataAtual(objeto.getDataAgendamento());
+		horaInicialMenorQueFinal(objeto.getHoraInicio(), objeto.getHoraFim());
 
 		return repository.save(objeto);
 	}
@@ -38,7 +50,12 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	@Override
 	public Agendamento atualizar(Long codigo, Agendamento objetoModificado) throws ServiceApplicationException{
 		
-		dataDeAgendamentoMaiorQueDataAtual(objetoModificado.getDataAgendamento());
+		if(objetoModificado.getHoraFim() == null) {
+			objetoModificado.setHoraFim(adicionarTempoDeProcedimentoNaHora(objetoModificado.getHoraInicio(), objetoModificado.getProcedimento().getDuracaoMinutos()));
+		}
+		
+		dataDeAgendamentoMaiorIgualQueDataAtual(objetoModificado.getDataAgendamento());
+		horaInicialMenorQueFinal(objetoModificado.getHoraInicio(), objetoModificado.getHoraFim());
 		
 		Agendamento objetoAtualizado = buscarPorCodigo(codigo);
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
@@ -49,16 +66,17 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	
 	
 	
-	public Agendamento fromDTO(AgendamentoNovoDTO objetoDTO) throws DadoInvalidoException {
+	public Agendamento fromDTO(AgendamentoNovoDTO objetoDTO) throws ServiceApplicationException {
 		
 		Date horaInicio = converterStringParaHora(objetoDTO.getHoraInicio());
-		Date horaFim = converterStringParaHora(objetoDTO.getHoraFim());
+		Date horaFim = null;
+		if(objetoDTO.getHoraFim() != null) {
+			horaFim = converterStringParaHora(objetoDTO.getHoraFim());
+		}
 		
-		Paciente paciente = new Paciente();
-		paciente.setCodigo(objetoDTO.getCodigoPaciente());
+		Paciente paciente = pacienteService.buscarPorCodigo(objetoDTO.getCodigoPaciente());
 		
-		Procedimento procedimento = new Procedimento();
-		procedimento.setCodigo(objetoDTO.getCodigoProcedimento());
+		Procedimento procedimento = procedimentoService.buscarPorCodigo(objetoDTO.getCodigoProcedimento());
 		
 		
 		Agendamento agendamento = new Agendamento(objetoDTO.getDataAgendamento(), horaInicio, horaFim, StatusAgendamento.toEnum(objetoDTO.getStatusAgendamento()), 
@@ -77,7 +95,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		}
 	}
 	
-	private void dataDeAgendamentoMaiorQueDataAtual(Date dataAgendamento) throws DataAgendamentoInvalidaException {
+	private void dataDeAgendamentoMaiorIgualQueDataAtual(Date dataAgendamento) throws DataAgendamentoInvalidaException {
 		Calendar calendar = new GregorianCalendar();
 		Date dataAtual = calendar.getTime();
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -100,6 +118,36 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		}
 		
 	}
+	
+	
+	private void horaInicialMenorQueFinal (Date horaInicial, Date horaFinal) throws HoraAgendamentoInvalidaException {
+		
+		DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+		
+		String horaInicialString =  dateFormat.format(horaInicial);
+		String horaFinalString =  dateFormat.format(horaFinal);
+		
+		try {
+			horaInicial = dateFormat.parse(horaInicialString);
+			horaFinal = dateFormat.parse(horaFinalString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		if(!horaInicial.before(horaFinal)) {
+			throw new HoraAgendamentoInvalidaException("A hora de inicio "+"'"+horaInicialString+"'"+ "não pode ser superior a hora de finalização " +"'"+horaFinalString+"'");
+		}
+	}
+	
+	private Date adicionarTempoDeProcedimentoNaHora(Date horaInicial, Integer tempoProcedimento) {
+	
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(horaInicial);
+		calendar.add(Calendar.MINUTE, tempoProcedimento);
+		
+		return calendar.getTime();
+	}
+	
 	
 	
 	
