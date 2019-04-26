@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import com.projeto.dentalhelper.domains.Procedimento;
 import com.projeto.dentalhelper.domains.enums.StatusAgendamento;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
 import com.projeto.dentalhelper.repositories.AgendamentoRepository;
+import com.projeto.dentalhelper.repositories.filter.AgendamentoFilter;
+import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHorarioException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaException;
@@ -31,10 +34,13 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	@Autowired
 	ProcedimentoService procedimentoService;
 	
+	private static final int PRIMEIRO_ITEM = 0;
+	
 	
 	@Override
 	public Agendamento salvar(Agendamento objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
+		
 		
 		if(objeto.getHoraFim() == null) {
 			objeto.setHoraFim(adicionarTempoDeProcedimentoNaHora(objeto.getHoraInicio(), objeto.getProcedimento().getDuracaoMinutos()));
@@ -42,6 +48,8 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		
 		dataDeAgendamentoMaiorIgualQueDataAtual(objeto.getDataAgendamento());
 		horaInicialMenorQueFinal(objeto.getHoraInicio(), objeto.getHoraFim());
+		
+		agendamentoJaCadastradoNesseHorario(objeto, null);
 
 		return repository.save(objeto);
 	}
@@ -56,6 +64,8 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		
 		dataDeAgendamentoMaiorIgualQueDataAtual(objetoModificado.getDataAgendamento());
 		horaInicialMenorQueFinal(objetoModificado.getHoraInicio(), objetoModificado.getHoraFim());
+		
+		agendamentoJaCadastradoNesseHorario(objetoModificado, codigo);
 		
 		Agendamento objetoAtualizado = buscarPorCodigo(codigo);
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
@@ -135,7 +145,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		}
 		
 		if(!horaInicial.before(horaFinal)) {
-			throw new HoraAgendamentoInvalidaException("A hora de inicio "+"'"+horaInicialString+"'"+ "não pode ser superior a hora de finalização " +"'"+horaFinalString+"'");
+			throw new HoraAgendamentoInvalidaException("A hora de inicio "+"'"+horaInicialString+"'"+ "não pode ser superior ou igual a hora de finalização " +"'"+horaFinalString+"'");
 		}
 	}
 	
@@ -143,11 +153,38 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(horaInicial);
-		calendar.add(Calendar.MINUTE, tempoProcedimento);
+		calendar.add(Calendar.MINUTE, tempoProcedimento);	
 		
 		return calendar.getTime();
 	}
 	
+	
+	private boolean agendamentoJaCadastradoNesseHorario(Agendamento objeto, Long codigoDoObjetoAtualizado) throws AgendamentoJaCadastradoNoHorarioException {
+		AgendamentoFilter filter = new AgendamentoFilter();
+		filter.setDataAgendamento(objeto.getDataAgendamento());
+		
+		filter.setHoraInicioMin(objeto.getHoraInicio());
+		filter.setHoraInicioMax(objeto.getHoraFim());
+		
+		List<Agendamento> listaDeObjetos = repository.buscarPorHoraEData(filter);
+		
+		if(listaDeObjetos.isEmpty()) {
+			return false;
+		} else {
+			Agendamento agendamentoExistente = obterPacienteExistente(listaDeObjetos);
+			if(codigoDoObjetoAtualizado != null) {
+				if(agendamentoExistente.getCodigo() == codigoDoObjetoAtualizado) {
+					return false;
+				}
+			}
+			throw new AgendamentoJaCadastradoNoHorarioException(Long.toString(agendamentoExistente.getCodigo()));
+		}
+		
+	}
+	
+	private Agendamento obterPacienteExistente(List<Agendamento> listaDeObjetos) {
+		return listaDeObjetos.get(PRIMEIRO_ITEM);
+	}
 	
 	
 	

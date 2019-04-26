@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHorarioRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.FileException;
@@ -200,6 +201,14 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpServletResponse response) {
 
 		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.rg-duplicado");
+		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
+	}
+	
+	@ExceptionHandler(AgendamentoJaCadastradoNoHorarioRuntimeException.class)
+	public ResponseEntity<Object> recursoAgendamentoDuplicado(AgendamentoJaCadastradoNoHorarioRuntimeException exception, WebRequest request,
+			HttpServletResponse response) {
+
+		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.agendamento-duplicado");
 		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
 	}
 	

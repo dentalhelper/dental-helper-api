@@ -15,6 +15,7 @@ import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
 import com.projeto.dentalhelper.resources.api.AgendamentoApi;
 import com.projeto.dentalhelper.services.AgendamentoService;
+import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHorarioRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaException;
@@ -41,6 +42,8 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 			throw new DataAgendamentoInvalidaRuntimeException(e.getMessage());
 		} catch (DadoInvalidoException e) {
 			throw new DadoInvalidoRunTimeException(e.getMessage());
+		} catch (ServiceApplicationException e) {
+			lancarExceptionComLocation(e);
 		}
 		Long codigo = objetoSalvo.getCodigo();
 		adicionarHeaderLocation(response, codigo, "/agendamentos");
@@ -75,6 +78,8 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 			throw new DataAgendamentoInvalidaRuntimeException(e.getMessage());
 		} catch (DadoInvalidoException e) {
 			throw new DadoInvalidoRunTimeException(e.getMessage());
+		} catch (ServiceApplicationException e) {
+			lancarExceptionComLocation(e);
 		}
 		return ResponseEntity.ok(objetoEditado);
 	}
@@ -86,6 +91,14 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 	public ResponseEntity<Void> delete(Long codigo) {
 		service.deletar(codigo);
 		return ResponseEntity.noContent().header("Entity", Long.toString(codigo)).build();
+	}
+	
+	protected void lancarExceptionComLocation(ServiceApplicationException e) {
+		Agendamento agendamentoExistente = service.buscarPorCodigo(Long.parseLong(e.getMessage()));
+		adicionarLink(agendamentoExistente, agendamentoExistente.getCodigo());
+
+		throw new AgendamentoJaCadastradoNoHorarioRuntimeException("Já existe um agendamento nesse horário",
+				agendamentoExistente.getId().getHref());
 	}
 
 }
