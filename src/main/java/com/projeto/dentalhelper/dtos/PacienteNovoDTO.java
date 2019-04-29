@@ -61,7 +61,7 @@ public class PacienteNovoDTO implements Serializable {
 	private String logradouro;
 
 	@NotNull
-	private Integer numero;
+	private String numero;
 
 	@NotBlank
 	@Size(min = 3)
@@ -206,11 +206,11 @@ public class PacienteNovoDTO implements Serializable {
 		this.logradouro = logradouro;
 	}
 
-	public Integer getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(Integer numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 

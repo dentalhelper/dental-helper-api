@@ -40,7 +40,7 @@ public class AgendamentoRepositoryImpl implements AgendamentoRepositoryQuery{
 		
 		if(filter.getHoraInicioMin() != null && filter.getHoraInicioMax() != null) {
 			try {
-				resultadoFinal =  filtrarPorHora(resultado, filter);
+				resultadoFinal =  filtrarPorHoraJaAlocada(resultado, filter);
 				return resultadoFinal;
 			} catch (ParseException e) {}
 		}
@@ -84,7 +84,7 @@ public class AgendamentoRepositoryImpl implements AgendamentoRepositoryQuery{
 		return filtrar(filter);
 	}
 	
-	private List<Agendamento> filtrarPorHora(List<Agendamento> agendamentos, AgendamentoFilter filter) throws ParseException {
+	private List<Agendamento> filtrarPorHoraJaAlocada(List<Agendamento> agendamentos, AgendamentoFilter filter) throws ParseException {
 		
 		List<Agendamento> resultado = new ArrayList<Agendamento>();
 		
@@ -108,13 +108,15 @@ public class AgendamentoRepositoryImpl implements AgendamentoRepositoryQuery{
 			Date horaInicio = dateFormat.parse(horaInicialString);
 			
 			Date horaFim = dateFormat.parse(horaFinalString);
+			
 
-
-			if(horaInicio.getTime() >= filter.getHoraInicioMin().getTime() && horaInicio.getTime() <= filter.getHoraInicioMax().getTime() || horaFim.getTime() >= filter.getHoraInicioMin().getTime() && horaFim.getTime() <= filter.getHoraInicioMax().getTime()) {
+			if(horaInicio.getTime() >= filter.getHoraInicioMin().getTime() && horaInicio.getTime() <= filter.getHoraInicioMax().getTime() || 
+					horaFim.getTime() >= filter.getHoraInicioMin().getTime() && horaFim.getTime() <= filter.getHoraInicioMax().getTime() ||
+					horaInicio.getTime() < filter.getHoraInicioMin().getTime() && horaFim.getTime() > filter.getHoraInicioMax().getTime()) {
+				
 					resultado.add(a);
 
 			}
-
 		}
 		
 		return resultado;

@@ -18,8 +18,8 @@ CREATE TABLE paciente(
 	codigo BIGINT(20) NOT NULL,
 	data_criacao_ficha DATE NOT NULL,
 	profissao VARCHAR(30) NOT NULL,
-	foto_perfil VARCHAR(100),
-	url_da_foto VARCHAR(400),
+	foto_perfil VARCHAR(500),
+	url_da_foto VARCHAR(500),
 	codigo_anamnese BIGINT(20),
 	
 	 FOREIGN KEY (codigo) REFERENCES pessoa(codigo),

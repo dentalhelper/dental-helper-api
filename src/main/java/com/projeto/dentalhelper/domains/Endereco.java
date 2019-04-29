@@ -13,8 +13,8 @@ public class Endereco extends ObjetoIdentificado {
 
 	private String logradouro;
 
-	// TODO: Usar String
-	private Integer numero;
+	
+	private String numero;
 
 	private String bairro;
 
@@ -30,7 +30,7 @@ public class Endereco extends ObjetoIdentificado {
 
 	}
 
-	public Endereco(String logradouro, Integer numero, String bairro, String cEP, String complemento, Cidade cidade) {
+	public Endereco(String logradouro, String numero, String bairro, String cEP, String complemento, Cidade cidade) {
 		super();
 		this.logradouro = logradouro;
 		this.numero = numero;
@@ -48,11 +48,11 @@ public class Endereco extends ObjetoIdentificado {
 		this.logradouro = logradouro;
 	}
 
-	public Integer getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(Integer numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 
