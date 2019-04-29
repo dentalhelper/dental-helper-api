@@ -24,6 +24,7 @@ import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
+import com.projeto.dentalhelper.dtos.PacienteSelectComFotoDTO;
 import com.projeto.dentalhelper.resources.api.PacienteAPI;
 import com.projeto.dentalhelper.services.PacienteService;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
@@ -117,6 +118,16 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 		List<PacienteResumoDTO> pacienteResumoDTO = objetos.stream().map(paciente -> new PacienteResumoDTO(paciente))
 				.collect(Collectors.toList());
 		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(pacienteResumoDTO);
+
+	}
+	
+	@Override
+	public ResponseEntity<List<PacienteSelectComFotoDTO>> getAllWithImage() {
+		List<Paciente> objetos = service.buscarTodos();
+		adicionarLinks(objetos);
+		List<PacienteSelectComFotoDTO> pacienteSelectComFotoDTO = objetos.stream()
+				.map(paciente -> new PacienteSelectComFotoDTO(paciente)).collect(Collectors.toList());
+		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(pacienteSelectComFotoDTO);
 
 	}
 
