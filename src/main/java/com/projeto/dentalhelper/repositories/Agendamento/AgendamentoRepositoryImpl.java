@@ -24,7 +24,30 @@ public class AgendamentoRepositoryImpl implements AgendamentoRepositoryQuery{
 	EntityManager manager;
 
 	@Override
-	public List<Agendamento> filtrar(AgendamentoFilter filter) {	
+	public List<Agendamento> buscarPorFiltro(AgendamentoFilter filter) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Agendamento> criteria = builder.createQuery(Agendamento.class);
+		Root<Agendamento> root = criteria.from(Agendamento.class);
+		
+		Predicate[] predicates = criarRestricoes(filter, builder, root);
+		criteria.where(predicates);
+		
+		TypedQuery<Agendamento> query = manager.createQuery(criteria);
+		return query.getResultList();
+	}
+	
+	
+	
+	@Override
+	public List<Agendamento> buscarPorCodigoPaciente(Long codigo) {
+		AgendamentoFilter filter = new AgendamentoFilter();
+		filter.setCodPaciente(codigo);
+		
+		return buscarPorFiltro(filter);
+	}
+	
+	
+	public List<Agendamento> filtrarPorHoraEData(AgendamentoFilter filter) {	
 		
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Agendamento> criteria = builder.createQuery(Agendamento.class);
@@ -81,14 +104,14 @@ public class AgendamentoRepositoryImpl implements AgendamentoRepositoryQuery{
 		filter.setDataAgendamentoMax(null);
 		filter.setDataAgendamentoMin(null);
 		
-		return filtrar(filter);
+		return filtrarPorHoraEData(filter);
 	}
 	
 	private List<Agendamento> filtrarPorHoraJaAlocada(List<Agendamento> agendamentos, AgendamentoFilter filter) throws ParseException {
 		
 		List<Agendamento> resultado = new ArrayList<Agendamento>();
 		
-		DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
 		
 		if(filter.getHoraInicioMin() != null) {
 			String horaInicialMinString =  dateFormat.format(filter.getHoraInicioMin());
@@ -121,6 +144,10 @@ public class AgendamentoRepositoryImpl implements AgendamentoRepositoryQuery{
 		
 		return resultado;
 	}
+
+
+
+	
 	
 	
 	

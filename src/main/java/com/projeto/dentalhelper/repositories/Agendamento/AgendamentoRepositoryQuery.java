@@ -7,10 +7,14 @@ import com.projeto.dentalhelper.repositories.filter.AgendamentoFilter;
 
 public interface AgendamentoRepositoryQuery {
 	
+	//busca com o filtro completo
+	public List<Agendamento> buscarPorFiltro(AgendamentoFilter filter);
 	
-	public List<Agendamento> filtrar(AgendamentoFilter filter);
-	
+	//filtra pela hora e data para verificar se já existe agendamento alocado nesses horário
 	public List<Agendamento> buscarPorHoraEData(AgendamentoFilter filter);
+	
+	//filtra apenas pelo código do paciente
+	public List<Agendamento> buscarPorCodigoPaciente(Long codigo);
 	
 
 }

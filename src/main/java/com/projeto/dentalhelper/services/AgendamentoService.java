@@ -97,7 +97,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	
 	
 	private Date converterStringParaHora(String hora) throws DadoInvalidoException {
-		DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
 	    try {
 			return dateFormat.parse(hora);
 		} catch (ParseException e) {
@@ -132,7 +132,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	
 	private void horaInicialMenorQueFinal (Date horaInicial, Date horaFinal) throws HoraAgendamentoInvalidaException {
 		
-		DateFormat dateFormat = new SimpleDateFormat("hh:mm");
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
 		
 		String horaInicialString =  dateFormat.format(horaInicial);
 		String horaFinalString =  dateFormat.format(horaFinal);
@@ -184,6 +184,12 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	
 	private Agendamento obterPacienteExistente(List<Agendamento> listaDeObjetos) {
 		return listaDeObjetos.get(PRIMEIRO_ITEM);
+	}
+	
+	public List<Agendamento> filtrar(AgendamentoFilter filter){
+		filter.setHoraInicioMax(null);
+		filter.setHoraInicioMin(null);
+		return repository.buscarPorFiltro(filter);
 	}
 	
 	

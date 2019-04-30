@@ -4,14 +4,14 @@ import java.util.Date;
 
 public class AgendamentoFilter {
 	
+	//para uma data especifica
 	private Date dataAgendamento;
 	
 	private Date dataAgendamentoMin;
-	
 	private Date dataAgendamentoMax;
 	
+	//horas não são filtradas por padrão,
 	private Date horaInicioMax;
-	
 	private Date horaInicioMin;
 	
 	private Long codPaciente;

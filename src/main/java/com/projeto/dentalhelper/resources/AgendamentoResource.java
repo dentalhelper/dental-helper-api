@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
+import com.projeto.dentalhelper.repositories.filter.AgendamentoFilter;
 import com.projeto.dentalhelper.resources.api.AgendamentoApi;
 import com.projeto.dentalhelper.services.AgendamentoService;
 import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHorarioRuntimeException;
@@ -55,8 +56,8 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 		return service.salvar(objeto);
 	}
 
-	public List<Agendamento> getAll() {
-		List<Agendamento> objetos = service.buscarTodos();
+	public List<Agendamento> getByFilter(AgendamentoFilter filter) {
+		List<Agendamento> objetos = service.filtrar(filter);
 		return adicionarLinks(objetos);
 	}
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Cidade;
 import com.projeto.dentalhelper.domains.Endereco;
@@ -24,6 +25,7 @@ import com.projeto.dentalhelper.domains.enums.EstadoCivil;
 import com.projeto.dentalhelper.domains.enums.RespostaQuestaoAnamnese;
 import com.projeto.dentalhelper.domains.enums.Sexo;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
+import com.projeto.dentalhelper.repositories.AgendamentoRepository;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
@@ -40,6 +42,8 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	@Autowired
+	private AgendamentoRepository agendamentoRepository;
 	
 	@Autowired
 	private S3Service s3Service;
@@ -292,4 +296,9 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	public Foto enviarFotoDoPaciente(MultipartFile multipartFile) {
 		return s3Service.enviarArquivo(multipartFile);
 	}
+	
+	public List<Agendamento> buscarAgendamentosDoPacientePeloCodigo(Long codigo){
+		return agendamentoRepository.buscarPorCodigoPaciente(codigo);
+	}
+	
 }

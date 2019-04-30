@@ -1,5 +1,6 @@
 package com.projeto.dentalhelper.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
+import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
@@ -143,5 +147,22 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 		PacienteAnamneseDTO pacienteDTO = new PacienteAnamneseDTO(objeto);
 		return ResponseEntity.ok().body(pacienteDTO);
 	}
+	
+	@Override
+	public ResponseEntity<PacienteAgendamentoDTO> getAgendamentosByCodigoPaciente(@PathVariable Long codigo){
+		Paciente objeto = service.buscarPorCodigo(codigo);
+		List<Agendamento> agendamentos = service.buscarAgendamentosDoPacientePeloCodigo(codigo);
+		List<AgendamentoNovoDTO> agendamentosDTO = new ArrayList<AgendamentoNovoDTO>();
+		
+		for(Agendamento a: agendamentos) {
+			AgendamentoNovoDTO agendamentoDTO = new AgendamentoNovoDTO(a);
+			agendamentosDTO.add(agendamentoDTO);
+		}
+		
+		PacienteAgendamentoDTO pacienteDTO = new PacienteAgendamentoDTO(agendamentosDTO, objeto.getCodigo());
+		return ResponseEntity.ok().body(pacienteDTO);
+	}
+	
+	
 
 }

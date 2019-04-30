@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
+import com.projeto.dentalhelper.repositories.filter.AgendamentoFilter;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 import io.swagger.annotations.ApiOperation;
@@ -30,9 +31,9 @@ public interface AgendamentoApi {
 	public ResponseEntity<Agendamento> post(@Valid @RequestBody AgendamentoNovoDTO objeto, HttpServletResponse response)
 			throws ServiceApplicationException;
 
-	@ApiOperation(value = "Busca todas os agendamentos")
+	@ApiOperation(value = "Busca agendamentos por filtro")
 	@GetMapping
-	public List<Agendamento> getAll();
+	public List<Agendamento> getByFilter(AgendamentoFilter filter);
 
 	@ApiOperation(value = "Busca um agendamento por código")
 	@GetMapping(value = "/{codigo}")
