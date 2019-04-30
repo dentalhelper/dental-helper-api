@@ -79,10 +79,10 @@ public class AgendamentoRepositoryImpl implements AgendamentoRepositoryQuery{
 		
 		
 		if(filter.getDataAgendamentoMin() != null) {
-			predicates.add(builder.lessThanOrEqualTo(root.get("dataAgendamento"), filter.getDataAgendamentoMin()));
+			predicates.add(builder.greaterThanOrEqualTo(root.get("dataAgendamento"), filter.getDataAgendamentoMin()));
 		}
 		if(filter.getDataAgendamentoMax() != null) {
-			predicates.add(builder.greaterThanOrEqualTo(root.get("dataAgendamento"), filter.getDataAgendamentoMax()));
+			predicates.add(builder.lessThanOrEqualTo(root.get("dataAgendamento"), filter.getDataAgendamentoMax()));
 		}
 		if(filter.getCodPaciente() != null) {
 			predicates.add(builder.equal(root.join("paciente").<Long>get("codigo"), filter.getCodPaciente()));

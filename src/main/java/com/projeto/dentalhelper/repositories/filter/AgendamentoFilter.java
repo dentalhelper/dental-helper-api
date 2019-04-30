@@ -2,12 +2,17 @@ package com.projeto.dentalhelper.repositories.filter;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class AgendamentoFilter {
 	
 	//para uma data especifica
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dataAgendamento;
 	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dataAgendamentoMin;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dataAgendamentoMax;
 	
 	//horas não são filtradas por padrão,

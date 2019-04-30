@@ -125,7 +125,7 @@ public class AgendamentoNovoDTO implements Serializable{
 	}
 
 	private String converterHoraParaString(Date hora) {
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");  
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");  
         return dateFormat.format(hora);  
 	}
 	
