@@ -19,7 +19,7 @@ import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Paciente;
-import com.projeto.dentalhelper.dtos.AgendamentoResumoDTO;
+import com.projeto.dentalhelper.dtos.AgendamentoResumoPacienteDTO;
 import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
@@ -163,10 +163,10 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 	public ResponseEntity<PacienteAgendamentoDTO> getAgendamentosByCodigoPaciente(@PathVariable Long codigo){
 		Paciente objeto = service.buscarPorCodigo(codigo);
 		List<Agendamento> agendamentos = service.buscarAgendamentosDoPacientePeloCodigo(codigo);
-		List<AgendamentoResumoDTO> agendamentosDTO = new ArrayList<AgendamentoResumoDTO>();
+		List<AgendamentoResumoPacienteDTO> agendamentosDTO = new ArrayList<AgendamentoResumoPacienteDTO>();
 		
 		for(Agendamento a: agendamentos) {
-			AgendamentoResumoDTO agendamentoDTO = new AgendamentoResumoDTO(a);
+			AgendamentoResumoPacienteDTO agendamentoDTO = new AgendamentoResumoPacienteDTO(a);
 			agendamentosDTO.add(agendamentoDTO);
 		}
 		

@@ -1,6 +1,7 @@
 package com.projeto.dentalhelper.resources;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
+import com.projeto.dentalhelper.dtos.AgendamentoResumoDTO;
 import com.projeto.dentalhelper.repositories.filter.AgendamentoFilter;
 import com.projeto.dentalhelper.resources.api.AgendamentoApi;
 import com.projeto.dentalhelper.services.AgendamentoService;
@@ -56,11 +58,17 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 		return service.salvar(objeto);
 	}
 
-	public List<Agendamento> getByFilter(AgendamentoFilter filter) {
+	public ResponseEntity<List<AgendamentoResumoDTO>> getByFilter(AgendamentoFilter filter) {
 		List<Agendamento> objetos = service.filtrar(filter);
-		return adicionarLinks(objetos);
+		adicionarLinks(objetos);
+		List<AgendamentoResumoDTO> agendamentoResumoDTO = objetos.stream().map(agendamento -> new AgendamentoResumoDTO(agendamento))
+				.collect(Collectors.toList());
+		
+		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(agendamentoResumoDTO);
+		
+		
 	}
-
+	
 	public ResponseEntity<Agendamento> getByCodigo(@PathVariable Long codigo) {
 		Agendamento objeto = service.buscarPorCodigo(codigo);
 		adicionarLink(objeto, codigo);
@@ -101,5 +109,15 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 		throw new AgendamentoJaCadastradoNoHorarioRuntimeException("Já existe um agendamento nesse horário",
 				agendamentoExistente.getId().getHref());
 	}
+
+	@Override
+	public ResponseEntity<AgendamentoNovoDTO> getByCodigoForEdit(Long codigo) {
+		Agendamento objeto = service.buscarPorCodigo(codigo);
+		adicionarLink(objeto, codigo);
+		AgendamentoNovoDTO agendamentoDTO = new AgendamentoNovoDTO(objeto);
+		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(agendamentoDTO);
+	}
+	
+	
 
 }

@@ -1,8 +1,6 @@
 package com.projeto.dentalhelper.dtos;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.hateoas.ResourceSupport;
@@ -10,38 +8,39 @@ import org.springframework.hateoas.ResourceSupport;
 import com.projeto.dentalhelper.domains.Agendamento;
 
 public class AgendamentoResumoDTO extends ResourceSupport implements Serializable {
-
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = 1L;
+
 	private Long codigoAgendamento;
 	
 	private Date dataAgendamento;
 	
-	private String horaInicio;
+	private Date horaInicio;
 	
-	private String horaFim;
+	private Date horaFim;
 	
 	private Boolean primeiraAvalicao;
 	
 	private Long codigoPaciente;
 	
-	private String nomeProcedimento;
+	private Long codigoProcedimento;
 	
-	private String statusAgendamento;
+	private Integer statusAgendamento;
 	
+	private String observacao;
 	
-	public AgendamentoResumoDTO(Agendamento agendamento) {
-		this.codigoAgendamento = agendamento.getCodigo();
-		this.dataAgendamento = agendamento.getDataAgendamento();
-		this.horaInicio = converterHoraParaString(agendamento.getHoraInicio());
-		this.horaFim = converterHoraParaString(agendamento.getHoraFim());
-		this.primeiraAvalicao = agendamento.getPrimeiraAvalicao();
-		this.codigoPaciente = agendamento.getPaciente().getCodigo();
-		this.nomeProcedimento = agendamento.getProcedimento().getNome();
-		this.statusAgendamento = agendamento.getStatusAgendamento().getDescricao();
+	public AgendamentoResumoDTO(Agendamento a) {
+		this.codigoAgendamento = a.getCodigo();
+		this.dataAgendamento = a.getDataAgendamento();
+		this.horaInicio = a.getHoraInicio();
+		this.horaFim = a.getHoraFim();
+		this.primeiraAvalicao = a.getPrimeiraAvalicao();
+		this.codigoPaciente = a.getPaciente().getCodigo();
+		this.codigoProcedimento = a.getProcedimento().getCodigo();
+		this.statusAgendamento = a.getStatusAgendamento().getCodigo();
+		this.observacao = a.getObservacao();
+		
 	}
-	
-	
 
 	public Long getCodigoAgendamento() {
 		return codigoAgendamento;
@@ -59,19 +58,19 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 		this.dataAgendamento = dataAgendamento;
 	}
 
-	public String getHoraInicio() {
+	public Date getHoraInicio() {
 		return horaInicio;
 	}
 
-	public void setHoraInicio(String horaInicio) {
+	public void setHoraInicio(Date horaInicio) {
 		this.horaInicio = horaInicio;
 	}
 
-	public String getHoraFim() {
+	public Date getHoraFim() {
 		return horaFim;
 	}
 
-	public void setHoraFim(String horaFim) {
+	public void setHoraFim(Date horaFim) {
 		this.horaFim = horaFim;
 	}
 
@@ -91,29 +90,34 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 		this.codigoPaciente = codigoPaciente;
 	}
 
-	public String getNomeProcedimento() {
-		return nomeProcedimento;
+	public Long getCodigoProcedimento() {
+		return codigoProcedimento;
 	}
 
-	public void setNomeProcedimento(String nomeProcedimento) {
-		this.nomeProcedimento = nomeProcedimento;
+	public void setCodigoProcedimento(Long codigoProcedimento) {
+		this.codigoProcedimento = codigoProcedimento;
 	}
-	
-	
-	
-	public String getStatusAgendamento() {
+
+	public Integer getStatusAgendamento() {
 		return statusAgendamento;
 	}
 
-	public void setStatusAgendamento(String statusAgendamento) {
+	public void setStatusAgendamento(Integer statusAgendamento) {
 		this.statusAgendamento = statusAgendamento;
 	}
 
-	private String converterHoraParaString(Date hora) {
-		DateFormat dateFormat = new SimpleDateFormat("HH:mm");  
-        return dateFormat.format(hora);  
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 	
 	
-
+	
+	
+	
+	
+	
 }

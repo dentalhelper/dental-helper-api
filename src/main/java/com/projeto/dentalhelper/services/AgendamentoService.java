@@ -199,6 +199,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	public List<Agendamento> filtrar(AgendamentoFilter filter){
 		filter.setHoraInicioMax(null);
 		filter.setHoraInicioMin(null);
+			
 		return repository.buscarPorFiltro(filter);
 	}
 	

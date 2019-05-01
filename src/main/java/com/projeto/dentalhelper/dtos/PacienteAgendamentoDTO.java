@@ -11,9 +11,9 @@ public class PacienteAgendamentoDTO extends ResourceSupport implements Serializa
 	
 	private Long codigoPaciente;
 	
-	private List<AgendamentoResumoDTO> agendamentos;
+	private List<AgendamentoResumoPacienteDTO> agendamentos;
 	
-	public PacienteAgendamentoDTO(List<AgendamentoResumoDTO> agendamentos, Long codigoPaciente) {
+	public PacienteAgendamentoDTO(List<AgendamentoResumoPacienteDTO> agendamentos, Long codigoPaciente) {
 		this.agendamentos = agendamentos;
 		this.codigoPaciente = codigoPaciente;
 	}
@@ -28,12 +28,12 @@ public class PacienteAgendamentoDTO extends ResourceSupport implements Serializa
 	}
 
 
-	public List<AgendamentoResumoDTO> getAgendamentos() {
+	public List<AgendamentoResumoPacienteDTO> getAgendamentos() {
 		return agendamentos;
 	}
 
 
-	public void setAgendamentos(List<AgendamentoResumoDTO> agendamentos) {
+	public void setAgendamentos(List<AgendamentoResumoPacienteDTO> agendamentos) {
 		this.agendamentos = agendamentos;
 	}
 
