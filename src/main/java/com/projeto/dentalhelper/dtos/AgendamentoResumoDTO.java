@@ -13,6 +13,8 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 
 	private static final long serialVersionUID = 1L;
 	
+	private Long codigoAgendamento;
+	
 	private Date dataAgendamento;
 	
 	private String horaInicio;
@@ -29,6 +31,7 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 	
 	
 	public AgendamentoResumoDTO(Agendamento agendamento) {
+		this.codigoAgendamento = agendamento.getCodigo();
 		this.dataAgendamento = agendamento.getDataAgendamento();
 		this.horaInicio = converterHoraParaString(agendamento.getHoraInicio());
 		this.horaFim = converterHoraParaString(agendamento.getHoraFim());
@@ -36,6 +39,16 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 		this.codigoPaciente = agendamento.getPaciente().getCodigo();
 		this.nomeProcedimento = agendamento.getProcedimento().getNome();
 		this.statusAgendamento = agendamento.getStatusAgendamento().getDescricao();
+	}
+	
+	
+
+	public Long getCodigoAgendamento() {
+		return codigoAgendamento;
+	}
+
+	public void setCodigoAgendamento(Long codigoAgendamento) {
+		this.codigoAgendamento = codigoAgendamento;
 	}
 
 	public Date getDataAgendamento() {

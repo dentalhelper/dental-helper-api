@@ -171,14 +171,24 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		if(listaDeObjetos.isEmpty()) {
 			return false;
 		} else {
-			Agendamento agendamentoExistente = obterPacienteExistente(listaDeObjetos);
+			Agendamento agendamentoExistente = null;
 			if(codigoDoObjetoAtualizado != null) {
-				if(agendamentoExistente.getCodigo() == codigoDoObjetoAtualizado) {
-					return false;
+				for(Agendamento a: listaDeObjetos) {
+					agendamentoExistente = a;
+					if(codigoDoObjetoAtualizado != agendamentoExistente.getCodigo()) {
+						throw new AgendamentoJaCadastradoNoHorarioException(Long.toString(agendamentoExistente.getCodigo()));			
+					}
 				}
 			}
-			throw new AgendamentoJaCadastradoNoHorarioException(Long.toString(agendamentoExistente.getCodigo()));
+			else {
+				agendamentoExistente = obterPacienteExistente(listaDeObjetos);
+				throw new AgendamentoJaCadastradoNoHorarioException(Long.toString(agendamentoExistente.getCodigo()));	
+			}
+
+				
+			
 		}
+		return false;
 		
 	}
 	
