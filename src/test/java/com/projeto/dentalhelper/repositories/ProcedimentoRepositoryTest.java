@@ -1,42 +1,24 @@
 package com.projeto.dentalhelper.repositories;
 
-import static com.projeto.dentalhelper.builders.CategoriaDespesaBuilder.umaCategoriaDespesa;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.validation.ConstraintViolationException;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.projeto.dentalhelper.builders.ProcedimentoBuilder;
-import com.projeto.dentalhelper.domains.CategoriaDespesa;
-import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.domains.ObjetoIdentificado;
 import com.projeto.dentalhelper.domains.Procedimento;
 import com.projeto.dentalhelper.services.ProcedimentoService;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
 
-@DataJpaTest
-@RunWith(SpringRunner.class)
-@TestPropertySource(locations = "classpath:test.properties")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ComponentScan(basePackageClasses = { ProcedimentoService.class })
-public class ProcedimentoRepositoryTest {
+public class ProcedimentoRepositoryTest extends AbstractRepositoryConfig {
+	
 	@Autowired
 	private ProcedimentoService service;
-	
-
-	@Rule
-	public ExpectedException exceptedException = ExpectedException.none();
 	
 	public Procedimento criarProcedimentoValido(String nome) {
 		Procedimento procedimento = ProcedimentoBuilder.novoProcedimento();
@@ -69,9 +51,6 @@ public class ProcedimentoRepositoryTest {
 		assertThat(procedimento.getDescricao()).isEqualTo(procedimento.getNome());
 	}
 	
-	
-	
-
 	@Test
 	public void deveDeletarUmProcedimento() throws Exception {
 

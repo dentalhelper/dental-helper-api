@@ -19,9 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
+import com.projeto.dentalhelper.dtos.PacienteSelectComFotoDTO;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -43,10 +45,14 @@ public interface PacienteAPI {
 	public ResponseEntity<List<PacienteResumoDTO>> getByFilter(
 			@RequestParam(required = false, defaultValue = "%") String filtro);
 
+	@ApiOperation(value = "Busca a imagem e o nome de todos os pacientes")
+	@GetMapping(value = "/nome-foto")
+	public ResponseEntity<List<PacienteSelectComFotoDTO>> getAllWithImage();
+
 	@ApiOperation(value = "Busca um paciente por código")
 	@GetMapping(value = "/{codigo}")
 	public ResponseEntity<Paciente> getByCodigo(@PathVariable Long codigo);
-	
+
 	@ApiOperation(value = "Busca dados cadastrais do paciente pelo código")
 	@GetMapping(value = "/{codigo}/edit")
 	public ResponseEntity<PacienteNovoDTO> getByCodigoForEdit(@PathVariable Long codigo);
@@ -66,9 +72,13 @@ public interface PacienteAPI {
 	@ApiOperation(value = "Atualiza a anamnese do paciente")
 	@PutMapping(value = "/{codigo}/anamnese")
 	public ResponseEntity<Paciente> put(@PathVariable Long codigo, @Valid @RequestBody Anamnese anamnese);
-	
+
 	@ApiOperation(value = "Busca um paciente pelo código e retorna sua anamnese")
 	@GetMapping(value = "/{codigo}/anamnese")
 	public ResponseEntity<PacienteAnamneseDTO> getAnamneseByCodigoPaciente(@PathVariable Long codigo);
+	
+	@ApiOperation(value = "Busca um paciente pelo código e retorna seus agendamentos")
+	@GetMapping(value = "/{codigo}/agendamentos")
+	public ResponseEntity<PacienteAgendamentoDTO> getAgendamentosByCodigoPaciente(@PathVariable Long codigo);
 
 }

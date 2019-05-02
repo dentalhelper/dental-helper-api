@@ -21,21 +21,23 @@ public class EstadoResource implements EstadoAPI {
 
 	@Autowired
 	private EstadoService service;
-	
+
 	@Autowired
 	private CidadeService cidadeService;
-	
+
 	@Override
 	public ResponseEntity<List<EstadoDTO>> getAll() {
 		List<Estado> estados = service.buscarTodos();
-		List<EstadoDTO> listaEstadosDTO = estados.stream().map(objeto -> new EstadoDTO(objeto)).collect(Collectors.toList());
+		List<EstadoDTO> listaEstadosDTO = estados.stream().map(objeto -> new EstadoDTO(objeto))
+				.collect(Collectors.toList());
 		return ResponseEntity.ok().body(listaEstadosDTO);
 	}
 
 	@Override
-	public ResponseEntity<List<CidadeDTO>> getCidades(@PathVariable  Long codigoEstado) {
+	public ResponseEntity<List<CidadeDTO>> getCidades(@PathVariable Long codigoEstado) {
 		List<Cidade> cidades = cidadeService.buscarPorEstado(codigoEstado);
-		List<CidadeDTO> listaCidadesDTO = cidades.stream().map(objeto -> new CidadeDTO(objeto)).collect(Collectors.toList());
+		List<CidadeDTO> listaCidadesDTO = cidades.stream().map(objeto -> new CidadeDTO(objeto))
+				.collect(Collectors.toList());
 		return ResponseEntity.ok().body(listaCidadesDTO);
 	}
 

@@ -6,20 +6,11 @@ import java.util.Date;
 
 import javax.validation.ConstraintViolationException;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.projeto.dentalhelper.builders.PacienteBuilder;
-import com.projeto.dentalhelper.domains.Despesa;
 import com.projeto.dentalhelper.domains.ObjetoIdentificado;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
@@ -28,22 +19,12 @@ import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 
-
-@DataJpaTest
-@RunWith(SpringRunner.class)
-@TestPropertySource(locations = "classpath:test.properties")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ComponentScan(basePackageClasses = { PacienteService.class })
-public class PacienteRepositoryTest {
+public class PacienteRepositoryTest extends AbstractRepositoryConfig {
 	
 	@Autowired
 	private PacienteService service;
-	
-	@Rule
-	public ExpectedException exceptedException = ExpectedException.none();
-	
-	
-	
+		
 	public Paciente criarPacienteValido() {
 		Paciente paciente = PacienteBuilder.novoPaciente();
 		paciente.setNome("Aroldo Alves");

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Cidade;
 import com.projeto.dentalhelper.domains.Endereco;
@@ -21,13 +22,14 @@ import com.projeto.dentalhelper.domains.Questao;
 import com.projeto.dentalhelper.domains.QuestaoPreDefinida;
 import com.projeto.dentalhelper.domains.Telefone;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
+import com.projeto.dentalhelper.domains.enums.RespostaQuestaoAnamnese;
 import com.projeto.dentalhelper.domains.enums.Sexo;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
+import com.projeto.dentalhelper.repositories.AgendamentoRepository;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
-import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
@@ -40,6 +42,8 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	@Autowired
+	private AgendamentoRepository agendamentoRepository;
 	
 	@Autowired
 	private S3Service s3Service;
@@ -63,13 +67,8 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		
 		List<QuestaoPreDefinida> questoesPreDefinidas = questoesRepository.findAll();
 		List<Questao> questoes = new ArrayList<Questao>();
-		for(QuestaoPreDefinida qP: questoesPreDefinidas) {
-			Questao q = new Questao();
-			q.setAnamnese(anamnese);
-			q.setDescricao(qP.getQuestao());
-			q.setInformAdicionais("");
-			questoes.add(q);
-		}
+
+		questoesPreDefinidas.forEach(q -> questoes.add(gerarQuestao(q, anamnese)));	
 		
 		anamnese.setQuestoes(questoes);
 		objeto.setAnamnese(anamnese);
@@ -79,8 +78,12 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		}
 		return repository.save(objeto);
 	}
-	
-	
+
+	private Questao gerarQuestao(QuestaoPreDefinida q, Anamnese anamnese) {
+		return new Questao(q.getQuestao(), anamnese);
+	}
+
+
 	@Override
 	public Paciente atualizar(Long codigo, Paciente objetoModificado) throws ServiceApplicationException {
 		Paciente objetoAtualizado = buscarPorCodigo(codigo);
@@ -102,11 +105,15 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		}
 		
 		objetoModificado.getEndereco().setCodigo(objetoAtualizado.getEndereco().getCodigo());
-		objetoModificado.getTelefones().get(0).setCodigo(objetoAtualizado.getTelefones().get(0).getCodigo());
 		
-		if(objetoModificado.getTelefones().size() > 1 && objetoAtualizado.getTelefones().size() > 1) {
-			objetoModificado.getTelefones().get(1).setCodigo(objetoAtualizado.getTelefones().get(1).getCodigo());
+		if(objetoModificado.getTelefones().size() >=1 && objetoAtualizado.getTelefones().size() >=1) {
+			objetoModificado.getTelefones().get(0).setCodigo(objetoAtualizado.getTelefones().get(0).getCodigo());
+			
+			if(objetoModificado.getTelefones().size() > 1 && objetoAtualizado.getTelefones().size() > 1) {
+				objetoModificado.getTelefones().get(1).setCodigo(objetoAtualizado.getTelefones().get(1).getCodigo());
+			}
 		}
+			
 		
 			
 		
@@ -118,7 +125,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 
 		
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "sexo", "anamnese");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "anamnese");
 		return repository.save(objetoAtualizado);
 	}
 	
@@ -131,8 +138,9 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		
 		
 		for(Questao q: anamnese.getQuestoes()) {
-			if(q.getResposta() == null) {
-				throw new RespostaInvalidaException("Resposta inválida para a pergunta: " +q.getDescricao());
+			if(q.getInformAdicionais() != "") {
+				if(q.getResposta() == RespostaQuestaoAnamnese.NAO_RESPONDIDO)
+					throw new RespostaInvalidaException("Informações adicionais não podem estar em questões não respondidas.");
 			}
 		}
 		
@@ -288,4 +296,9 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	public Foto enviarFotoDoPaciente(MultipartFile multipartFile) {
 		return s3Service.enviarArquivo(multipartFile);
 	}
+	
+	public List<Agendamento> buscarAgendamentosDoPacientePeloCodigo(Long codigo){
+		return agendamentoRepository.buscarPorCodigoPaciente(codigo);
+	}
+	
 }

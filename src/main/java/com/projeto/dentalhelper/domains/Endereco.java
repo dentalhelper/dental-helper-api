@@ -4,43 +4,33 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "endereco")
-public class Endereco extends ObjetoIdentificado{
-	
-	
-	/**
-	 * 
-	 */
+public class Endereco extends ObjetoIdentificado {
+
 	private static final long serialVersionUID = 1L;
-	
 
 	private String logradouro;
-	
 
-	private Integer numero;
 	
+	private String numero;
 
 	private String bairro;
 
 	private String CEP;
-	
+
 	private String complemento;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "codigo_cidade")
 	private Cidade cidade;
-	
+
 	public Endereco() {
-		
+
 	}
-	
-	public Endereco(String logradouro, Integer numero,
-			String bairro, String cEP, String complemento, Cidade cidade) {
+
+	public Endereco(String logradouro, String numero, String bairro, String cEP, String complemento, Cidade cidade) {
 		super();
 		this.logradouro = logradouro;
 		this.numero = numero;
@@ -58,11 +48,11 @@ public class Endereco extends ObjetoIdentificado{
 		this.logradouro = logradouro;
 	}
 
-	public Integer getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(Integer numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 
@@ -97,7 +87,5 @@ public class Endereco extends ObjetoIdentificado{
 	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
 	}
-	
-	
 
 }

@@ -28,15 +28,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHorarioRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
+import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.FileException;
+import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
-import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaException;
 import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaRuntimeException;
 
 @ControllerAdvice
@@ -92,18 +94,6 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(status).body(responseBody);
 	}
 	
-//	@ExceptionHandler({ RespostaInvalidaException.class })
-//	public ResponseEntity<Object> respostaInvalida(RespostaInvalidaException exception,
-//			HttpServletRequest request) {
-//
-//		HttpStatus status = HttpStatus.NOT_FOUND;
-//		String mensagemUsuario = montarMensagemUsuario("recurso.resposta-invalida");
-//		String mensagemDesenvolvedor = exception.toString();
-//		List<ErroMensagem> responseBody = montarResponseBody(status, mensagemUsuario, mensagemDesenvolvedor);
-//
-//		return ResponseEntity.status(status).body(responseBody);
-//	}
-
 	@ExceptionHandler({ DataIntegrityViolationException.class })
 	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException exception,
 			WebRequest request) {
@@ -137,7 +127,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@ExceptionHandler(RespostaInvalidaRuntimeException.class)
-	public ResponseEntity<Object> recursoNomeDuplicado(RespostaInvalidaRuntimeException exception,
+	public ResponseEntity<Object> respostaInvalida(RespostaInvalidaRuntimeException exception,
 			WebRequest request, HttpServletResponse response) {
 		
 		
@@ -150,6 +140,36 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
+	
+	@ExceptionHandler(HoraAgendamentoInvalidaRuntimeException.class)
+	public ResponseEntity<Object> horaAgendamentoInvalida(HoraAgendamentoInvalidaRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+		
+		
+		
+		String mensagemUsuario = montarMensagemUsuario("agendamento.hora-invalida");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(DataAgendamentoInvalidaRuntimeException.class)
+	public ResponseEntity<Object> dataAgendamentoInvalida(DataAgendamentoInvalidaRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+	
+		String mensagemUsuario = montarMensagemUsuario("agendamento.data-invalida");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	
 	
 	@ExceptionHandler(DadoInvalidoRunTimeException.class)
 	public ResponseEntity<Object> recursoNomeDuplicado(DadoInvalidoRunTimeException exception,
@@ -181,6 +201,14 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpServletResponse response) {
 
 		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.rg-duplicado");
+		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
+	}
+	
+	@ExceptionHandler(AgendamentoJaCadastradoNoHorarioRuntimeException.class)
+	public ResponseEntity<Object> recursoAgendamentoDuplicado(AgendamentoJaCadastradoNoHorarioRuntimeException exception, WebRequest request,
+			HttpServletResponse response) {
+
+		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.agendamento-duplicado");
 		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
 	}
 	

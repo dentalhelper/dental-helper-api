@@ -1,15 +1,15 @@
 package com.projeto.dentalhelper.domains.enums;
 
-public enum RespostaQuestaoAnamnese {
-	
-	SIM(1, "Sim"),
-	NAO(2, "Não"),
-	NAO_SEI(3, "Não sei"),
-	NAO_RESPONDIDO(4, "Não respondido");
+public enum StatusAgendamento {
+	AGENDADO(1, "Agendado"),
+	CONFIRMADO(2, "Confirmado"),
+	FINALIZADO(3, "Finalizado"),
+	FALTOU(4, "Faltou"),
+	CANCELADO(5, "Cancelado");
 	
 	private int codigo;
 	private String descricao;
-	private RespostaQuestaoAnamnese(int codigo, String descricao) {
+	private StatusAgendamento(int codigo, String descricao) {
 		this.codigo = codigo;
 		this.descricao = descricao;
 	}
@@ -27,13 +27,13 @@ public enum RespostaQuestaoAnamnese {
 		this.descricao = descricao;
 	}
 	
-	public static RespostaQuestaoAnamnese toEnum(Integer codigo) {
+	public static StatusAgendamento toEnum(Integer codigo) {
 		if (codigo == null) {
 			return null;
 		}
-		for (RespostaQuestaoAnamnese resp : RespostaQuestaoAnamnese.values()) {
-			if (codigo.equals(resp.getCodigo())) {
-				return resp;
+		for (StatusAgendamento status : StatusAgendamento.values()) {
+			if (codigo.equals(status.getCodigo())) {
+				return status;
 			}
 		}
 		throw new IllegalArgumentException("Código inválido: " + codigo);

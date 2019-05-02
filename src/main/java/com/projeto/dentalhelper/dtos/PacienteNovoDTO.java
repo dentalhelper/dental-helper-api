@@ -6,7 +6,9 @@ import java.util.Date;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 
 import com.projeto.dentalhelper.domains.Paciente;
 
@@ -22,10 +24,12 @@ public class PacienteNovoDTO implements Serializable {
 	private Date dataNascimento;
 
 	@Size(max = 30)
+	@Pattern(regexp = "[0-9]{11}")
 	@NotBlank
 	private String cPF;
 
 	@Size(max = 20)
+	@Pattern(regexp = "[0-9]{7}")
 	@NotBlank
 	private String rG;
 
@@ -45,8 +49,11 @@ public class PacienteNovoDTO implements Serializable {
 	private String urlDaFoto;
 
 	@NotBlank
+	@Pattern(regexp = "[0-9]{11}")
 	private String telefonePrincipal;
 
+	
+	@Pattern(regexp = "[0-9]{0,11}")
 	private String telefone2;
 
 	@NotBlank
@@ -54,11 +61,13 @@ public class PacienteNovoDTO implements Serializable {
 	private String logradouro;
 
 	@NotNull
-	private Integer numero;
+	private String numero;
 
 	@NotBlank
 	@Size(min = 3)
 	private String bairro;
+	
+	@Pattern(regexp = "[0-9]{8}")
 	@NotBlank
 	private String CEP;
 
@@ -197,11 +206,11 @@ public class PacienteNovoDTO implements Serializable {
 		this.logradouro = logradouro;
 	}
 
-	public Integer getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(Integer numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 
