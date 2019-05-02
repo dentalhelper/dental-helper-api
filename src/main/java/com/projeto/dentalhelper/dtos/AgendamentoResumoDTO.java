@@ -23,7 +23,11 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 	
 	private Long codigoPaciente;
 	
+	private String nomePaciente;
+	
 	private Long codigoProcedimento;
+	
+	private String nomeProcedimento;
 	
 	private Integer statusAgendamento;
 	
@@ -39,7 +43,8 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 		this.codigoProcedimento = a.getProcedimento().getCodigo();
 		this.statusAgendamento = a.getStatusAgendamento().getCodigo();
 		this.observacao = a.getObservacao();
-		
+		this.nomePaciente = a.getPaciente().getNome();
+		this.nomeProcedimento = a.getProcedimento().getNome();
 	}
 
 	public Long getCodigoAgendamento() {
@@ -112,6 +117,22 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
+	}
+
+	public String getNomePaciente() {
+		return nomePaciente;
+	}
+
+	public void setNomePaciente(String nomePaciente) {
+		this.nomePaciente = nomePaciente;
+	}
+
+	public String getNomeProcedimento() {
+		return nomeProcedimento;
+	}
+
+	public void setNomeProcedimento(String nomeProcedimento) {
+		this.nomeProcedimento = nomeProcedimento;
 	}
 	
 	
