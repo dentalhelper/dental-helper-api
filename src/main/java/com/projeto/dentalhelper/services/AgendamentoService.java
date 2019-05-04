@@ -34,7 +34,6 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	@Autowired
 	ProcedimentoService procedimentoService;
 	
-	private static final int PRIMEIRO_ITEM = 0;
 	
 	
 	@Override
@@ -65,7 +64,9 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		dataDeAgendamentoMaiorIgualQueDataAtual(objetoModificado.getDataAgendamento());
 		horaInicialMenorQueFinal(objetoModificado.getHoraInicio(), objetoModificado.getHoraFim());
 		
-		agendamentoJaCadastradoNesseHorario(objetoModificado, codigo);
+		if(!(objetoModificado.getStatusAgendamento() == StatusAgendamento.CANCELADO)) {
+			agendamentoJaCadastradoNesseHorario(objetoModificado, codigo);
+		}
 		
 		Agendamento objetoAtualizado = buscarPorCodigo(codigo);
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
@@ -172,29 +173,26 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 			return false;
 		} else {
 			Agendamento agendamentoExistente = null;
-			if(codigoDoObjetoAtualizado != null) {
-				for(Agendamento a: listaDeObjetos) {
-					agendamentoExistente = a;
-					if(codigoDoObjetoAtualizado != agendamentoExistente.getCodigo()) {
+			for(Agendamento a: listaDeObjetos) {
+				agendamentoExistente = a;
+				if(codigoDoObjetoAtualizado != null) {
+					if(codigoDoObjetoAtualizado != agendamentoExistente.getCodigo() && !(agendamentoExistente.getStatusAgendamento() == StatusAgendamento.CANCELADO)) {
 						throw new AgendamentoJaCadastradoNoHorarioException(Long.toString(agendamentoExistente.getCodigo()));			
 					}
 				}
-			}
-			else {
-				agendamentoExistente = obterPacienteExistente(listaDeObjetos);
-				throw new AgendamentoJaCadastradoNoHorarioException(Long.toString(agendamentoExistente.getCodigo()));	
-			}
-
+				else {
+					if(!(agendamentoExistente.getStatusAgendamento() == StatusAgendamento.CANCELADO)) {
+						throw new AgendamentoJaCadastradoNoHorarioException(Long.toString(agendamentoExistente.getCodigo()));
+					}
+				}
 				
-			
+			}
+				
 		}
 		return false;
 		
 	}
 	
-	private Agendamento obterPacienteExistente(List<Agendamento> listaDeObjetos) {
-		return listaDeObjetos.get(PRIMEIRO_ITEM);
-	}
 	
 	public List<Agendamento> filtrar(AgendamentoFilter filter){
 		filter.setHoraInicioMax(null);
