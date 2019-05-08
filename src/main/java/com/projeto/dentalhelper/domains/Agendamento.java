@@ -48,8 +48,8 @@ public class Agendamento extends ObjetoIdentificado{
 	
 
 	@ManyToOne
-	@JoinColumn(name = "codigo_paciente")
-	private Paciente paciente;
+	@JoinColumn(name = "codigo_orcamento")
+	private Orcamento orcamento;
 	
 
 	@ManyToOne
@@ -64,7 +64,7 @@ public class Agendamento extends ObjetoIdentificado{
 
 
 	public Agendamento(Date dataAgendamento, Date horaInicio, Date horaFim, StatusAgendamento statusAgendamento,
-			String observacao, Boolean primeiraAvalicao, Paciente paciente, Procedimento procedimento) {
+			String observacao, Boolean primeiraAvalicao, Orcamento orcamento, Procedimento procedimento) {
 		super();
 		this.dataAgendamento = dataAgendamento;
 		this.horaInicio = horaInicio;
@@ -72,7 +72,7 @@ public class Agendamento extends ObjetoIdentificado{
 		this.statusAgendamento = (statusAgendamento==null) ? null : statusAgendamento.getCodigo();
 		this.observacao = observacao;
 		this.primeiraAvalicao = primeiraAvalicao;
-		this.paciente = paciente;
+		this.orcamento = orcamento;
 		this.procedimento = procedimento;
 	}
 
@@ -126,15 +126,6 @@ public class Agendamento extends ObjetoIdentificado{
 	public void setPrimeiraAvalicao(Boolean primeiraAvalicao) {
 		this.primeiraAvalicao = primeiraAvalicao;
 	}
-
-	public Paciente getPaciente() {
-		return paciente;
-	}
-
-	public void setPaciente(Paciente paciente) {
-		this.paciente = paciente;
-	}
-
 	public Procedimento getProcedimento() {
 		return procedimento;
 	}
@@ -143,6 +134,15 @@ public class Agendamento extends ObjetoIdentificado{
 		this.procedimento = procedimento;
 	}
 
+	public Orcamento getOrcamento() {
+		return orcamento;
+	}
+	
+	public void setOrcamento(Orcamento orcamento) {
+		this.orcamento = orcamento;
+	}
+
+	
 	
 
 	

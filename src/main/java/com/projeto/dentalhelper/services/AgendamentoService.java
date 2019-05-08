@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Agendamento;
-import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Procedimento;
 import com.projeto.dentalhelper.domains.enums.StatusAgendamento;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
@@ -29,11 +29,13 @@ import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 public class AgendamentoService extends AbstractService<Agendamento, AgendamentoRepository>{
 	
 	@Autowired
-	PacienteService pacienteService;
+	private PacienteService pacienteService;
 	
 	@Autowired
-	ProcedimentoService procedimentoService;
+	private ProcedimentoService procedimentoService;
 	
+	@Autowired
+	private OrcamentoService orcamentoService;
 	
 	
 	@Override
@@ -85,13 +87,13 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 			horaFim = converterStringParaHora(objetoDTO.getHoraFim());
 		}
 		
-		Paciente paciente = pacienteService.buscarPorCodigo(objetoDTO.getCodigoPaciente());
+		Orcamento orcamento = orcamentoService.buscarPorCodigo(objetoDTO.getCodigoOrcamento());
 		
 		Procedimento procedimento = procedimentoService.buscarPorCodigo(objetoDTO.getCodigoProcedimento());
 		
 		
 		Agendamento agendamento = new Agendamento(objetoDTO.getDataAgendamento(), horaInicio, horaFim, StatusAgendamento.toEnum(objetoDTO.getStatusAgendamento()), 
-				objetoDTO.getObservacao(), objetoDTO.getPrimeiraAvalicao(), paciente , procedimento);
+				objetoDTO.getObservacao(), objetoDTO.getPrimeiraAvalicao(), orcamento , procedimento);
 				
 		return agendamento;
 	}
