@@ -15,6 +15,8 @@ public class AgendamentoResumoPacienteDTO extends ResourceSupport implements Ser
 	
 	private Long codigoAgendamento;
 	
+	private Long codigoOrcamento;
+	
 	private Date dataAgendamento;
 	
 	private String horaInicio;
@@ -33,6 +35,7 @@ public class AgendamentoResumoPacienteDTO extends ResourceSupport implements Ser
 	public AgendamentoResumoPacienteDTO(Agendamento agendamento) {
 		this.codigoAgendamento = agendamento.getCodigo();
 		this.dataAgendamento = agendamento.getDataAgendamento();
+		this.codigoOrcamento = agendamento.getOrcamento().getCodigo();
 		this.horaInicio = converterHoraParaString(agendamento.getHoraInicio());
 		this.horaFim = converterHoraParaString(agendamento.getHoraFim());
 		this.primeiraAvalicao = agendamento.getPrimeiraAvalicao();
@@ -108,6 +111,15 @@ public class AgendamentoResumoPacienteDTO extends ResourceSupport implements Ser
 	public void setStatusAgendamento(String statusAgendamento) {
 		this.statusAgendamento = statusAgendamento;
 	}
+	
+	public Long getCodigoOrcamento() {
+		return codigoOrcamento;
+	}
+	public void setCodigoOrcamento(Long codigoOrcamento) {
+		this.codigoOrcamento = codigoOrcamento;
+	}
+
+
 
 	private String converterHoraParaString(Date hora) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm");  

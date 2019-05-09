@@ -13,6 +13,8 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 
 	private Long codigoAgendamento;
 	
+	private Long codigoOrcamento;
+	
 	private Date dataAgendamento;
 	
 	private Date horaInicio;
@@ -35,6 +37,7 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 	
 	public AgendamentoResumoDTO(Agendamento a) {
 		this.codigoAgendamento = a.getCodigo();
+		this.codigoOrcamento = a.getOrcamento().getCodigo();
 		this.dataAgendamento = a.getDataAgendamento();
 		this.horaInicio = a.getHoraInicio();
 		this.horaFim = a.getHoraFim();
@@ -133,6 +136,14 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 
 	public void setNomeProcedimento(String nomeProcedimento) {
 		this.nomeProcedimento = nomeProcedimento;
+	}
+
+	public Long getCodigoOrcamento() {
+		return codigoOrcamento;
+	}
+
+	public void setCodigoOrcamento(Long codigoOrcamento) {
+		this.codigoOrcamento = codigoOrcamento;
 	}
 	
 	

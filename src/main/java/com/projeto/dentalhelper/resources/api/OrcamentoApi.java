@@ -14,43 +14,35 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.projeto.dentalhelper.domains.Agendamento;
-import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
-import com.projeto.dentalhelper.dtos.AgendamentoResumoDTO;
-import com.projeto.dentalhelper.repositories.filter.AgendamentoFilter;
+import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@RequestMapping(value = "/agendamentos")
-public interface AgendamentoApi {
+@RequestMapping(value = "/orcamentos")
+public interface OrcamentoApi {
 
-	@ApiOperation(value = "Salva um agendamento")
+	@ApiOperation(value = "Salva um orçamento")
 	@PostMapping(value = "/novo")
-	public ResponseEntity<Agendamento> post(@Valid @RequestBody AgendamentoNovoDTO objeto, HttpServletResponse response)
+	public ResponseEntity<Orcamento> post(@Valid @RequestBody Orcamento objeto, HttpServletResponse response)
 			throws ServiceApplicationException;
 
 	@ApiOperation(value = "Busca agendamentos por filtro")
 	@GetMapping
-	public ResponseEntity<List<AgendamentoResumoDTO>> getByFilter(AgendamentoFilter filter);
+	public List<Orcamento> getAll();
 
-	@ApiOperation(value = "Busca um agendamento por código")
+	@ApiOperation(value = "Busca um Orcamento por código")
 	@GetMapping(value = "/{codigo}")
-	public ResponseEntity<Agendamento> getByCodigo(@PathVariable Long codigo);
-	
-	@ApiOperation(value = "Busca dados do agendamento pelo código")
-	@GetMapping(value = "/{codigo}/edit")
-	public ResponseEntity<AgendamentoNovoDTO> getByCodigoForEdit(@PathVariable Long codigo);
-	
+	public ResponseEntity<Orcamento> getByCodigo(@PathVariable Long codigo);	
 
-	@ApiOperation(value = "Atualiza um agendamento")
+	@ApiOperation(value = "Atualiza um Orcamento")
 	@PutMapping(value = "/{codigo}")
-	public ResponseEntity<Agendamento> put(@PathVariable Long codigo,
-			@Valid @RequestBody AgendamentoNovoDTO objetoModificado) throws ServiceApplicationException;
+	public ResponseEntity<Orcamento> put(@PathVariable Long codigo,
+			@Valid @RequestBody Orcamento objetoModificado) throws ServiceApplicationException;
 
-	@ApiOperation(value = "Deleta um agendamento")
+	@ApiOperation(value = "Deleta um Orcamento")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = "Integridade de dados violada, não é possível excluir um recurso que está relacionado à outro."),
 			@ApiResponse(code = 404, message = "Código inexistente.") })

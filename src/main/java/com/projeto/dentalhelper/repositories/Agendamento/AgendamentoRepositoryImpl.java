@@ -85,7 +85,7 @@ public class AgendamentoRepositoryImpl implements AgendamentoRepositoryQuery{
 			predicates.add(builder.lessThanOrEqualTo(root.get("dataAgendamento"), filter.getDataAgendamentoMax()));
 		}
 		if(filter.getCodPaciente() != null) {
-			predicates.add(builder.equal(root.join("paciente").<Long>get("codigo"), filter.getCodPaciente()));
+			predicates.add(builder.equal(root.join("orcamento").join("paciente").get("codigo"), filter.getCodPaciente()));
 
 		}
 		if(filter.getDataAgendamento() != null) {

@@ -14,11 +14,11 @@ CREATE TABLE orcamento(
 
 INSERT INTO orcamento
 (data_orcamento, aprovado, valor_total, codigo_paciente) values
-('2019-05-01', false, 75.00 , 1),
-('2019-05-02', false, 78.00 , 2),
-('2019-05-03', false, 55.00 , 3),
-('2019-05-04', false, 60.00 , 4),
-('2019-05-05', false, 45.00 , 5);
+('2019-05-01', true, 75.00 , 1),
+('2019-05-02', true, 78.00 , 2),
+('2019-05-03', true, 55.00 , 3),
+('2019-05-04', true, 60.00 , 4),
+('2019-05-05', true, 45.00 , 5);
 
 
 CREATE TABLE orcamento_procedimento(
@@ -38,6 +38,8 @@ INSERT INTO orcamento_procedimento
 (2, 3),
 (2, 4),
 (3, 1),
+(3, 2),
 (4, 5),
+(4, 4),
 (5, 2);
 
