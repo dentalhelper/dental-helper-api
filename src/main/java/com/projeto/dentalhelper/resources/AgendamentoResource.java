@@ -26,6 +26,8 @@ import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaExcep
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
@@ -50,6 +52,8 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 			throw new DadoInvalidoRunTimeException(e.getMessage());
 		} catch (ProcedimentoNaoEstaEmOrcamentoException e) {
 			throw new ProcedimentoNaoEstaEmOrcamentoRuntimeException(e.getMessage());
+		} catch (OrcamentoNaoAprovadoException e) {
+			throw new OrcamentoNaoAprovadoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -94,6 +98,8 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 			throw new DadoInvalidoRunTimeException(e.getMessage());
 		} catch (ProcedimentoNaoEstaEmOrcamentoException e) {
 			throw new ProcedimentoNaoEstaEmOrcamentoRuntimeException(e.getMessage());
+		} catch (OrcamentoNaoAprovadoException e) {
+			throw new OrcamentoNaoAprovadoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -139,6 +145,8 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 			throw new DadoInvalidoRunTimeException(e.getMessage());
 		} catch (ProcedimentoNaoEstaEmOrcamentoException e) {
 			throw new ProcedimentoNaoEstaEmOrcamentoRuntimeException(e.getMessage());
+		} catch (OrcamentoNaoAprovadoException e) {
+			throw new OrcamentoNaoAprovadoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}

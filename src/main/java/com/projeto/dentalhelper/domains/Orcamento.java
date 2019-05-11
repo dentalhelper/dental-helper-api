@@ -35,6 +35,7 @@ public class Orcamento extends ObjetoIdentificado{
 	private List<Procedimento> procedimentos = new ArrayList<Procedimento>();
 	
 	@ManyToOne
+	@NotNull
 	@JoinColumn(name = "codigo_paciente")
 	private Paciente paciente;
 

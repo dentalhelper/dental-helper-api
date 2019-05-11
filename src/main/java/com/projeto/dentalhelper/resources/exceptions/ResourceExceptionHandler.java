@@ -35,6 +35,7 @@ import com.projeto.dentalhelper.services.exceptions.FileException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoDuplicadoRuntimeException;
@@ -202,6 +203,20 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
 	
+	@ExceptionHandler(OrcamentoNaoAprovadoRuntimeException.class)
+	public ResponseEntity<Object> orcamentoNaoAprovado(OrcamentoNaoAprovadoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+		
+		
+		
+		String mensagemUsuario = montarMensagemUsuario("orcamento.nao-aprovado");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
 	
 
 	@ExceptionHandler(RecursoCpfDuplicadoRuntimeException.class)

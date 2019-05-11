@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Orcamento;
@@ -61,6 +62,12 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 	public ResponseEntity<Void> delete(Long codigo) {
 		service.deletar(codigo);
 		return ResponseEntity.noContent().header("Entity", Long.toString(codigo)).build();
+	}
+	
+	public ResponseEntity<Orcamento> getByCodigo(@PathVariable Long codigo) {
+		Orcamento objeto = service.buscarPorCodigo(codigo);
+		adicionarLink(objeto, codigo);
+		return objeto != null ? ResponseEntity.ok(objeto) : ResponseEntity.notFound().build();
 	}
 
 }

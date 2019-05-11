@@ -23,6 +23,7 @@ import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHor
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
@@ -50,7 +51,9 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		
 		agendamentoJaCadastradoNesseHorario(objeto, null);
 		
+		orcamentoEstaAprovado(objeto.getOrcamento());
 		procedimentoEstaNoOrcamento(objeto);
+		
 
 		return repository.save(objeto);
 	}
@@ -69,6 +72,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		if(!(objetoModificado.getStatusAgendamento() == StatusAgendamento.CANCELADO)) {
 			agendamentoJaCadastradoNesseHorario(objetoModificado, codigo);
 		}
+		orcamentoEstaAprovado(objetoModificado.getOrcamento());
 		procedimentoEstaNoOrcamento(objetoModificado);
 		
 		Agendamento objetoAtualizado = buscarPorCodigo(codigo);
@@ -217,6 +221,12 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		}
 	}
 	
+	
+	public void orcamentoEstaAprovado(Orcamento o) throws OrcamentoNaoAprovadoException {
+		if(o.getAprovado() == false) {
+			throw new OrcamentoNaoAprovadoException("Não poderá agendar procedimentos enquanto o orçamento não for aprovado.");
+		}
+	}
 	
 	
 
