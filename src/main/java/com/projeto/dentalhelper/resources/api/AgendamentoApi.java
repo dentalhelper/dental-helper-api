@@ -56,5 +56,10 @@ public interface AgendamentoApi {
 			@ApiResponse(code = 404, message = "Código inexistente.") })
 	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> delete(@PathVariable Long codigo);
+	
+	@ApiOperation(value = "Atualiza o status de um agendamento")
+	@PutMapping(value = "/{codigo}/status")
+	public ResponseEntity<Agendamento> atualizarStatus(@PathVariable Long codigo, @RequestBody Integer status) throws ServiceApplicationException;
+	
 
 }

@@ -35,6 +35,7 @@ import com.projeto.dentalhelper.services.exceptions.FileException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoRuntimeException;
@@ -178,6 +179,21 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		
 		String mensagemUsuario = montarMensagemUsuario("recurso.dado-invalido");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(ProcedimentoNaoEstaEmOrcamentoRuntimeException.class)
+	public ResponseEntity<Object> procedimentoInvalidoParaAgendamento(ProcedimentoNaoEstaEmOrcamentoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+		
+		
+		
+		String mensagemUsuario = montarMensagemUsuario("agendamento.procedimento-invalido");
 		String mensagemDesenvolvedor = exception.toString();
 		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
 				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));

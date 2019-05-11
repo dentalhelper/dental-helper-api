@@ -23,13 +23,11 @@ import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHor
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
 public class AgendamentoService extends AbstractService<Agendamento, AgendamentoRepository>{
-	
-	@Autowired
-	private PacienteService pacienteService;
 	
 	@Autowired
 	private ProcedimentoService procedimentoService;
@@ -51,6 +49,8 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		horaInicialMenorQueFinal(objeto.getHoraInicio(), objeto.getHoraFim());
 		
 		agendamentoJaCadastradoNesseHorario(objeto, null);
+		
+		procedimentoEstaNoOrcamento(objeto);
 
 		return repository.save(objeto);
 	}
@@ -69,6 +69,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		if(!(objetoModificado.getStatusAgendamento() == StatusAgendamento.CANCELADO)) {
 			agendamentoJaCadastradoNesseHorario(objetoModificado, codigo);
 		}
+		procedimentoEstaNoOrcamento(objetoModificado);
 		
 		Agendamento objetoAtualizado = buscarPorCodigo(codigo);
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
@@ -201,6 +202,19 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		filter.setHoraInicioMin(null);
 			
 		return repository.buscarPorFiltro(filter);
+	}
+	
+	public void procedimentoEstaNoOrcamento(Agendamento a) throws ProcedimentoNaoEstaEmOrcamentoException {
+		Orcamento orcamento = a.getOrcamento();
+		boolean resultado = false;
+		for(Procedimento p: orcamento.getProcedimentos()) {
+			if(p.getCodigo() == a.getProcedimento().getCodigo()) {
+				resultado = true;
+			}
+		}
+		if(resultado == false) {
+			throw new ProcedimentoNaoEstaEmOrcamentoException("O procedimento '"+a.getProcedimento().getNome() +"' não está no orçamento");
+		}
 	}
 	
 	
