@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -58,7 +59,7 @@ public interface AgendamentoApi {
 	public ResponseEntity<Void> delete(@PathVariable Long codigo);
 	
 	@ApiOperation(value = "Atualiza o status de um agendamento")
-	@PutMapping(value = "/{codigo}/status")
+	@PatchMapping(value = "/{codigo}")
 	public ResponseEntity<Agendamento> atualizarStatus(@PathVariable Long codigo, @RequestBody Integer status) throws ServiceApplicationException;
 	
 
