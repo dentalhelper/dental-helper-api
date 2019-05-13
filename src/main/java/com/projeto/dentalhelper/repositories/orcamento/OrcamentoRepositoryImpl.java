@@ -1,6 +1,7 @@
 package com.projeto.dentalhelper.repositories.orcamento;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -20,9 +21,7 @@ public class OrcamentoRepositoryImpl implements OrcamentoRepositoryQuery {
 	EntityManager manager;
 
 	@Override
-	public List<Orcamento> buscarPorCodigoPaciente(Long codigo) {
-		OrcamentoFilter filter = new OrcamentoFilter();
-		filter.setCodigoPaciente(codigo);
+	public List<Orcamento> filtrar(OrcamentoFilter filter) {
 
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Orcamento> criteria = builder.createQuery(Orcamento.class);
@@ -43,6 +42,15 @@ public class OrcamentoRepositoryImpl implements OrcamentoRepositoryQuery {
 			predicates.add(
 					builder.equal(root.join("paciente").get("codigo"), filter.getCodigoPaciente()));
 		}
+		if(filter.getDataOrcamentoDe() != null) {
+			predicates.add(
+					builder.greaterThanOrEqualTo(root.get("dataOrcamento"), filter.getDataOrcamentoDe()));
+		}
+		if(filter.getDataOrcamentoAte() != null) {
+			predicates.add(
+					builder.lessThanOrEqualTo(root.get("dataOrcamento"), filter.getDataOrcamentoAte()));
+		}
+		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
 

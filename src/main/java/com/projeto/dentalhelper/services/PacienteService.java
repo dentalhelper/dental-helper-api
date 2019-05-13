@@ -31,6 +31,7 @@ import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.OrcamentoRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
+import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
@@ -308,7 +309,9 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	}
 	
 	public List<Orcamento> buscarOrcamentosDoPacientePeloCodigo(Long codigo){
-		return orcamentoRepository.buscarPorCodigoPaciente(codigo);
+		OrcamentoFilter filter = new OrcamentoFilter();
+		filter.setCodigoPaciente(codigo);
+		return orcamentoRepository.filtrar(filter);
 	}
 	
 }

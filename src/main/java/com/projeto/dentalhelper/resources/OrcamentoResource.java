@@ -15,6 +15,8 @@ import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
 import com.projeto.dentalhelper.resources.api.OrcamentoApi;
 import com.projeto.dentalhelper.services.OrcamentoService;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @RestController
@@ -26,6 +28,8 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 
 		try {
 			objetoSalvo = salvar(objeto);
+		} catch (OrcamentoDeveConterProcedimentoException e) {
+			throw new OrcamentoDeveConterProcedimentoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -54,6 +58,8 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 		Orcamento objetoEditado = null;
 		try {
 			objetoEditado = atualizar(codigo, objetoModificado);
+		} catch (OrcamentoDeveConterProcedimentoException e) {
+			throw new OrcamentoDeveConterProcedimentoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
