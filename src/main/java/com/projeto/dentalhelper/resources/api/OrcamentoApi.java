@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
+import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 import io.swagger.annotations.ApiOperation;
@@ -30,9 +31,9 @@ public interface OrcamentoApi {
 	public ResponseEntity<Orcamento> post(@Valid @RequestBody Orcamento objeto, HttpServletResponse response)
 			throws ServiceApplicationException;
 
-	@ApiOperation(value = "Busca todos os orçamentos")
+	@ApiOperation(value = "Buscar orçamentos por filtro")
 	@GetMapping
-	public ResponseEntity<List<OrcamentoResumoDTO>> getAll();
+	public ResponseEntity<List<OrcamentoResumoDTO>> getByFilter(OrcamentoFilter filt);
 
 	@ApiOperation(value = "Busca um Orcamento por código")
 	@GetMapping(value = "/{codigo}")

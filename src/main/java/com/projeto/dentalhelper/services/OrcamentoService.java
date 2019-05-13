@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Procedimento;
 import com.projeto.dentalhelper.repositories.OrcamentoRepository;
+import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
@@ -67,6 +68,10 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 			procedimentos.add(procedimentoService.buscarPorCodigo(p.getCodigo()));
 		}
 		return procedimentos;
+	}
+	
+	public List<Orcamento> filtrar (OrcamentoFilter filter){
+		return repository.filtrar(filter);
 	}
 	
 	

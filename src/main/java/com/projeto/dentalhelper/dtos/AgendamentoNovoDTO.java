@@ -43,6 +43,8 @@ public class AgendamentoNovoDTO implements Serializable{
 	@NotNull
 	private Long codigoProcedimento;
 	
+	private Float valor;
+	
 	public AgendamentoNovoDTO() {
 	}
 	
@@ -55,6 +57,7 @@ public class AgendamentoNovoDTO implements Serializable{
 		this.primeiraAvalicao = agendamento.getPrimeiraAvalicao();
 		this.codigoOrcamento = agendamento.getOrcamento().getCodigo();
 		this.codigoProcedimento = agendamento.getProcedimento().getCodigo();
+		this.valor = agendamento.getValor();
 	}
 	
 	
@@ -124,6 +127,14 @@ public class AgendamentoNovoDTO implements Serializable{
 
 	public void setCodigoOrcamento(Long codigoOrcamento) {
 		this.codigoOrcamento = codigoOrcamento;
+	}
+	
+	public Float getValor() {
+		return valor;
+	}
+
+	public void setValor(Float valor) {
+		this.valor = valor;
 	}
 
 	private String converterHoraParaString(Date hora) {

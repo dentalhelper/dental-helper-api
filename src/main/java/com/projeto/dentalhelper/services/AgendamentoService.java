@@ -92,13 +92,19 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 			horaFim = converterStringParaHora(objetoDTO.getHoraFim());
 		}
 		
+		
 		Orcamento orcamento = orcamentoService.buscarPorCodigo(objetoDTO.getCodigoOrcamento());
 		
 		Procedimento procedimento = procedimentoService.buscarPorCodigo(objetoDTO.getCodigoProcedimento());
 		
+		Float valor = objetoDTO.getValor();
+		
+		if(valor == null) {
+			valor = procedimento.getValorBase();
+		}
 		
 		Agendamento agendamento = new Agendamento(objetoDTO.getDataAgendamento(), horaInicio, horaFim, StatusAgendamento.toEnum(objetoDTO.getStatusAgendamento()), 
-				objetoDTO.getObservacao(), objetoDTO.getPrimeiraAvalicao(), orcamento , procedimento);
+				objetoDTO.getObservacao(), objetoDTO.getPrimeiraAvalicao(), orcamento , procedimento, valor);
 				
 		return agendamento;
 	}

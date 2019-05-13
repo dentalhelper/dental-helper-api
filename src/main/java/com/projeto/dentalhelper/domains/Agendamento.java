@@ -56,6 +56,8 @@ public class Agendamento extends ObjetoIdentificado{
 	@JoinColumn(name = "codigo_procedimento")
 	private Procedimento procedimento;
 	
+	private Float valor;
+	
 	public Agendamento() {
 		
 	}
@@ -64,7 +66,7 @@ public class Agendamento extends ObjetoIdentificado{
 
 
 	public Agendamento(Date dataAgendamento, Date horaInicio, Date horaFim, StatusAgendamento statusAgendamento,
-			String observacao, Boolean primeiraAvalicao, Orcamento orcamento, Procedimento procedimento) {
+			String observacao, Boolean primeiraAvalicao, Orcamento orcamento, Procedimento procedimento, Float valor) {
 		super();
 		this.dataAgendamento = dataAgendamento;
 		this.horaInicio = horaInicio;
@@ -74,6 +76,7 @@ public class Agendamento extends ObjetoIdentificado{
 		this.primeiraAvalicao = primeiraAvalicao;
 		this.orcamento = orcamento;
 		this.procedimento = procedimento;
+		this.valor = valor;
 	}
 
 
@@ -141,16 +144,13 @@ public class Agendamento extends ObjetoIdentificado{
 	public void setOrcamento(Orcamento orcamento) {
 		this.orcamento = orcamento;
 	}
+	
+	public Float getValor() {
+		return valor;
+	}
 
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
+	public void setValor(Float valor) {
+		this.valor = valor;
+	}
 
 }

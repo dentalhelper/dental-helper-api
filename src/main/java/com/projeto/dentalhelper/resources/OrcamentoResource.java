@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
+import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.resources.api.OrcamentoApi;
 import com.projeto.dentalhelper.services.OrcamentoService;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoException;
@@ -44,8 +45,8 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 	}
 
 	@Override
-	public ResponseEntity<List<OrcamentoResumoDTO>> getAll() {
-		List<Orcamento> objetos = service.buscarTodos();
+	public ResponseEntity<List<OrcamentoResumoDTO>> getByFilter(OrcamentoFilter filter) {
+		List<Orcamento> objetos = service.filtrar(filter);
 		adicionarLinks(objetos);
 		List<OrcamentoResumoDTO> orcamentoResumoDTO = objetos.stream()
 				.map(orcamento -> new OrcamentoResumoDTO(orcamento)).collect(Collectors.toList());
