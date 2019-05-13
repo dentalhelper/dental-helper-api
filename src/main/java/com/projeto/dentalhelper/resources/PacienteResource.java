@@ -18,11 +18,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Foto;
+import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.dtos.AgendamentoResumoPacienteDTO;
+import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
+import com.projeto.dentalhelper.dtos.PacienteOrcamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteSelectComFotoDTO;
 import com.projeto.dentalhelper.resources.api.PacienteAPI;
@@ -172,6 +175,18 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 		
 		PacienteAgendamentoDTO pacienteDTO = new PacienteAgendamentoDTO(agendamentosDTO, objeto.getCodigo());
 		return ResponseEntity.ok().body(pacienteDTO);
+	}
+
+	@Override
+	public ResponseEntity<PacienteOrcamentoDTO> getOrcamentosByCodigoPaciente(@PathVariable Long codigo) {
+		Paciente objeto = service.buscarPorCodigo(codigo);
+		List<Orcamento> orcamentos = service.buscarOrcamentosDoPacientePeloCodigo(codigo);
+		List<OrcamentoResumoDTO> orcamentosDTO = new ArrayList<OrcamentoResumoDTO>();
+		
+		orcamentos.forEach((o) -> orcamentosDTO.add(new OrcamentoResumoDTO(o)));
+
+		PacienteOrcamentoDTO responseDTO = new PacienteOrcamentoDTO(objeto.getCodigo(), orcamentosDTO);
+		return ResponseEntity.ok().body(responseDTO);
 	}
 	
 	

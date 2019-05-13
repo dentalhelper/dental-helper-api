@@ -22,6 +22,7 @@ import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
+import com.projeto.dentalhelper.dtos.PacienteOrcamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteSelectComFotoDTO;
 
@@ -76,9 +77,13 @@ public interface PacienteAPI {
 	@ApiOperation(value = "Busca um paciente pelo código e retorna sua anamnese")
 	@GetMapping(value = "/{codigo}/anamnese")
 	public ResponseEntity<PacienteAnamneseDTO> getAnamneseByCodigoPaciente(@PathVariable Long codigo);
-	
+
 	@ApiOperation(value = "Busca um paciente pelo código e retorna seus agendamentos")
 	@GetMapping(value = "/{codigo}/agendamentos")
 	public ResponseEntity<PacienteAgendamentoDTO> getAgendamentosByCodigoPaciente(@PathVariable Long codigo);
+
+	@ApiOperation(value = "Busca um paciente pelo código e retorna seus orçamentos")
+	@GetMapping(value = "/{codigo}/orcamentos")
+	public ResponseEntity<PacienteOrcamentoDTO> getOrcamentosByCodigoPaciente(@PathVariable Long codigo);
 
 }

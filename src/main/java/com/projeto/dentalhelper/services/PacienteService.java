@@ -17,6 +17,7 @@ import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Cidade;
 import com.projeto.dentalhelper.domains.Endereco;
 import com.projeto.dentalhelper.domains.Foto;
+import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.domains.Questao;
 import com.projeto.dentalhelper.domains.QuestaoPreDefinida;
@@ -27,6 +28,7 @@ import com.projeto.dentalhelper.domains.enums.Sexo;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.repositories.AgendamentoRepository;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
+import com.projeto.dentalhelper.repositories.OrcamentoRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
@@ -42,8 +44,12 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	
 	@Autowired
 	private AgendamentoRepository agendamentoRepository;
+	
+	@Autowired
+	private OrcamentoRepository orcamentoRepository;
 	
 	@Autowired
 	private S3Service s3Service;
@@ -299,6 +305,10 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	public List<Agendamento> buscarAgendamentosDoPacientePeloCodigo(Long codigo){
 		return agendamentoRepository.buscarPorCodigoPaciente(codigo);
+	}
+	
+	public List<Orcamento> buscarOrcamentosDoPacientePeloCodigo(Long codigo){
+		return orcamentoRepository.buscarPorCodigoPaciente(codigo);
 	}
 	
 }
