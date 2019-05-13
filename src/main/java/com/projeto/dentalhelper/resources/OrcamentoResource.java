@@ -1,6 +1,7 @@
 package com.projeto.dentalhelper.resources;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Orcamento;
+import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
 import com.projeto.dentalhelper.resources.api.OrcamentoApi;
 import com.projeto.dentalhelper.services.OrcamentoService;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
@@ -32,19 +34,23 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 		adicionarLink(objetoSalvo, codigo);
 		return ResponseEntity.status(HttpStatus.CREATED).body(objetoSalvo);
 	}
-	
+
 	private Orcamento salvar(Orcamento objeto) throws ServiceApplicationException {
 		return service.salvar(objeto);
 	}
 
 	@Override
-	public List<Orcamento> getAll() {
+	public ResponseEntity<List<OrcamentoResumoDTO>> getAll() {
 		List<Orcamento> objetos = service.buscarTodos();
-		return adicionarLinks(objetos);
+		adicionarLinks(objetos);
+		List<OrcamentoResumoDTO> orcamentoResumoDTO = objetos.stream()
+				.map(orcamento -> new OrcamentoResumoDTO(orcamento)).collect(Collectors.toList());
+		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(orcamentoResumoDTO);
 	}
 
 	@Override
-	public ResponseEntity<Orcamento> put(Long codigo, @Valid Orcamento objetoModificado) throws ServiceApplicationException {
+	public ResponseEntity<Orcamento> put(Long codigo, @Valid Orcamento objetoModificado)
+			throws ServiceApplicationException {
 		Orcamento objetoEditado = null;
 		try {
 			objetoEditado = atualizar(codigo, objetoModificado);
@@ -57,13 +63,13 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 	private Orcamento atualizar(Long codigo, Orcamento objetoModificado) throws ServiceApplicationException {
 		return service.atualizar(codigo, objetoModificado);
 	}
-	
+
 	@Override
 	public ResponseEntity<Void> delete(Long codigo) {
 		service.deletar(codigo);
 		return ResponseEntity.noContent().header("Entity", Long.toString(codigo)).build();
 	}
-	
+
 	public ResponseEntity<Orcamento> getByCodigo(@PathVariable Long codigo) {
 		Orcamento objeto = service.buscarPorCodigo(codigo);
 		adicionarLink(objeto, codigo);
