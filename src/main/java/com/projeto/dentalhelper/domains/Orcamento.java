@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "orcamento")
@@ -39,18 +44,26 @@ public class Orcamento extends ObjetoIdentificado{
 	@JoinColumn(name = "codigo_paciente")
 	private Paciente paciente;
 	
+
+	@JsonIgnoreProperties("orcamento")
+	@Valid
+	@OneToMany(mappedBy = "orcamento", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<Pagamento> pagamentos = new ArrayList<Pagamento>();
+	
+	
 	public Orcamento () {
 		
 	}
 
 	public Orcamento(Float valorTotal, Date dataOrcamento, Boolean aprovado, List<Procedimento> procedimentos,
-			Paciente paciente) {
+			Paciente paciente, List<Pagamento> pagamentos) {
 		super();
 		this.valorTotal = valorTotal;
 		this.dataOrcamento = dataOrcamento;
 		this.aprovado = aprovado;
 		this.procedimentos = procedimentos;
 		this.paciente = paciente;
+		this.pagamentos = pagamentos;
 	}
 
 	public Float getValorTotal() {
@@ -92,10 +105,13 @@ public class Orcamento extends ObjetoIdentificado{
 	public void setPaciente(Paciente paciente) {
 		this.paciente = paciente;
 	}
-	
-	
-	
-	
-	
+
+	public List<Pagamento> getPagamentos() {
+		return pagamentos;
+	}
+
+	public void setPagamentos(List<Pagamento> pagamentos) {
+		this.pagamentos = pagamentos;
+	}
 
 }

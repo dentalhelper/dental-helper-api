@@ -48,18 +48,13 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		Orcamento objetoAtualizado = buscarPorCodigo(codigo);
 		
 		if(objetoModificado.getValorTotal() == null) {
-			float valorTotal = 0;
-			for(Procedimento p: objetoModificado.getProcedimentos()) {
-				valorTotal += p.getValorBase();
-			}
-			objetoModificado.setValorTotal(valorTotal);
+			objetoModificado.setValorTotal(objetoAtualizado.getValorTotal());
 		}
 		if(objetoModificado.getAprovado() == null) {
-			objetoModificado.setAprovado(false);
+			objetoModificado.setAprovado(objetoAtualizado.getAprovado());
 		}
 		
-	
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "pagamentos");
 		return repository.save(objetoAtualizado);
 	}
 	
@@ -78,17 +73,17 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 	
 	public Orcamento fromDTO(OrcamentoNovoDTO objetoDTO) throws OrcamentoDeveConterProcedimentoException {
 		
-		procedimentosVazios(objetoDTO.getProcedimentos());
+		procedimentosVazio(objetoDTO.getProcedimentos());
 		
 		List<Procedimento> procedimentos = buscarProcedimentos(objetoDTO.getProcedimentos());
 		Paciente paciente = pacienteService.buscarPorCodigo(objetoDTO.getCodPaciente());
 		
-		Orcamento orcamento = new Orcamento(objetoDTO.getValorTotal(), objetoDTO.getDataOrcamento(), objetoDTO.getAprovado(), procedimentos, paciente);
+		Orcamento orcamento = new Orcamento(objetoDTO.getValorTotal(), objetoDTO.getDataOrcamento(), objetoDTO.getAprovado(), procedimentos, paciente, null);
 		
 		return orcamento;
 	}
 	
-	public boolean procedimentosVazios (List<Procedimento> procedimentos) throws OrcamentoDeveConterProcedimentoException {
+	public boolean procedimentosVazio (List<Procedimento> procedimentos) throws OrcamentoDeveConterProcedimentoException {
 		if(procedimentos.isEmpty()) {
 			throw new OrcamentoDeveConterProcedimentoException("O orçamento deve conter pelo menos 1 procedimento, tamanho da lista :"+ procedimentos.size());
 		}

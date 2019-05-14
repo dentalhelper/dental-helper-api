@@ -31,12 +31,15 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHorarioRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.FileException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.PagamentoSuperaValorTotalDoOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoDuplicadoRuntimeException;
@@ -216,6 +219,42 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
 				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
 		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(PagamentoSuperaValorTotalDoOrcamentoRuntimeException.class)
+	public ResponseEntity<Object> pagamentoSuperaValorTotalDoProcedimento(PagamentoSuperaValorTotalDoOrcamentoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("pagamento.valor-superado");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(DespesaNaoPodeSerApagadaRuntimeException.class)
+	public ResponseEntity<Object> pagamentoSuperaValorTotalDoProcedimento(DespesaNaoPodeSerApagadaRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("pagamento.despesa-remocao");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(DespesaNaoPodeSerEditadaRuntimeException.class)
+	public ResponseEntity<Object> pagamentoSuperaValorTotalDoProcedimento(DespesaNaoPodeSerEditadaRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("pagamento.despesa-edicao");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
 		
 		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
