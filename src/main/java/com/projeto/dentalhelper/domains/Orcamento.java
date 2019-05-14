@@ -11,7 +11,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "orcamento")
@@ -22,8 +23,8 @@ public class Orcamento extends ObjetoIdentificado{
 	@Column(name = "valor_total")
 	private Float valorTotal;
 	
-	@NotNull
 	@Column(name = "data_orcamento")
+	@Temporal(TemporalType.DATE)
 	private Date dataOrcamento;
 	
 	private Boolean aprovado;
@@ -35,9 +36,22 @@ public class Orcamento extends ObjetoIdentificado{
 	private List<Procedimento> procedimentos = new ArrayList<Procedimento>();
 	
 	@ManyToOne
-	@NotNull
 	@JoinColumn(name = "codigo_paciente")
 	private Paciente paciente;
+	
+	public Orcamento () {
+		
+	}
+
+	public Orcamento(Float valorTotal, Date dataOrcamento, Boolean aprovado, List<Procedimento> procedimentos,
+			Paciente paciente) {
+		super();
+		this.valorTotal = valorTotal;
+		this.dataOrcamento = dataOrcamento;
+		this.aprovado = aprovado;
+		this.procedimentos = procedimentos;
+		this.paciente = paciente;
+	}
 
 	public Float getValorTotal() {
 		return valorTotal;

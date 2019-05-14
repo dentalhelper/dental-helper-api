@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projeto.dentalhelper.domains.Orcamento;
+import com.projeto.dentalhelper.dtos.OrcamentoNovoDTO;
 import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
 import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
@@ -28,7 +29,7 @@ public interface OrcamentoApi {
 
 	@ApiOperation(value = "Salva um orçamento")
 	@PostMapping(value = "/novo")
-	public ResponseEntity<Orcamento> post(@Valid @RequestBody Orcamento objeto, HttpServletResponse response)
+	public ResponseEntity<Orcamento> post(@Valid @RequestBody OrcamentoNovoDTO objeto, HttpServletResponse response)
 			throws ServiceApplicationException;
 
 	@ApiOperation(value = "Buscar orçamentos por filtro")
@@ -42,7 +43,7 @@ public interface OrcamentoApi {
 	@ApiOperation(value = "Atualiza um Orcamento")
 	@PutMapping(value = "/{codigo}")
 	public ResponseEntity<Orcamento> put(@PathVariable Long codigo,
-			@Valid @RequestBody Orcamento objetoModificado) throws ServiceApplicationException;
+			@Valid @RequestBody OrcamentoNovoDTO objetoModificado) throws ServiceApplicationException;
 
 	@ApiOperation(value = "Deleta um Orcamento")
 	@ApiResponses(value = {

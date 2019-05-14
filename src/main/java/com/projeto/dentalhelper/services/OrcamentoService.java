@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Orcamento;
+import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.domains.Procedimento;
+import com.projeto.dentalhelper.dtos.OrcamentoNovoDTO;
 import com.projeto.dentalhelper.repositories.OrcamentoRepository;
 import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoException;
@@ -26,24 +28,17 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 
 	@Override
 	public Orcamento salvar(Orcamento objeto) throws ServiceApplicationException {
-		objeto.setCodigo(null);
-		
-		
-		if(objeto.getProcedimentos().isEmpty()) {
-			throw new OrcamentoDeveConterProcedimentoException("O orçamento deve conter pelo menos 1 procedimento, tamanho da lista :"+ objeto.getProcedimentos().size());
-		}
-
-		objeto.setProcedimentos(buscarProcedimentos(objeto));
-		objeto.setPaciente(pacienteService.buscarPorCodigo(objeto.getPaciente().getCodigo()));
-		
+		objeto.setCodigo(null);	
 		
 		objeto.setAprovado(false);
-		float valorTotal = 0;
-		for(Procedimento p: objeto.getProcedimentos()) {
-			valorTotal += p.getValorBase();
+		if(objeto.getValorTotal() == null) {
+			float valorTotal = 0;
+			for(Procedimento p: objeto.getProcedimentos()) {
+				valorTotal += p.getValorBase();
+			}
+			objeto.setValorTotal(valorTotal);
 		}
-		objeto.setValorTotal(valorTotal);
-		
+			
 		
 		return repository.save(objeto);
 	}
@@ -52,19 +47,26 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 	public Orcamento atualizar(Long codigo, Orcamento objetoModificado) throws ServiceApplicationException{
 		Orcamento objetoAtualizado = buscarPorCodigo(codigo);
 		
-		if(objetoModificado.getProcedimentos().isEmpty()) {
-			throw new OrcamentoDeveConterProcedimentoException("O orçamento deve conter pelo menos 1 procedimento, tamanho da lista :"+ objetoModificado.getProcedimentos().size());
+		if(objetoModificado.getValorTotal() == null) {
+			float valorTotal = 0;
+			for(Procedimento p: objetoModificado.getProcedimentos()) {
+				valorTotal += p.getValorBase();
+			}
+			objetoModificado.setValorTotal(valorTotal);
+		}
+		if(objetoModificado.getAprovado() == null) {
+			objetoModificado.setAprovado(false);
 		}
 		
-		
+	
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
 		return repository.save(objetoAtualizado);
 	}
 	
 	
-	public List<Procedimento> buscarProcedimentos (Orcamento o){
+	public List<Procedimento> buscarProcedimentos (List<Procedimento> pro){
 		List<Procedimento> procedimentos = new ArrayList<Procedimento>();
-		for(Procedimento p: o.getProcedimentos()) {
+		for(Procedimento p: pro) {
 			procedimentos.add(procedimentoService.buscarPorCodigo(p.getCodigo()));
 		}
 		return procedimentos;
@@ -72,6 +74,25 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 	
 	public List<Orcamento> filtrar (OrcamentoFilter filter){
 		return repository.filtrar(filter);
+	}
+	
+	public Orcamento fromDTO(OrcamentoNovoDTO objetoDTO) throws OrcamentoDeveConterProcedimentoException {
+		
+		procedimentosVazios(objetoDTO.getProcedimentos());
+		
+		List<Procedimento> procedimentos = buscarProcedimentos(objetoDTO.getProcedimentos());
+		Paciente paciente = pacienteService.buscarPorCodigo(objetoDTO.getCodPaciente());
+		
+		Orcamento orcamento = new Orcamento(objetoDTO.getValorTotal(), objetoDTO.getDataOrcamento(), objetoDTO.getAprovado(), procedimentos, paciente);
+		
+		return orcamento;
+	}
+	
+	public boolean procedimentosVazios (List<Procedimento> procedimentos) throws OrcamentoDeveConterProcedimentoException {
+		if(procedimentos.isEmpty()) {
+			throw new OrcamentoDeveConterProcedimentoException("O orçamento deve conter pelo menos 1 procedimento, tamanho da lista :"+ procedimentos.size());
+		}
+		return false;
 	}
 	
 	

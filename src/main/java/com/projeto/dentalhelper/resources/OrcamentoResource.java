@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Orcamento;
+import com.projeto.dentalhelper.dtos.OrcamentoNovoDTO;
 import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
 import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.resources.api.OrcamentoApi;
@@ -24,11 +25,12 @@ import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoService> implements OrcamentoApi {
 
 	@Override
-	public ResponseEntity<Orcamento> post(@Valid Orcamento objeto, HttpServletResponse response) {
+	public ResponseEntity<Orcamento> post(@Valid OrcamentoNovoDTO objeto, HttpServletResponse response) {
 		Orcamento objetoSalvo = null;
 
 		try {
-			objetoSalvo = salvar(objeto);
+			objetoSalvo = service.fromDTO(objeto);
+			objetoSalvo = salvar(objetoSalvo);
 		} catch (OrcamentoDeveConterProcedimentoException e) {
 			throw new OrcamentoDeveConterProcedimentoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
@@ -54,11 +56,12 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 	}
 
 	@Override
-	public ResponseEntity<Orcamento> put(Long codigo, @Valid Orcamento objetoModificado)
+	public ResponseEntity<Orcamento> put(Long codigo, @Valid OrcamentoNovoDTO objetoModificado)
 			throws ServiceApplicationException {
 		Orcamento objetoEditado = null;
 		try {
-			objetoEditado = atualizar(codigo, objetoModificado);
+			objetoEditado = service.fromDTO(objetoModificado);
+			objetoEditado = atualizar(codigo, objetoEditado);
 		} catch (OrcamentoDeveConterProcedimentoException e) {
 			throw new OrcamentoDeveConterProcedimentoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
