@@ -19,6 +19,8 @@ import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaExce
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoSuperaValorTotalDoOrcamentoException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoSuperaValorTotalDoOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
@@ -47,6 +49,8 @@ public class PagamentoResource extends AbstractResource<Pagamento, PagamentoServ
 			throw new DespesaNaoPodeSerEditadaRuntimeException(e.getMessage());
 		} catch (DespesaNaoPodeSerApagadaException e) {
 			throw new DespesaNaoPodeSerApagadaRuntimeException(e.getMessage());
+		} catch (OrcamentoNaoAprovadoException e) {
+			throw new OrcamentoNaoAprovadoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}

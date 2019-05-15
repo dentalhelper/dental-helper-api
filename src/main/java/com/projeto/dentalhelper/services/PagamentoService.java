@@ -12,6 +12,7 @@ import com.projeto.dentalhelper.dtos.PagamentoRecebimentoNovoDTO;
 import com.projeto.dentalhelper.repositories.PagamentoRepository;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoSuperaValorTotalDoOrcamentoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
@@ -24,6 +25,7 @@ public class PagamentoService extends AbstractService<Pagamento, PagamentoReposi
 	public Pagamento salvarRecebimento(Pagamento objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
 		valorPagamentoSuperaValorTotal(objeto.getOrcamento(), objeto);
+		orcamentoEstaAprovado(objeto.getOrcamento());
 		
 		
 		return repository.save(objeto);
@@ -90,5 +92,10 @@ public class PagamentoService extends AbstractService<Pagamento, PagamentoReposi
 		return false;
 	}
 	
+	public void orcamentoEstaAprovado(Orcamento o) throws OrcamentoNaoAprovadoException {
+		if(o.getAprovado() == false) {
+			throw new OrcamentoNaoAprovadoException("Não poderá adicionar pagamentos enquanto o orçamento não for aprovado.");
+		}
+	}
 	
 }
