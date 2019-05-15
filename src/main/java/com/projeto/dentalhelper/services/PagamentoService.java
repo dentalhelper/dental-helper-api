@@ -34,6 +34,7 @@ public class PagamentoService extends AbstractService<Pagamento, PagamentoReposi
 
 	public Pagamento atualizarRecebimento(Long codigo, Pagamento objetoModificado) throws ServiceApplicationException{
 		Pagamento objetoAtualizado = buscarPorCodigo(codigo);
+		objetoModificado.setCodigo(codigo);
 		
 		isDespesa(objetoAtualizado, true);
 		valorPagamentoSuperaValorTotal(objetoAtualizado.getOrcamento(), objetoModificado);
