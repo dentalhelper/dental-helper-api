@@ -65,6 +65,16 @@ public class Orcamento extends ObjetoIdentificado{
 		this.paciente = paciente;
 		this.pagamentos = pagamentos;
 	}
+	
+	public Orcamento(Float valorTotal, Boolean aprovado, List<Procedimento> procedimentos,
+			Paciente paciente, List<Pagamento> pagamentos) {
+		super();
+		this.valorTotal = valorTotal;
+		this.aprovado = aprovado;
+		this.procedimentos = procedimentos;
+		this.paciente = paciente;
+		this.pagamentos = pagamentos;
+	}
 
 	public Float getValorTotal() {
 		return valorTotal;

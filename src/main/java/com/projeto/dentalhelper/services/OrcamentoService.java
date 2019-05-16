@@ -1,6 +1,8 @@
 package com.projeto.dentalhelper.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -38,6 +40,8 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 			}
 			objeto.setValorTotal(valorTotal);
 		}
+		Calendar calendar = new GregorianCalendar();
+		objeto.setDataOrcamento(calendar.getTime());
 			
 		
 		return repository.save(objeto);
@@ -54,7 +58,7 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 			objetoModificado.setAprovado(objetoAtualizado.getAprovado());
 		}
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "pagamentos");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "pagamentos", "dataOrcamento");
 		return repository.save(objetoAtualizado);
 	}
 	
@@ -78,7 +82,7 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		List<Procedimento> procedimentos = buscarProcedimentos(objetoDTO.getProcedimentos());
 		Paciente paciente = pacienteService.buscarPorCodigo(objetoDTO.getCodPaciente());
 		
-		Orcamento orcamento = new Orcamento(objetoDTO.getValorTotal(), objetoDTO.getDataOrcamento(), objetoDTO.getAprovado(), procedimentos, paciente, null);
+		Orcamento orcamento = new Orcamento(objetoDTO.getValorTotal(), objetoDTO.getAprovado(), procedimentos, paciente, null);
 		
 		return orcamento;
 	}

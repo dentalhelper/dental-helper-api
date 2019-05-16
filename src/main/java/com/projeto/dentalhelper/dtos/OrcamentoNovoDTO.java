@@ -2,7 +2,6 @@ package com.projeto.dentalhelper.dtos;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -16,8 +15,6 @@ public class OrcamentoNovoDTO implements Serializable {
 	
 	private Float valorTotal;
 	
-	@NotNull
-	private Date dataOrcamento;
 	
 	private Boolean aprovado;
 	
@@ -32,7 +29,6 @@ public class OrcamentoNovoDTO implements Serializable {
 	
 	public OrcamentoNovoDTO(Orcamento o) {
 		this.valorTotal = o.getValorTotal();
-		this.dataOrcamento = o.getDataOrcamento();
 		this.aprovado = o.getAprovado();
 		this.procedimentos = o.getProcedimentos();
 		this.codPaciente = o.getPaciente().getCodigo();
@@ -44,14 +40,6 @@ public class OrcamentoNovoDTO implements Serializable {
 
 	public void setValorTotal(Float valorTotal) {
 		this.valorTotal = valorTotal;
-	}
-
-	public Date getDataOrcamento() {
-		return dataOrcamento;
-	}
-
-	public void setDataOrcamento(Date dataOrcamento) {
-		this.dataOrcamento = dataOrcamento;
 	}
 
 	public Boolean getAprovado() {
