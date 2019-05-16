@@ -234,6 +234,13 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		}
 	}
 	
+	public Agendamento atualizarStatus(Long codigo, Integer status) {
+		Agendamento agendamento = buscarPorCodigo(codigo);
+		agendamento.setStatusAgendamento(StatusAgendamento.toEnum(status));
+		
+		return repository.save(agendamento);
+	}
+	
 	
 
 }

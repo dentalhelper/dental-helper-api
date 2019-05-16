@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Agendamento;
-import com.projeto.dentalhelper.domains.enums.StatusAgendamento;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
 import com.projeto.dentalhelper.dtos.AgendamentoResumoDTO;
 import com.projeto.dentalhelper.repositories.filter.AgendamentoFilter;
@@ -133,23 +132,7 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 
 	@Override
 	public ResponseEntity<Agendamento> atualizarStatus(@PathVariable Long codigo, @RequestBody Integer status) throws ServiceApplicationException {
-		Agendamento objetoBuscado = service.buscarPorCodigo(codigo);
-		objetoBuscado.setStatusAgendamento(StatusAgendamento.toEnum(status));
-		try {
-			objetoBuscado = atualizar(codigo, objetoBuscado);
-		} catch (HoraAgendamentoInvalidaException e) {
-			throw new HoraAgendamentoInvalidaRuntimeException(e.getMessage());
-		} catch (DataAgendamentoInvalidaException e) {
-			throw new DataAgendamentoInvalidaRuntimeException(e.getMessage());
-		} catch (DadoInvalidoException e) {
-			throw new DadoInvalidoRunTimeException(e.getMessage());
-		} catch (ProcedimentoNaoEstaEmOrcamentoException e) {
-			throw new ProcedimentoNaoEstaEmOrcamentoRuntimeException(e.getMessage());
-		} catch (OrcamentoNaoAprovadoException e) {
-			throw new OrcamentoNaoAprovadoRuntimeException(e.getMessage());
-		} catch (ServiceApplicationException e) {
-			lancarExceptionComLocation(e);
-		}
+		Agendamento objetoBuscado = service.atualizarStatus(codigo, status);
 		return ResponseEntity.ok(objetoBuscado);
 	}
 	
