@@ -5,9 +5,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,7 +40,11 @@ public interface OrcamentoApi {
 
 	@ApiOperation(value = "Busca um Orcamento por código")
 	@GetMapping(value = "/{codigo}")
-	public ResponseEntity<Orcamento> getByCodigo(@PathVariable Long codigo);	
+	public ResponseEntity<Orcamento> getByCodigo(@PathVariable Long codigo);
+
+	@ApiOperation(value = "Busca dados do Orcamento pelo código")
+	@GetMapping(value = "/{codigo}/edit")
+	public ResponseEntity<OrcamentoNovoDTO> getByCodigoForEdit(@PathVariable Long codigo);
 
 	@ApiOperation(value = "Atualiza um Orcamento")
 	@PutMapping(value = "/{codigo}")
@@ -51,5 +57,9 @@ public interface OrcamentoApi {
 			@ApiResponse(code = 404, message = "Código inexistente.") })
 	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> delete(@PathVariable Long codigo);
+	
+	@ApiOperation(value = "Atualiza o status de um orçamento")
+	@PatchMapping(value = "/{codigo}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Orcamento> atualizarStatus(@PathVariable Long codigo, @RequestBody String aprovado) throws ServiceApplicationException;
 
 }

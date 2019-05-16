@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Orcamento;
@@ -84,6 +85,30 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 		Orcamento objeto = service.buscarPorCodigo(codigo);
 		adicionarLink(objeto, codigo);
 		return objeto != null ? ResponseEntity.ok(objeto) : ResponseEntity.notFound().build();
+	}
+
+	@Override
+	public ResponseEntity<OrcamentoNovoDTO> getByCodigoForEdit(Long codigo) {
+		Orcamento objeto = service.buscarPorCodigo(codigo);
+		adicionarLink(objeto, codigo);
+		OrcamentoNovoDTO orcamentoDTO = new OrcamentoNovoDTO(objeto);
+		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(orcamentoDTO);
+	}
+
+	@Override
+	public ResponseEntity<Orcamento> atualizarStatus(@PathVariable Long codigo, @RequestBody String aprovado)
+			throws ServiceApplicationException {
+		Orcamento objetoBuscado = service.buscarPorCodigo(codigo);
+		// TODO: RECEBER BOOLEAN NA REQUISIÇÃO
+		objetoBuscado.setAprovado(true);
+		try {
+			objetoBuscado = atualizar(codigo, objetoBuscado);
+		} catch (OrcamentoDeveConterProcedimentoException e) {
+			throw new OrcamentoDeveConterProcedimentoRuntimeException(e.getMessage());
+		} catch (ServiceApplicationException e) {
+			lancarExceptionComLocation(e);
+		}
+		return ResponseEntity.ok(objetoBuscado);
 	}
 
 }
