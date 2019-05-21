@@ -8,8 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -34,11 +32,17 @@ public class Orcamento extends ObjetoIdentificado{
 	
 	private Boolean aprovado;
 	
-	@ManyToMany
-    @JoinTable(name="orcamento_procedimento", joinColumns=
-    {@JoinColumn(name="codigo_orcamento")}, inverseJoinColumns=
-    {@JoinColumn(name="codigo_procedimento")})
-	private List<Procedimento> procedimentos = new ArrayList<Procedimento>();
+//	@ManyToMany
+//    @JoinTable(name="orcamento_procedimento", joinColumns=
+//    {@JoinColumn(name="codigo_orcamento")}, inverseJoinColumns=
+//    {@JoinColumn(name="codigo_procedimento")})
+//	private List<Procedimento> procedimentos = new ArrayList<Procedimento>();
+	
+	
+	@JsonIgnoreProperties("orcamento")
+	@Valid
+	@OneToMany(mappedBy = "orcamento", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ProcedimentoPrevisto> procedimentosPrevistos = new ArrayList<ProcedimentoPrevisto>();
 	
 	@ManyToOne
 	@JoinColumn(name = "codigo_paciente")
@@ -55,23 +59,23 @@ public class Orcamento extends ObjetoIdentificado{
 		
 	}
 
-	public Orcamento(Float valorTotal, Date dataOrcamento, Boolean aprovado, List<Procedimento> procedimentos,
+	public Orcamento(Float valorTotal, Date dataOrcamento, Boolean aprovado, List<ProcedimentoPrevisto> procedimentosPrevistos,
 			Paciente paciente, List<Pagamento> pagamentos) {
 		super();
 		this.valorTotal = valorTotal;
 		this.dataOrcamento = dataOrcamento;
 		this.aprovado = aprovado;
-		this.procedimentos = procedimentos;
+		this.procedimentosPrevistos = procedimentosPrevistos;
 		this.paciente = paciente;
 		this.pagamentos = pagamentos;
 	}
 	
-	public Orcamento(Float valorTotal, Boolean aprovado, List<Procedimento> procedimentos,
+	public Orcamento(Float valorTotal, Boolean aprovado, List<ProcedimentoPrevisto> procedimentosPrevistos,
 			Paciente paciente, List<Pagamento> pagamentos) {
 		super();
 		this.valorTotal = valorTotal;
 		this.aprovado = aprovado;
-		this.procedimentos = procedimentos;
+		this.procedimentosPrevistos = procedimentosPrevistos;
 		this.paciente = paciente;
 		this.pagamentos = pagamentos;
 	}
@@ -100,14 +104,6 @@ public class Orcamento extends ObjetoIdentificado{
 		this.aprovado = aprovado;
 	}
 
-	public List<Procedimento> getProcedimentos() {
-		return procedimentos;
-	}
-
-	public void setProcedimentos(List<Procedimento> procedimentos) {
-		this.procedimentos = procedimentos;
-	}
-
 	public Paciente getPaciente() {
 		return paciente;
 	}
@@ -123,5 +119,15 @@ public class Orcamento extends ObjetoIdentificado{
 	public void setPagamentos(List<Pagamento> pagamentos) {
 		this.pagamentos = pagamentos;
 	}
+
+	public List<ProcedimentoPrevisto> getProcedimentosPrevistos() {
+		return procedimentosPrevistos;
+	}
+
+	public void setProcedimentosPrevistos(List<ProcedimentoPrevisto> procedimentosPrevistos) {
+		this.procedimentosPrevistos = procedimentosPrevistos;
+	}
+	
+	
 
 }

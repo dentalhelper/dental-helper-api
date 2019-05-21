@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Procedimento;
+import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 import com.projeto.dentalhelper.domains.enums.StatusAgendamento;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
 import com.projeto.dentalhelper.repositories.AgendamentoRepository;
@@ -217,8 +218,8 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	public void procedimentoEstaNoOrcamento(Agendamento a) throws ProcedimentoNaoEstaEmOrcamentoException {
 		Orcamento orcamento = a.getOrcamento();
 		boolean resultado = false;
-		for(Procedimento p: orcamento.getProcedimentos()) {
-			if(p.getCodigo() == a.getProcedimento().getCodigo()) {
+		for(ProcedimentoPrevisto p: orcamento.getProcedimentosPrevistos()) {
+			if(p.getProcedimento().getCodigo() == a.getProcedimento().getCodigo()) {
 				resultado = true;
 			}
 		}

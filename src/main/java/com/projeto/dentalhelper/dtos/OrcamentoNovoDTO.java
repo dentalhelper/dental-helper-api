@@ -7,7 +7,7 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import com.projeto.dentalhelper.domains.Orcamento;
-import com.projeto.dentalhelper.domains.Procedimento;
+import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 
 public class OrcamentoNovoDTO implements Serializable {
 
@@ -15,10 +15,9 @@ public class OrcamentoNovoDTO implements Serializable {
 	
 	private Float valorTotal;
 	
-	
 	private Boolean aprovado;
 	
-	private List<Procedimento> procedimentos = new ArrayList<Procedimento>();
+	private List<ProcedimentoPrevistoNovoDTO> procedimentos = new ArrayList<ProcedimentoPrevistoNovoDTO>();
 	
 	@NotNull
 	private Long codPaciente;
@@ -30,7 +29,7 @@ public class OrcamentoNovoDTO implements Serializable {
 	public OrcamentoNovoDTO(Orcamento o) {
 		this.valorTotal = o.getValorTotal();
 		this.aprovado = o.getAprovado();
-		this.procedimentos = o.getProcedimentos();
+		this.procedimentos = converterProcedimentoPrevistoParaDtos(o.getProcedimentosPrevistos());
 		this.codPaciente = o.getPaciente().getCodigo();
 	}
 
@@ -50,11 +49,11 @@ public class OrcamentoNovoDTO implements Serializable {
 		this.aprovado = aprovado;
 	}
 
-	public List<Procedimento> getProcedimentos() {
+	public List<ProcedimentoPrevistoNovoDTO> getProcedimentos() {
 		return procedimentos;
 	}
 
-	public void setProcedimentos(List<Procedimento> procedimentos) {
+	public void setProcedimentos(List<ProcedimentoPrevistoNovoDTO> procedimentos) {
 		this.procedimentos = procedimentos;
 	}
 
@@ -66,7 +65,15 @@ public class OrcamentoNovoDTO implements Serializable {
 		this.codPaciente = codPaciente;
 	}
 	
-	
+	private List<ProcedimentoPrevistoNovoDTO> converterProcedimentoPrevistoParaDtos (List<ProcedimentoPrevisto> procedimentos) {
+		List<ProcedimentoPrevistoNovoDTO> procedimentosPrevistos = new ArrayList<ProcedimentoPrevistoNovoDTO>();
+		for(ProcedimentoPrevisto p: procedimentos) {
+			procedimentosPrevistos.add(new ProcedimentoPrevistoNovoDTO(p));
+		}
+		
+		return procedimentosPrevistos;
+		
+	}
 	
 
 }
