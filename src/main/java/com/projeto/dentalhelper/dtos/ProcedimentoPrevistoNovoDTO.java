@@ -11,6 +11,7 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
+	@NotNull
 	private Long codigo;
 	
 	private Float valor;
@@ -21,8 +22,6 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable{
 	
 	private Date dataFinalizacao;
 	
-	@NotNull
-	private Long codProcedimento;
 
 	public ProcedimentoPrevistoNovoDTO() {
 		super();
@@ -30,12 +29,11 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable{
 	
 	public ProcedimentoPrevistoNovoDTO(ProcedimentoPrevisto p) {
 		super();
-		this.codigo = p.getCodigo();
+		this.codigo = p.getProcedimento().getCodigo();
 		this.valor = p.getValorDoProcedimento();
 		this.finalizado = p.getFinalizado();
 		this.dataInicio = p.getDataInicio();
 		this.dataFinalizacao = p.getDataFinalizacao();
-		this.codProcedimento = p.getProcedimento().getCodigo();
 	}
 	
 
@@ -78,18 +76,5 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable{
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
 	}
-
-	public Long getCodProcedimento() {
-		return codProcedimento;
-	}
-
-	public void setCodProcedimento(Long codProcedimento) {
-		this.codProcedimento = codProcedimento;
-	}
-	
-	
-	
-	
-	
 
 }

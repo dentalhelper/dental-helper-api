@@ -35,6 +35,16 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		objeto.setCodigo(null);	
 		
 		objeto.setAprovado(false);
+		for(ProcedimentoPrevisto p: objeto.getProcedimentosPrevistos()) {
+			p.setOrcamento(objeto);
+			p.setFinalizado(false);
+			p.setDataInicio(null);
+			p.setDataFinalizacao(null);
+			if(p.getValorDoProcedimento() == null) {
+				p.setValorDoProcedimento(p.getProcedimento().getValorBase());
+			}
+		}
+		
 		if(objeto.getValorTotal() == null) {
 			float valorTotal = 0;
 			for(ProcedimentoPrevisto p: objeto.getProcedimentosPrevistos()) {
@@ -42,13 +52,10 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 			}
 			objeto.setValorTotal(valorTotal);
 		}
-		
-		for(ProcedimentoPrevisto p: objeto.getProcedimentosPrevistos()) {
-			p.setOrcamento(objeto);
-			p.setFinalizado(false);
-			p.setDataInicio(null);
-			p.setDataFinalizacao(null);
+		if(objeto.getDesconto() == null) {
+			objeto.setDesconto(new Float(0));
 		}
+		
 		
 		
 		Calendar calendar = new GregorianCalendar();
@@ -61,20 +68,66 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 	@Override
 	public Orcamento atualizar(Long codigo, Orcamento objetoModificado) throws ServiceApplicationException{
 		Orcamento objetoAtualizado = buscarPorCodigo(codigo);
-
-		int tam = objetoAtualizado.getProcedimentosPrevistos().size() % objetoModificado.getProcedimentosPrevistos().size();
+		
+		int tam = 0;
+		int tamDiferenca = 0;
+		int tamModificado = objetoModificado.getProcedimentosPrevistos().size();
+		int tamAtualizado = objetoAtualizado.getProcedimentosPrevistos().size();
+		if(tamModificado > tamAtualizado){
+			tam = tamAtualizado;
+			tamDiferenca = tamModificado % tamAtualizado;
+		}
+		else if(tamModificado < tamAtualizado){
+			tam = tamModificado;
+		}
+		else {
+			tam = tamAtualizado;
+		}
 		for(int i = 0; i<tam; i++) {
-			objetoModificado.getProcedimentosPrevistos().get(i).setCodigo(objetoAtualizado.getProcedimentosPrevistos().get(i).getCodigo());
+			ProcedimentoPrevisto procedimentoPrevisto = objetoModificado.getProcedimentosPrevistos().get(i);
+			ProcedimentoPrevisto procedimentoAtualizado = objetoAtualizado.getProcedimentosPrevistos().get(i);
+			procedimentoPrevisto.setCodigo(procedimentoAtualizado.getCodigo());
+			if(procedimentoPrevisto.getFinalizado() == null) {
+				procedimentoPrevisto.setFinalizado(procedimentoAtualizado.getFinalizado());
+			}
+			if(procedimentoPrevisto.getValorDoProcedimento() == null) {
+				procedimentoPrevisto.setValorDoProcedimento(procedimentoAtualizado.getValorDoProcedimento());
+			}
+			if(procedimentoPrevisto.getDataInicio() == null) {
+				procedimentoPrevisto.setDataInicio(procedimentoAtualizado.getDataInicio());
+			}
+			if(procedimentoPrevisto.getDataFinalizacao() == null) {
+				procedimentoPrevisto.setDataFinalizacao(procedimentoAtualizado.getDataFinalizacao());
+			}
 		}
 		
+		for(int i = tam; i < tam+tamDiferenca; i++) {
+			ProcedimentoPrevisto procedimentoPrevisto = objetoModificado.getProcedimentosPrevistos().get(i);
+			procedimentoPrevisto.setFinalizado(false);
+			procedimentoPrevisto.setDataInicio(null);
+			procedimentoPrevisto.setDataFinalizacao(null);
+			if(procedimentoPrevisto.getValorDoProcedimento() == null) {
+				procedimentoPrevisto.setValorDoProcedimento(procedimentoPrevisto.getProcedimento().getValorBase());
+			}
+		}
+
 		if(objetoModificado.getValorTotal() == null) {
 			objetoModificado.setValorTotal(objetoAtualizado.getValorTotal());
 		}
 		if(objetoModificado.getAprovado() == null) {
 			objetoModificado.setAprovado(objetoAtualizado.getAprovado());
 		}
+		if(objetoModificado.getDesconto() == null) {
+			objetoModificado.setDesconto(objetoAtualizado.getDesconto());
+		}
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "pagamentos", "dataOrcamento");
+		
+		objetoAtualizado.getProcedimentosPrevistos().clear();
+		objetoAtualizado.getProcedimentosPrevistos().addAll(objetoModificado.getProcedimentosPrevistos());
+
+		objetoAtualizado.getProcedimentosPrevistos().forEach(procedimento -> procedimento.setOrcamento(objetoAtualizado));
+		
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "pagamentos", "dataOrcamento", "procedimentosPrevistos");
 		return repository.save(objetoAtualizado);
 	}
 	
@@ -99,7 +152,7 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		
 		Paciente paciente = pacienteService.buscarPorCodigo(objetoDTO.getCodPaciente());
 		
-		Orcamento orcamento = new Orcamento(objetoDTO.getValorTotal(), objetoDTO.getAprovado(), procedimentosPrevistos, paciente, null);
+		Orcamento orcamento = new Orcamento(objetoDTO.getValorTotal(), objetoDTO.getAprovado(), procedimentosPrevistos, paciente, null, objetoDTO.getDesconto());
 		
 		return orcamento;
 	}
@@ -107,7 +160,7 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 	
 	public ProcedimentoPrevisto procedimentoPrevistoFromDTO (ProcedimentoPrevistoNovoDTO objetoDTO) {
 		
-		Procedimento procedimento = procedimentoService.buscarPorCodigo(objetoDTO.getCodProcedimento());
+		Procedimento procedimento = procedimentoService.buscarPorCodigo(objetoDTO.getCodigo());
 		
 		if(objetoDTO.getValor() == null) {
 			objetoDTO.setValor(procedimento.getValorBase());

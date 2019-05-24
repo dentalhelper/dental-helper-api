@@ -32,6 +32,8 @@ public class Orcamento extends ObjetoIdentificado{
 	
 	private Boolean aprovado;
 	
+	private Float desconto;
+	
 //	@ManyToMany
 //    @JoinTable(name="orcamento_procedimento", joinColumns=
 //    {@JoinColumn(name="codigo_orcamento")}, inverseJoinColumns=
@@ -71,13 +73,14 @@ public class Orcamento extends ObjetoIdentificado{
 	}
 	
 	public Orcamento(Float valorTotal, Boolean aprovado, List<ProcedimentoPrevisto> procedimentosPrevistos,
-			Paciente paciente, List<Pagamento> pagamentos) {
+			Paciente paciente, List<Pagamento> pagamentos, Float desconto) {
 		super();
 		this.valorTotal = valorTotal;
 		this.aprovado = aprovado;
 		this.procedimentosPrevistos = procedimentosPrevistos;
 		this.paciente = paciente;
 		this.pagamentos = pagamentos;
+		this.desconto = desconto;
 	}
 
 	public Float getValorTotal() {
@@ -127,6 +130,15 @@ public class Orcamento extends ObjetoIdentificado{
 	public void setProcedimentosPrevistos(List<ProcedimentoPrevisto> procedimentosPrevistos) {
 		this.procedimentosPrevistos = procedimentosPrevistos;
 	}
+
+	public Float getDesconto() {
+		return desconto;
+	}
+
+	public void setDesconto(Float desconto) {
+		this.desconto = desconto;
+	}
+	
 	
 	
 

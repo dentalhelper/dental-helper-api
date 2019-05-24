@@ -22,6 +22,8 @@ public class OrcamentoNovoDTO implements Serializable {
 	@NotNull
 	private Long codPaciente;
 	
+	private Float desconto;
+	
 	public OrcamentoNovoDTO () {
 		
 	}
@@ -31,6 +33,7 @@ public class OrcamentoNovoDTO implements Serializable {
 		this.aprovado = o.getAprovado();
 		this.procedimentos = converterProcedimentoPrevistoParaDtos(o.getProcedimentosPrevistos());
 		this.codPaciente = o.getPaciente().getCodigo();
+		this.desconto = o.getDesconto();
 	}
 
 	public Float getValorTotal() {
@@ -65,6 +68,14 @@ public class OrcamentoNovoDTO implements Serializable {
 		this.codPaciente = codPaciente;
 	}
 	
+	public Float getDesconto() {
+		return desconto;
+	}
+
+	public void setDesconto(Float desconto) {
+		this.desconto = desconto;
+	}
+
 	private List<ProcedimentoPrevistoNovoDTO> converterProcedimentoPrevistoParaDtos (List<ProcedimentoPrevisto> procedimentos) {
 		List<ProcedimentoPrevistoNovoDTO> procedimentosPrevistos = new ArrayList<ProcedimentoPrevistoNovoDTO>();
 		for(ProcedimentoPrevisto p: procedimentos) {
