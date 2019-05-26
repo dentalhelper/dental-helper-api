@@ -19,6 +19,7 @@ import com.projeto.dentalhelper.domains.Endereco;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 import com.projeto.dentalhelper.domains.Questao;
 import com.projeto.dentalhelper.domains.QuestaoPreDefinida;
 import com.projeto.dentalhelper.domains.Telefone;
@@ -30,9 +31,11 @@ import com.projeto.dentalhelper.repositories.AgendamentoRepository;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.OrcamentoRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
+import com.projeto.dentalhelper.repositories.ProcedimentoPrevistoRepository;
 import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
 import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
+import com.projeto.dentalhelper.repositories.filter.ProcedimentoPrevistoFilter;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
@@ -51,6 +54,9 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	@Autowired
 	private OrcamentoRepository orcamentoRepository;
+	
+	@Autowired
+	private ProcedimentoPrevistoRepository procedimentoPrevistoRepository;
 	
 	@Autowired
 	private S3Service s3Service;
@@ -314,4 +320,11 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		return orcamentoRepository.filtrar(filter);
 	}
 	
+	public List<ProcedimentoPrevisto> buscarProcedimentosPrevistosPeloCodigoDoPacienteEPeloFinalizado(Long codigo, Boolean finalizado){
+		ProcedimentoPrevistoFilter filter = new ProcedimentoPrevistoFilter();
+		filter.setCodigoPaciente(codigo);
+		filter.setFinalizado(finalizado);
+		return procedimentoPrevistoRepository.filtrar(filter);
+		
+	}
 }

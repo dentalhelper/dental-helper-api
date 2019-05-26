@@ -23,6 +23,7 @@ import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteOrcamentoDTO;
+import com.projeto.dentalhelper.dtos.PacienteProcedimentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteSelectComFotoDTO;
 
@@ -85,5 +86,9 @@ public interface PacienteAPI {
 	@ApiOperation(value = "Busca um paciente pelo código e retorna seus orçamentos")
 	@GetMapping(value = "/{codigo}/orcamentos")
 	public ResponseEntity<PacienteOrcamentoDTO> getOrcamentosByCodigoPaciente(@PathVariable Long codigo);
+
+	@ApiOperation(value = "Busca um paciente pelo código e retorna seus procedimentos filtrando por finalizados ou não")
+	@GetMapping(value = "/{codigo}/procedimentos")
+	public ResponseEntity<PacienteProcedimentoDTO> getProcedimentosByCodigoPaciente(@PathVariable Long codigo, @RequestParam(required = false, defaultValue = "false") Boolean filtro);
 
 }

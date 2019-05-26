@@ -20,14 +20,17 @@ import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 import com.projeto.dentalhelper.dtos.AgendamentoResumoPacienteDTO;
 import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.dtos.PacienteOrcamentoDTO;
+import com.projeto.dentalhelper.dtos.PacienteProcedimentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteSelectComFotoDTO;
+import com.projeto.dentalhelper.dtos.ProcedimentoPrevistoResumoDTO;
 import com.projeto.dentalhelper.resources.api.PacienteAPI;
 import com.projeto.dentalhelper.services.PacienteService;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
@@ -189,6 +192,18 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 		return ResponseEntity.ok().body(responseDTO);
 	}
 	
+	public ResponseEntity<PacienteProcedimentoDTO> getProcedimentosByCodigoPaciente(@PathVariable Long codigo, @RequestParam(required = false, defaultValue = "false") Boolean finalizado){
+		Paciente objeto = service.buscarPorCodigo(codigo);
+		List<ProcedimentoPrevisto> procedimentos = service.buscarProcedimentosPrevistosPeloCodigoDoPacienteEPeloFinalizado(codigo, finalizado);
+		List<ProcedimentoPrevistoResumoDTO> procedimentosDTO = new ArrayList<ProcedimentoPrevistoResumoDTO>();
+		
+		procedimentos.forEach((p) -> procedimentosDTO.add(new ProcedimentoPrevistoResumoDTO(p)));
+		
+		PacienteProcedimentoDTO responseDTO = new PacienteProcedimentoDTO(objeto.getCodigo(), procedimentosDTO);
+
+		return ResponseEntity.ok().body(responseDTO);
+		
+	}
 	
 
 }

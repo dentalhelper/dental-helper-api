@@ -75,7 +75,7 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		int tamAtualizado = objetoAtualizado.getProcedimentosPrevistos().size();
 		if(tamModificado > tamAtualizado){
 			tam = tamAtualizado;
-			tamDiferenca = tamModificado % tamAtualizado;
+			tamDiferenca = tamModificado - tamAtualizado;
 		}
 		else if(tamModificado < tamAtualizado){
 			tam = tamModificado;
