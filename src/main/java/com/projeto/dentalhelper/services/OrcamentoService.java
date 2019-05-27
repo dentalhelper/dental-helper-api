@@ -121,8 +121,6 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 			objetoModificado.setDesconto(objetoAtualizado.getDesconto());
 		}
 		
-		
-		objetoAtualizado.getProcedimentosPrevistos().clear();
 		objetoAtualizado.getProcedimentosPrevistos().addAll(objetoModificado.getProcedimentosPrevistos());
 
 		objetoAtualizado.getProcedimentosPrevistos().forEach(procedimento -> procedimento.setOrcamento(objetoAtualizado));

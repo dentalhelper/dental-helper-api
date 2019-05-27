@@ -7,26 +7,27 @@ import javax.validation.constraints.NotNull;
 
 import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 
-public class ProcedimentoPrevistoNovoDTO implements Serializable{
-	
+public class ProcedimentoPrevistoNovoDTO implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@NotNull
 	private Long codigo;
-	
+
 	private Float valor;
-	
+
+	private String nome;
+
 	private Boolean finalizado;
-	
+
 	private Date dataInicio;
-	
+
 	private Date dataFinalizacao;
-	
 
 	public ProcedimentoPrevistoNovoDTO() {
 		super();
 	}
-	
+
 	public ProcedimentoPrevistoNovoDTO(ProcedimentoPrevisto p) {
 		super();
 		this.codigo = p.getProcedimento().getCodigo();
@@ -34,8 +35,8 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable{
 		this.finalizado = p.getFinalizado();
 		this.dataInicio = p.getDataInicio();
 		this.dataFinalizacao = p.getDataFinalizacao();
+		this.nome = p.getProcedimento().getNome();
 	}
-	
 
 	public Float getValor() {
 		return valor;
@@ -51,6 +52,14 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable{
 
 	public void setFinalizado(Boolean finalizado) {
 		this.finalizado = finalizado;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public Date getDataInicio() {
