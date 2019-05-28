@@ -26,7 +26,7 @@ public class Usuario extends Pessoa{
 	
 	private Boolean ativo;
 	
-	private TipoUsuario tipo;
+	private Integer tipo;
 	
 	@Column(name = "data_cadastro")
 	@Temporal(TemporalType.DATE)
@@ -42,7 +42,7 @@ public class Usuario extends Pessoa{
 		this.login = login;
 		this.senha = senha;
 		this.ativo = ativo;
-		this.tipo = tipo;
+		this.tipo = tipo.getCodigo();
 		this.dataCadastro = dataCadastro;
 	}
 
@@ -71,12 +71,13 @@ public class Usuario extends Pessoa{
 	}
 
 	public TipoUsuario getTipo() {
-		return tipo;
+		return TipoUsuario.toEnum(tipo);
 	}
 
 	public void setTipo(TipoUsuario tipo) {
-		this.tipo = tipo;
+		this.tipo = tipo.getCodigo();
 	}
+	
 
 	public Date getDataCadastro() {
 		return dataCadastro;

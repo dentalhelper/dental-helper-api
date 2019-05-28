@@ -13,6 +13,7 @@ import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.domains.Procedimento;
 import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
+import com.projeto.dentalhelper.domains.enums.StatusPagamento;
 import com.projeto.dentalhelper.dtos.OrcamentoNovoDTO;
 import com.projeto.dentalhelper.dtos.ProcedimentoPrevistoNovoDTO;
 import com.projeto.dentalhelper.repositories.OrcamentoRepository;
@@ -35,6 +36,7 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		objeto.setCodigo(null);	
 		
 		objeto.setAprovado(false);
+		objeto.setStatus(StatusPagamento.ABERTO);
 		for(ProcedimentoPrevisto p: objeto.getProcedimentosPrevistos()) {
 			p.setOrcamento(objeto);
 			p.setFinalizado(false);
@@ -121,11 +123,12 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 			objetoModificado.setDesconto(objetoAtualizado.getDesconto());
 		}
 		
+		objetoAtualizado.getProcedimentosPrevistos().clear();
 		objetoAtualizado.getProcedimentosPrevistos().addAll(objetoModificado.getProcedimentosPrevistos());
 
 		objetoAtualizado.getProcedimentosPrevistos().forEach(procedimento -> procedimento.setOrcamento(objetoAtualizado));
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "pagamentos", "dataOrcamento", "procedimentosPrevistos");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "pagamentos", "dataOrcamento", "procedimentosPrevistos", "status");
 		return repository.save(objetoAtualizado);
 	}
 	
@@ -177,6 +180,20 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 			throw new OrcamentoDeveConterProcedimentoException("O orçamento deve conter pelo menos 1 procedimento, tamanho da lista :"+ procedimentos.size());
 		}
 		return false;
+	}
+	
+	public Orcamento atualizarStatus(Long codigo, String aprovado) {
+		Orcamento orcamento = buscarPorCodigo(codigo);
+		orcamento.setAprovado(true);
+		
+		return repository.save(orcamento);
+	}
+	
+	public Orcamento atualizarStatusPagamento(Long codigo, Integer status) {
+		Orcamento orcamento = buscarPorCodigo(codigo);
+		orcamento.setStatus(StatusPagamento.toEnum(status));
+		
+		return repository.save(orcamento);
 	}
 	
 	

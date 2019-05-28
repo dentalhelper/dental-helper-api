@@ -62,4 +62,9 @@ public interface OrcamentoApi {
 	@PatchMapping(value = "/{codigo}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Orcamento> atualizarStatus(@PathVariable Long codigo, @RequestBody String aprovado) throws ServiceApplicationException;
 
+	
+	@ApiOperation(value = "Atualiza o status do pagamento de um orçamento para cancelado")
+	@PatchMapping(value = "/{codigo}/pagamento")
+	public ResponseEntity<Orcamento> atualizarStatusPagamento(@PathVariable Long codigo) throws ServiceApplicationException;
+
 }

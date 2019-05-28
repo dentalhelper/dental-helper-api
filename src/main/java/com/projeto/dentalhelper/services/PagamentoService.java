@@ -7,12 +7,15 @@ import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Pagamento;
+import com.projeto.dentalhelper.domains.enums.StatusPagamento;
 import com.projeto.dentalhelper.domains.enums.TipoPagamento;
 import com.projeto.dentalhelper.dtos.PagamentoRecebimentoNovoDTO;
 import com.projeto.dentalhelper.repositories.PagamentoRepository;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoException;
+import com.projeto.dentalhelper.services.exceptions.PagamentoCanceladoException;
+import com.projeto.dentalhelper.services.exceptions.PagamentoFinalizadoException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoSuperaValorTotalDoOrcamentoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
@@ -24,11 +27,34 @@ public class PagamentoService extends AbstractService<Pagamento, PagamentoReposi
 
 	public Pagamento salvarRecebimento(Pagamento objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
+		if(objeto.getOrcamento().getStatus() == StatusPagamento.CANCELADO) {
+			throw new PagamentoCanceladoException("O pagamento foi cancelado.");
+		}
+		if(objeto.getOrcamento().getStatus() == StatusPagamento.PAGO) {
+			throw new PagamentoFinalizadoException("O pagamento já foi finalizado.");
+		}
 		valorPagamentoSuperaValorTotal(objeto.getOrcamento(), objeto);
 		orcamentoEstaAprovado(objeto.getOrcamento());
 		
 		
+		atualizarStatusDoOrcamento(objeto.getOrcamento(), objeto);
+		
 		return repository.save(objeto);
+	}
+
+
+	private void atualizarStatusDoOrcamento(Orcamento o, Pagamento p) {
+		float valor = 0;
+		
+		for(Pagamento pagamento: o.getPagamentos()) {
+			if(p.getCodigo() != pagamento.getCodigo())
+				valor+=pagamento.getValor();
+		}
+		valor+=p.getValor();
+		
+		if(valor == o.getValorTotal()) {
+			orcamentoService.atualizarStatusPagamento(o.getCodigo(), StatusPagamento.PAGO.getCodigo());
+		}
 	}
 
 
@@ -37,6 +63,15 @@ public class PagamentoService extends AbstractService<Pagamento, PagamentoReposi
 		objetoModificado.setCodigo(codigo);
 		
 		isDespesa(objetoAtualizado, true);
+		
+		if(objetoModificado.getOrcamento().getStatus() == StatusPagamento.CANCELADO) {
+			throw new PagamentoCanceladoException("O pagamento foi cancelado.");
+		}
+		if(objetoModificado.getOrcamento().getStatus() == StatusPagamento.PAGO) {
+			throw new PagamentoFinalizadoException("O pagamento já foi finalizado.");
+		}
+		
+		
 		valorPagamentoSuperaValorTotal(objetoAtualizado.getOrcamento(), objetoModificado);
 		
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "orcamento", "tipo");
@@ -98,5 +133,7 @@ public class PagamentoService extends AbstractService<Pagamento, PagamentoReposi
 			throw new OrcamentoNaoAprovadoException("Não poderá adicionar pagamentos enquanto o orçamento não for aprovado.");
 		}
 	}
+	
+	
 	
 }

@@ -21,6 +21,10 @@ import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaExce
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.PagamentoCanceladoException;
+import com.projeto.dentalhelper.services.exceptions.PagamentoCanceladoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.PagamentoFinalizadoException;
+import com.projeto.dentalhelper.services.exceptions.PagamentoFinalizadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoSuperaValorTotalDoOrcamentoException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoSuperaValorTotalDoOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
@@ -51,6 +55,10 @@ public class PagamentoResource extends AbstractResource<Pagamento, PagamentoServ
 			throw new DespesaNaoPodeSerApagadaRuntimeException(e.getMessage());
 		} catch (OrcamentoNaoAprovadoException e) {
 			throw new OrcamentoNaoAprovadoRuntimeException(e.getMessage());
+		} catch (PagamentoFinalizadoException e) {
+			throw new PagamentoFinalizadoRuntimeException(e.getMessage());
+		} catch (PagamentoCanceladoException e) {
+			throw new PagamentoCanceladoRuntimeException(e.getMessage());	
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -83,6 +91,10 @@ public class PagamentoResource extends AbstractResource<Pagamento, PagamentoServ
 			throw new DespesaNaoPodeSerEditadaRuntimeException(e.getMessage());
 		} catch (DespesaNaoPodeSerApagadaException e) {
 			throw new DespesaNaoPodeSerApagadaRuntimeException(e.getMessage());
+		} catch (PagamentoFinalizadoException e) {
+			throw new PagamentoFinalizadoRuntimeException(e.getMessage());
+		} catch (PagamentoCanceladoException e) {
+			throw new PagamentoCanceladoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}

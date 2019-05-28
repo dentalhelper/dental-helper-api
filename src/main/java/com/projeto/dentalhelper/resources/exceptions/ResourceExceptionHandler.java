@@ -39,6 +39,8 @@ import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.PagamentoCanceladoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.PagamentoFinalizadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoSuperaValorTotalDoOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoFinalizadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoRuntimeException;
@@ -250,6 +252,32 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
+	
+	
+	@ExceptionHandler(PagamentoCanceladoRuntimeException.class)
+	public ResponseEntity<Object> pagamentoCanceladoRuntimeException(PagamentoCanceladoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("pagamento.foi-canelado");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(PagamentoFinalizadoRuntimeException.class)
+	public ResponseEntity<Object> pagamentoFinalizadoRuntimeException(PagamentoFinalizadoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("pagamento.ja-fianlizado");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
 	
 	@ExceptionHandler(DespesaNaoPodeSerApagadaRuntimeException.class)
 	public ResponseEntity<Object> pagamentoSuperaValorTotalDoProcedimento(DespesaNaoPodeSerApagadaRuntimeException exception,

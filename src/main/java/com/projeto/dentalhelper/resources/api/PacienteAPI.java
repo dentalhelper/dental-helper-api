@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.dtos.OrcamentoPagamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
@@ -91,4 +92,8 @@ public interface PacienteAPI {
 	@GetMapping(value = "/{codigo}/procedimentos")
 	public ResponseEntity<PacienteProcedimentoDTO> getProcedimentosByCodigoPaciente(@PathVariable Long codigo, @RequestParam(required = false, defaultValue = "false") Boolean filtro);
 
+	@ApiOperation(value = "Buscar informações dos pagamentos pelo código do paciente")
+	@GetMapping(value = "/{codigo}/pagamentos")
+	public ResponseEntity<List<OrcamentoPagamentoDTO>> buscarInformacoesPagamento(@PathVariable Long codigo);
+	
 }

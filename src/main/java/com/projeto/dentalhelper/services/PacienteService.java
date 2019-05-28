@@ -327,4 +327,5 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		return procedimentoPrevistoRepository.filtrar(filter);
 		
 	}
+	
 }

@@ -16,6 +16,7 @@ import javax.persistence.TemporalType;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.projeto.dentalhelper.domains.enums.StatusPagamento;
 
 @Entity
 @Table(name = "orcamento")
@@ -56,20 +57,34 @@ public class Orcamento extends ObjetoIdentificado{
 	@OneToMany(mappedBy = "orcamento", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Pagamento> pagamentos = new ArrayList<Pagamento>();
 	
+	private Integer status;
+	
 	
 	public Orcamento () {
 		
 	}
 
-	public Orcamento(Float valorTotal, Date dataOrcamento, Boolean aprovado, List<ProcedimentoPrevisto> procedimentosPrevistos,
-			Paciente paciente, List<Pagamento> pagamentos) {
+//	public Orcamento(Float valorTotal, Date dataOrcamento, Boolean aprovado, List<ProcedimentoPrevisto> procedimentosPrevistos,
+//			Paciente paciente, List<Pagamento> pagamentos) {
+//		super();
+//		this.valorTotal = valorTotal;
+//		this.dataOrcamento = dataOrcamento;
+//		this.aprovado = aprovado;
+//		this.procedimentosPrevistos = procedimentosPrevistos;
+//		this.paciente = paciente;
+//		this.pagamentos = pagamentos;
+//	}
+	
+	public Orcamento(Float valorTotal, Boolean aprovado, List<ProcedimentoPrevisto> procedimentosPrevistos,
+			Paciente paciente, List<Pagamento> pagamentos, Float desconto, StatusPagamento status) {
 		super();
 		this.valorTotal = valorTotal;
-		this.dataOrcamento = dataOrcamento;
 		this.aprovado = aprovado;
 		this.procedimentosPrevistos = procedimentosPrevistos;
 		this.paciente = paciente;
 		this.pagamentos = pagamentos;
+		this.desconto = desconto;
+		this.status = status.getCodigo();
 	}
 	
 	public Orcamento(Float valorTotal, Boolean aprovado, List<ProcedimentoPrevisto> procedimentosPrevistos,
@@ -139,6 +154,13 @@ public class Orcamento extends ObjetoIdentificado{
 		this.desconto = desconto;
 	}
 	
+	public StatusPagamento getStatus() {
+		return StatusPagamento.toEnum(status);
+	}
+
+	public void setStatus(StatusPagamento status) {
+		this.status = status.getCodigo();
+	}
 	
 	
 

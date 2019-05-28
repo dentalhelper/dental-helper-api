@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Orcamento;
+import com.projeto.dentalhelper.domains.enums.StatusPagamento;
 import com.projeto.dentalhelper.dtos.OrcamentoNovoDTO;
 import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
 import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
@@ -98,17 +99,20 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 	@Override
 	public ResponseEntity<Orcamento> atualizarStatus(@PathVariable Long codigo, @RequestBody String aprovado)
 			throws ServiceApplicationException {
-		Orcamento objetoBuscado = service.buscarPorCodigo(codigo);
-		// TODO: RECEBER BOOLEAN NA REQUISIÇÃO
-		objetoBuscado.setAprovado(true);
-		try {
-			objetoBuscado = atualizar(codigo, objetoBuscado);
-		} catch (OrcamentoDeveConterProcedimentoException e) {
-			throw new OrcamentoDeveConterProcedimentoRuntimeException(e.getMessage());
-		} catch (ServiceApplicationException e) {
-			lancarExceptionComLocation(e);
-		}
-		return ResponseEntity.ok(objetoBuscado);
+		Orcamento orcamento = service.atualizarStatus(codigo, aprovado);
+		
+		
+		return ResponseEntity.ok(orcamento);
 	}
+
+	@Override
+	public ResponseEntity<Orcamento> atualizarStatusPagamento(Long codigo) throws ServiceApplicationException {
+		Orcamento orcamento = service.atualizarStatusPagamento(codigo, StatusPagamento.CANCELADO.getCodigo());
+		
+		
+		return ResponseEntity.ok(orcamento);
+	}
+
+
 
 }

@@ -22,6 +22,7 @@ import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 import com.projeto.dentalhelper.dtos.AgendamentoResumoPacienteDTO;
+import com.projeto.dentalhelper.dtos.OrcamentoPagamentoDTO;
 import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAnamneseDTO;
@@ -31,6 +32,7 @@ import com.projeto.dentalhelper.dtos.PacienteProcedimentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteSelectComFotoDTO;
 import com.projeto.dentalhelper.dtos.ProcedimentoPrevistoResumoDTO;
+import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.resources.api.PacienteAPI;
 import com.projeto.dentalhelper.services.PacienteService;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
@@ -205,5 +207,15 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 		
 	}
 	
+	@Override
+	public ResponseEntity<List<OrcamentoPagamentoDTO>> buscarInformacoesPagamento(Long codigo) {
+		List<Orcamento> orcamentos = service.buscarOrcamentosDoPacientePeloCodigo(codigo);
+		List<OrcamentoPagamentoDTO> orcamentosDTO = new ArrayList<OrcamentoPagamentoDTO>();
+		orcamentos.forEach((o) -> orcamentosDTO.add(new OrcamentoPagamentoDTO(o)));
+		
+		return ResponseEntity.ok().body(orcamentosDTO);
+		
+		
+	}
 
 }

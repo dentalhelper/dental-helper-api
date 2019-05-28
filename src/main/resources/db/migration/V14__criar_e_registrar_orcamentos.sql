@@ -6,6 +6,7 @@ CREATE TABLE orcamento(
 	valor_total FLOAT NOT NULL,
 	codigo_paciente BIGINT(20),
 	desconto FLOAT NOT NULL,
+	status INT(10) NOT NULL,
 	
 	
 	FOREIGN KEY (codigo_paciente) REFERENCES paciente(codigo)
@@ -28,12 +29,12 @@ CREATE TABLE procedimento_previsto(
 )ENGINE=innoDB DEFAULT charset=utf8;
 
 INSERT INTO orcamento
-(data_orcamento, aprovado,valor_total, codigo_paciente, desconto) values
-('2019-05-01', true, 75.00 , 1, 0),
-('2019-05-02', true, 78.00 , 2, 0),
-('2019-05-03', true, 55.00 , 3, 0),
-('2019-05-04', true, 60.00 , 4, 0),
-('2019-05-05', true, 45.00 , 5, 0);
+(data_orcamento, aprovado,valor_total, codigo_paciente, desconto, status) values
+('2019-05-01', true, 75.00 , 1, 0, 1),
+('2019-05-02', true, 78.00 , 2, 0, 1),
+('2019-05-03', true, 55.00 , 3, 0, 1),
+('2019-05-04', true, 60.00 , 4, 0, 1),
+('2019-05-05', true, 45.00 , 5, 0, 1);
 
 INSERT INTO procedimento_previsto
 (data_inicio, finalizado, valor_procedimento, codigo_orcamento, codigo_procedimento) values
