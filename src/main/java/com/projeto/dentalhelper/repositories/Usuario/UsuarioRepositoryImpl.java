@@ -72,7 +72,21 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryQuery{
 			predicates.add(builder.like(builder.lower(root.get("nome")), "%" + filter.getNome().toLowerCase() + "%"));
 		}
 		
+		if(filter.getLogin() != null) {
+			predicates.add(builder.equal(root.get("login"), filter.getLogin()));
+		}
+		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
+
+	@Override
+	public List<Usuario> buscarPorLogin(String login) {
+		UsuarioFilter filter = new UsuarioFilter();
+		filter.setLogin(login);
+		
+		return filtrar(filter);
+	}
+	
+	
 
 }

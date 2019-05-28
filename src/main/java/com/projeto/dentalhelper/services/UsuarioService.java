@@ -22,8 +22,11 @@ import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.UsuarioRepository;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.repositories.filter.UsuarioFilter;
+import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.RecursoLoginDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
@@ -44,6 +47,7 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		
 		CpfJaExiste(objeto, null);
 		RgJaExiste(objeto, null);
+		loginJaExiste(objeto, null);
 		
 		
 		Calendar calendar = new GregorianCalendar();
@@ -61,6 +65,7 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		
 		CpfJaExiste(objetoModificado, codigo);
 		RgJaExiste(objetoModificado, codigo);
+		loginJaExiste(objetoModificado, codigo);
 		
 		
 		objetoModificado.getEndereco().setCodigo(objetoAtualizado.getEndereco().getCodigo());
@@ -118,7 +123,7 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		return usuario;
 	}
 	
-	private boolean CpfJaExiste(Usuario objeto, Long codigoDoObjetoAtualizado) throws RecursoCpfDuplicadoException {
+	private boolean CpfJaExiste(Usuario objeto, Long codigoDoObjetoAtualizado) throws RecursoCpfDuplicadoException, CpfJaCadastradoException {
 		UsuarioFilter filter = new UsuarioFilter();
 		filter.setCpf(objeto.getcPF());
 		PacienteFilter filterPaciente = new PacienteFilter();
@@ -139,14 +144,14 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 			throw new RecursoCpfDuplicadoException(Long.toString(usuarioExistente.getCodigo()));
 			
 		}else if(!listaDePacientes.isEmpty()) {
-			throw new RecursoCpfDuplicadoException("Paciente: "+ Long.toString(listaDePacientes.get(0).getCodigo()));
+			throw new CpfJaCadastradoException("Um Paciente com o cpf: '"+objeto.getcPF()+"' já existe");
 		}
 		
 		return false;
 		
 	}
 	
-	private boolean RgJaExiste(Usuario objeto, Long codigoDoObjetoAtualizado) throws RecursoRgDuplicadoException {
+	private boolean RgJaExiste(Usuario objeto, Long codigoDoObjetoAtualizado) throws RecursoRgDuplicadoException, RgJaCadastradoException {
 		UsuarioFilter filter = new UsuarioFilter();
 		filter.setRg(objeto.getrG());
 		PacienteFilter filterPaciente = new PacienteFilter();
@@ -167,13 +172,30 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 			throw new RecursoRgDuplicadoException(Long.toString(usuarioExistente.getCodigo()));
 			
 		}else if(!listaDePacientes.isEmpty()) {
-			throw new RecursoRgDuplicadoException("Paciente: "+ Long.toString(listaDePacientes.get(0).getCodigo()));
+			throw new RgJaCadastradoException("Um Paciente com o rg: '"+objeto.getrG()+"' já existe");
 		}
 		
 		return false;
 		
 	}
 	
+	
+	private boolean loginJaExiste(Usuario objeto, Long codigoDoObjetoAtualizado) throws RecursoLoginDuplicadoException{
+		
+		List<Usuario> listaDeObjetos = repository.buscarPorLogin(objeto.getLogin());
+		
+		
+		if(!listaDeObjetos.isEmpty()){
+			Usuario usuarioExistente = listaDeObjetos.get(0);
+			if(codigoDoObjetoAtualizado != null) {
+				if(usuarioExistente.getCodigo() == codigoDoObjetoAtualizado) {
+					return false;
+				}
+			}
+			throw new RecursoLoginDuplicadoException(Long.toString(usuarioExistente.getCodigo()));
+		}
+		return false;
+	}
 	
 	
 }

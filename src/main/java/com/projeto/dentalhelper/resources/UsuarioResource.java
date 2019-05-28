@@ -14,11 +14,18 @@ import com.projeto.dentalhelper.domains.Usuario;
 import com.projeto.dentalhelper.dtos.UsuarioNovoDTO;
 import com.projeto.dentalhelper.resources.api.UsuarioAPI;
 import com.projeto.dentalhelper.services.UsuarioService;
+import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
+import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoLoginDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.RecursoLoginDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoException;
+import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @RestController
@@ -32,6 +39,10 @@ public class UsuarioResource extends AbstractResource<Usuario, UsuarioService> i
 			objetoSalvo = salvar(objetoSalvo);
 		} catch (DadoInvalidoException e) {
 			throw new DadoInvalidoRunTimeException(e.getMessage());
+		} catch (RgJaCadastradoException e) {
+			throw new RgJaCadastradoRuntimeException(e.getMessage());
+		} catch (CpfJaCadastradoException e) {
+			throw new CpfJaCadastradoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -60,6 +71,10 @@ public class UsuarioResource extends AbstractResource<Usuario, UsuarioService> i
 			objetoEditado = atualizar(codigo, usuarioFromDTO);
 		} catch (DadoInvalidoException e) {
 			throw new DadoInvalidoRunTimeException(e.getMessage());
+		} catch (RgJaCadastradoException e) {
+			throw new RgJaCadastradoRuntimeException(e.getMessage());
+		} catch (CpfJaCadastradoException e) {
+			throw new CpfJaCadastradoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -82,13 +97,15 @@ public class UsuarioResource extends AbstractResource<Usuario, UsuarioService> i
 		Usuario usuarioExistente = service.buscarPorCodigo(Long.parseLong(e.getMessage()));
 		adicionarLink(usuarioExistente, usuarioExistente.getCodigo());
 		if (e instanceof RecursoCpfDuplicadoException) {
-			throw new RecursoCpfDuplicadoRuntimeException(
-					"Já existe um Usuario com esse cpf: " + usuarioExistente.getcPF(),
+			throw new RecursoCpfDuplicadoRuntimeException("Já existe um Usuario com esse cpf: " + usuarioExistente.getcPF(),
+					usuarioExistente.getId().getHref());
+		}else if(e instanceof RecursoRgDuplicadoException) {
+			throw new RecursoRgDuplicadoRuntimeException("Já existe um Usuario com esse rg: " + usuarioExistente.getrG(),
+					usuarioExistente.getId().getHref());
+		}else if(e instanceof RecursoLoginDuplicadoException){
+			throw new RecursoLoginDuplicadoRuntimeException("Já existe um Usuario com esse login: " + usuarioExistente.getLogin(),
 					usuarioExistente.getId().getHref());
 		}
-
-		throw new RecursoRgDuplicadoRuntimeException("Já existe um Usuario com esse rg: " + usuarioExistente.getrG(),
-				usuarioExistente.getId().getHref());
 	}
 
 	@Override

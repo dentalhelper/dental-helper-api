@@ -39,10 +39,12 @@ import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.repositories.filter.ProcedimentoPrevistoFilter;
 import com.projeto.dentalhelper.repositories.filter.UsuarioFilter;
+import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaException;
+import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 import com.projeto.dentalhelper.services.storage.S3Service;
 
@@ -217,7 +219,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	}
 	
 	
-	private boolean CpfJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoCpfDuplicadoException {
+	private boolean CpfJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoCpfDuplicadoException, CpfJaCadastradoException {
 		PacienteFilter filter = new PacienteFilter();
 		filter.setCpf(objeto.getcPF());
 		UsuarioFilter filterUsuario = new UsuarioFilter();
@@ -235,14 +237,14 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 			}
 			throw new RecursoCpfDuplicadoException(Long.toString(pacienteExistente.getCodigo()));
 		}else if(!listaDeUsuarios.isEmpty()) {
-			throw new RecursoCpfDuplicadoException("Usuario: "+ Long.toString(listaDeUsuarios.get(0).getCodigo()));
+			throw new CpfJaCadastradoException("Um usuário com o cpf: '"+objeto.getcPF()+"' já existe");
 		}
 		
 		return false;
 		
 	}
 	
-	private boolean RgJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoRgDuplicadoException {
+	private boolean RgJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoRgDuplicadoException, RgJaCadastradoException {
 		PacienteFilter filter = new PacienteFilter();
 		filter.setRg(objeto.getrG());
 		
@@ -263,7 +265,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 			}
 			throw new RecursoRgDuplicadoException(Long.toString(pacienteExistente.getCodigo()));
 		}else if(!listaDeUsuarios.isEmpty()) {
-			throw new RecursoRgDuplicadoException("Usuario: "+ Long.toString(listaDeUsuarios.get(0).getCodigo()));
+			throw new RgJaCadastradoException("Um usuário com o rg: '"+objeto.getrG()+"' já existe");
 		}
 		
 		return false;

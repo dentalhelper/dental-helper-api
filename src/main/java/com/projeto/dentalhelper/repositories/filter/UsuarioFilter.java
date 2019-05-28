@@ -7,7 +7,9 @@ public class UsuarioFilter {
 	private String cpf;
 	
 	private String rg;
-
+	
+	private String login;
+	
 	public String getNome() {
 		return nome;
 	}
@@ -31,7 +33,14 @@ public class UsuarioFilter {
 	public void setRg(String rg) {
 		this.rg = rg;
 	}
-	
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
 	
 
 }

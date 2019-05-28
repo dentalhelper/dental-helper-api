@@ -12,5 +12,7 @@ public interface UsuarioRepositoryQuery {
 	public List<Usuario> buscarPorRg(UsuarioFilter filter);
 	
 	public List<Usuario> filtrar(UsuarioFilter filter);
+	
+	public List<Usuario> buscarPorLogin(String login);
 
 }

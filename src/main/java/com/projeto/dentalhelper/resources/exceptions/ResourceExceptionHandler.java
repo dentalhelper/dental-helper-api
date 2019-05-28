@@ -29,6 +29,7 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHorarioRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaRuntimeException;
@@ -46,9 +47,11 @@ import com.projeto.dentalhelper.services.exceptions.ProcedimentoFinalizadoRuntim
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoLoginDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoRuntimeException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
@@ -210,6 +213,38 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
 	
+	@ExceptionHandler(CpfJaCadastradoRuntimeException.class)
+	public ResponseEntity<Object> cpfJaCadastrado(CpfJaCadastradoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+		
+		
+		
+		String mensagemUsuario = montarMensagemUsuario("cpf.ja-cadastrado");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}	
+	
+	@ExceptionHandler(RgJaCadastradoRuntimeException.class)
+	public ResponseEntity<Object> procedimentoInvalidoParaAgendamento(RgJaCadastradoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+		
+		
+		
+		String mensagemUsuario = montarMensagemUsuario("rg.ja-cadastrado");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	
+	
 	
 	@ExceptionHandler(OrcamentoDeveConterProcedimentoRuntimeException.class)
 	public ResponseEntity<Object> orcamentoDeveConterProcedimento(OrcamentoDeveConterProcedimentoRuntimeException exception,
@@ -332,6 +367,14 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpServletResponse response) {
 
 		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.rg-duplicado");
+		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
+	}
+	
+	@ExceptionHandler(RecursoLoginDuplicadoRuntimeException.class)
+	public ResponseEntity<Object> recursoCpfDuplicado(RecursoLoginDuplicadoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.login-duplicado");
 		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
 	}
 	

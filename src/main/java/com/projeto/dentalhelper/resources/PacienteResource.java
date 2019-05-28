@@ -34,12 +34,16 @@ import com.projeto.dentalhelper.dtos.PacienteSelectComFotoDTO;
 import com.projeto.dentalhelper.dtos.ProcedimentoPrevistoResumoDTO;
 import com.projeto.dentalhelper.resources.api.PacienteAPI;
 import com.projeto.dentalhelper.services.PacienteService;
+import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
+import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoException;
+import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @RestController
@@ -53,6 +57,10 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 			objetoSalvo = salvar(objetoSalvo);
 		} catch (DadoInvalidoException e) {
 			throw new DadoInvalidoRunTimeException(e.getMessage());
+		} catch (RgJaCadastradoException e) {
+			throw new RgJaCadastradoRuntimeException(e.getMessage());
+		} catch (CpfJaCadastradoException e) {
+			throw new CpfJaCadastradoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -88,6 +96,10 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 			objetoEditado = atualizar(codigo, pacienteFromDTO);
 		} catch (DadoInvalidoException e) {
 			throw new DadoInvalidoRunTimeException(e.getMessage());
+		} catch (RgJaCadastradoException e) {
+			throw new RgJaCadastradoRuntimeException(e.getMessage());
+		} catch (CpfJaCadastradoException e) {
+			throw new CpfJaCadastradoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
