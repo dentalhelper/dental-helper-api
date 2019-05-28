@@ -13,6 +13,6 @@ CREATE TABLE usuario(
         
 INSERT INTO usuario
 (codigo, data_cadastro, ativo, login, senha, tipo) values
-(6,'2019-05-27', true, 'carlos1', 'carlos1', 1),
-(7,'2019-05-27', true, 'renata1', 'renata1', 2),
-(8,'2019-05-27', true, 'gabriel1', 'gabriel1', 3);
+(6,'2019-05-27', true, 'carlos', '$2b$10$YPp.lNFN9nyP8RklhrJZFOXmSB6I3KSBo2TfAjwHY2AQAlkNKyCFe', 1),
+(7,'2019-05-27', true, 'renata', '$2b$10$CMSsjVdZDBSrRWxV5glqGOd1AOUeRPmZZdmr7hnsoHLiNQXOw6tTi', 2),
+(8,'2019-05-27', true, 'gabriel', '$2b$10$M6uEmjomLIwRsg13pcLBeu2dWR45/0focbU9ijmnaJnzvX2j8QJsC', 3);

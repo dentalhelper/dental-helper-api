@@ -23,6 +23,7 @@ import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 import com.projeto.dentalhelper.domains.Questao;
 import com.projeto.dentalhelper.domains.QuestaoPreDefinida;
 import com.projeto.dentalhelper.domains.Telefone;
+import com.projeto.dentalhelper.domains.Usuario;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
 import com.projeto.dentalhelper.domains.enums.RespostaQuestaoAnamnese;
 import com.projeto.dentalhelper.domains.enums.Sexo;
@@ -33,9 +34,11 @@ import com.projeto.dentalhelper.repositories.OrcamentoRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.ProcedimentoPrevistoRepository;
 import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
+import com.projeto.dentalhelper.repositories.UsuarioRepository;
 import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.repositories.filter.ProcedimentoPrevistoFilter;
+import com.projeto.dentalhelper.repositories.filter.UsuarioFilter;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
@@ -63,6 +66,9 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	@Autowired
 	private QuestaoPreDefinidaRepository questoesRepository;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 	
 	private static final int PRIMEIRO_ITEM = 0;
 	
@@ -214,12 +220,13 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	private boolean CpfJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoCpfDuplicadoException {
 		PacienteFilter filter = new PacienteFilter();
 		filter.setCpf(objeto.getcPF());
+		UsuarioFilter filterUsuario = new UsuarioFilter();
+		filterUsuario.setCpf(objeto.getcPF());
 		
 		List<Paciente> listaDeObjetos = repository.buscarPorCpf(filter);
+		List<Usuario> listaDeUsuarios = usuarioRepository.buscarPorCpf(filterUsuario);
 		
-		if(listaDeObjetos.isEmpty()) {
-			return false;
-		} else {
+		if(!listaDeObjetos.isEmpty()){
 			Paciente pacienteExistente = obterPacienteExistente(listaDeObjetos);
 			if(codigoDoObjetoAtualizado != null) {
 				if(pacienteExistente.getCodigo() == codigoDoObjetoAtualizado) {
@@ -227,7 +234,11 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 				}
 			}
 			throw new RecursoCpfDuplicadoException(Long.toString(pacienteExistente.getCodigo()));
+		}else if(!listaDeUsuarios.isEmpty()) {
+			throw new RecursoCpfDuplicadoException("Usuario: "+ Long.toString(listaDeUsuarios.get(0).getCodigo()));
 		}
+		
+		return false;
 		
 	}
 	
@@ -237,9 +248,13 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		
 		List<Paciente> listaDeObjetos = repository.buscarPorRg(filter);
 		
-		if(listaDeObjetos.isEmpty()) {
-			return false;
-		} else {
+		
+		UsuarioFilter filterUsuario = new UsuarioFilter();
+		filterUsuario.setRg(objeto.getrG());
+		
+		List<Usuario> listaDeUsuarios = usuarioRepository.buscarPorRg(filterUsuario);
+		
+		if(!listaDeObjetos.isEmpty()){
 			Paciente pacienteExistente = obterPacienteExistente(listaDeObjetos);
 			if(codigoDoObjetoAtualizado != null) {
 				if(pacienteExistente.getCodigo() == codigoDoObjetoAtualizado) {
@@ -247,7 +262,11 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 				}
 			}
 			throw new RecursoRgDuplicadoException(Long.toString(pacienteExistente.getCodigo()));
+		}else if(!listaDeUsuarios.isEmpty()) {
+			throw new RecursoRgDuplicadoException("Usuario: "+ Long.toString(listaDeUsuarios.get(0).getCodigo()));
 		}
+		
+		return false;
 		
 	}
 	

@@ -32,7 +32,6 @@ import com.projeto.dentalhelper.dtos.PacienteProcedimentoDTO;
 import com.projeto.dentalhelper.dtos.PacienteResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteSelectComFotoDTO;
 import com.projeto.dentalhelper.dtos.ProcedimentoPrevistoResumoDTO;
-import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.resources.api.PacienteAPI;
 import com.projeto.dentalhelper.services.PacienteService;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;

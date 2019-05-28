@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
 import com.projeto.dentalhelper.domains.enums.Sexo;
 import com.projeto.dentalhelper.domains.enums.TipoUsuario;
@@ -22,6 +23,7 @@ public class Usuario extends Pessoa{
 	
 	private String login;
 	
+	@JsonIgnore
 	private String senha;
 	
 	private Boolean ativo;
@@ -35,6 +37,7 @@ public class Usuario extends Pessoa{
 	public Usuario() {
 		
 	}
+	
 	
 	public Usuario(String nome, Date dataNascimento, String cPF, String rG, EstadoCivil estadoCivil, Sexo sexo,
 			String email, String login, String senha, Boolean ativo, TipoUsuario tipo, Date dataCadastro) {
