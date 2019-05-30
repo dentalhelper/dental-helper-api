@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Cidade;
@@ -88,17 +89,17 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		return repository.save(objetoAtualizado);
 	}
 	
-//	public String senhaToBcrypt(String senha) {
-//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//		return encoder.encode(senha);
-//	}
+	public String senhaToBcrypt(String senha) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.encode(senha);
+	}
 	
 	public Usuario fromDTO(UsuarioNovoDTO objetoDTO) {
 		
 		Usuario usuario = new Usuario(objetoDTO.getNome(), objetoDTO.getDataNascimento(), 
 				objetoDTO.getcPF(), objetoDTO.getrG(), EstadoCivil.toEnum(objetoDTO.getEstadoCivil()), 
 				Sexo.toEnum(objetoDTO.getSexo()), objetoDTO.getEmail(), objetoDTO.getLogin(), 
-				objetoDTO.getSenha(), true , TipoUsuario.toEnum(objetoDTO.getTipo()), null);
+				senhaToBcrypt(objetoDTO.getSenha()), true , TipoUsuario.toEnum(objetoDTO.getTipo()), null);
 		
 		
 		

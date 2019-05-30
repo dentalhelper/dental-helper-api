@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ public interface UsuarioAPI {
 
 	@ApiOperation(value = "Salva um usuário")
 	@PostMapping(value = "/novo")
+//	@PreAuthorize("hasAuthority('ROLE_ADMINISTRADOR') and #oauth2.hasScope('write')")
 	public ResponseEntity<Usuario> post(@Valid @RequestBody UsuarioNovoDTO objeto, HttpServletResponse response);
 	
 	@ApiOperation(value = "Busca todos os usuários")
