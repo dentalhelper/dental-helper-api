@@ -25,6 +25,24 @@ public class Pagamento extends ObjetoIdentificado {
 
 
 	private Integer tipo;
+	
+	@ManyToOne
+	@JoinColumn(name = "codigo_orcamento")
+	private Orcamento orcamento;
+	
+	public Pagamento() {}
+	
+
+	public Pagamento(Date dataPagamento, Integer forma, Float valor, Integer tipo,
+			Orcamento orcamento) {
+		super();
+		this.dataPagamento = dataPagamento;
+		this.forma = forma;
+		this.valor = valor;
+		this.tipo = tipo;
+		this.orcamento = orcamento;
+	}
+
 
 	public Date getDataPagamento() {
 		return dataPagamento;
@@ -57,5 +75,15 @@ public class Pagamento extends ObjetoIdentificado {
 	public void setTipo(TipoPagamento tipoPagamento) {
 		this.tipo = tipoPagamento.getCodigo();
 	}
+
+	public Orcamento getOrcamento() {
+		return orcamento;
+	}
+
+	public void setOrcamento(Orcamento orcamento) {
+		this.orcamento = orcamento;
+	}
+	
+	
 
 }

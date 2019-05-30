@@ -17,23 +17,34 @@ import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Cidade;
 import com.projeto.dentalhelper.domains.Endereco;
 import com.projeto.dentalhelper.domains.Foto;
+import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 import com.projeto.dentalhelper.domains.Questao;
 import com.projeto.dentalhelper.domains.QuestaoPreDefinida;
 import com.projeto.dentalhelper.domains.Telefone;
+import com.projeto.dentalhelper.domains.Usuario;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
 import com.projeto.dentalhelper.domains.enums.RespostaQuestaoAnamnese;
 import com.projeto.dentalhelper.domains.enums.Sexo;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.repositories.AgendamentoRepository;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
+import com.projeto.dentalhelper.repositories.OrcamentoRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
+import com.projeto.dentalhelper.repositories.ProcedimentoPrevistoRepository;
 import com.projeto.dentalhelper.repositories.QuestaoPreDefinidaRepository;
+import com.projeto.dentalhelper.repositories.UsuarioRepository;
+import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
+import com.projeto.dentalhelper.repositories.filter.ProcedimentoPrevistoFilter;
+import com.projeto.dentalhelper.repositories.filter.UsuarioFilter;
+import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaException;
+import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 import com.projeto.dentalhelper.services.storage.S3Service;
 
@@ -42,14 +53,24 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	
 	@Autowired
 	private AgendamentoRepository agendamentoRepository;
+	
+	@Autowired
+	private OrcamentoRepository orcamentoRepository;
+	
+	@Autowired
+	private ProcedimentoPrevistoRepository procedimentoPrevistoRepository;
 	
 	@Autowired
 	private S3Service s3Service;
 	
 	@Autowired
 	private QuestaoPreDefinidaRepository questoesRepository;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 	
 	private static final int PRIMEIRO_ITEM = 0;
 	
@@ -198,15 +219,16 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	}
 	
 	
-	private boolean CpfJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoCpfDuplicadoException {
+	private boolean CpfJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoCpfDuplicadoException, CpfJaCadastradoException {
 		PacienteFilter filter = new PacienteFilter();
 		filter.setCpf(objeto.getcPF());
+		UsuarioFilter filterUsuario = new UsuarioFilter();
+		filterUsuario.setCpf(objeto.getcPF());
 		
 		List<Paciente> listaDeObjetos = repository.buscarPorCpf(filter);
+		List<Usuario> listaDeUsuarios = usuarioRepository.buscarPorCpf(filterUsuario);
 		
-		if(listaDeObjetos.isEmpty()) {
-			return false;
-		} else {
+		if(!listaDeObjetos.isEmpty()){
 			Paciente pacienteExistente = obterPacienteExistente(listaDeObjetos);
 			if(codigoDoObjetoAtualizado != null) {
 				if(pacienteExistente.getCodigo() == codigoDoObjetoAtualizado) {
@@ -214,19 +236,27 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 				}
 			}
 			throw new RecursoCpfDuplicadoException(Long.toString(pacienteExistente.getCodigo()));
+		}else if(!listaDeUsuarios.isEmpty()) {
+			throw new CpfJaCadastradoException("Um usuário com o cpf: '"+objeto.getcPF()+"' já existe");
 		}
+		
+		return false;
 		
 	}
 	
-	private boolean RgJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoRgDuplicadoException {
+	private boolean RgJaExiste(Paciente objeto, Long codigoDoObjetoAtualizado) throws RecursoRgDuplicadoException, RgJaCadastradoException {
 		PacienteFilter filter = new PacienteFilter();
 		filter.setRg(objeto.getrG());
 		
 		List<Paciente> listaDeObjetos = repository.buscarPorRg(filter);
 		
-		if(listaDeObjetos.isEmpty()) {
-			return false;
-		} else {
+		
+		UsuarioFilter filterUsuario = new UsuarioFilter();
+		filterUsuario.setRg(objeto.getrG());
+		
+		List<Usuario> listaDeUsuarios = usuarioRepository.buscarPorRg(filterUsuario);
+		
+		if(!listaDeObjetos.isEmpty()){
 			Paciente pacienteExistente = obterPacienteExistente(listaDeObjetos);
 			if(codigoDoObjetoAtualizado != null) {
 				if(pacienteExistente.getCodigo() == codigoDoObjetoAtualizado) {
@@ -234,7 +264,11 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 				}
 			}
 			throw new RecursoRgDuplicadoException(Long.toString(pacienteExistente.getCodigo()));
+		}else if(!listaDeUsuarios.isEmpty()) {
+			throw new RgJaCadastradoException("Um usuário com o rg: '"+objeto.getrG()+"' já existe");
 		}
+		
+		return false;
 		
 	}
 	
@@ -299,6 +333,20 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	public List<Agendamento> buscarAgendamentosDoPacientePeloCodigo(Long codigo){
 		return agendamentoRepository.buscarPorCodigoPaciente(codigo);
+	}
+	
+	public List<Orcamento> buscarOrcamentosDoPacientePeloCodigo(Long codigo){
+		OrcamentoFilter filter = new OrcamentoFilter();
+		filter.setCodigoPaciente(codigo);
+		return orcamentoRepository.filtrar(filter);
+	}
+	
+	public List<ProcedimentoPrevisto> buscarProcedimentosPrevistosPeloCodigoDoPacienteEPeloFinalizado(Long codigo, Boolean finalizado){
+		ProcedimentoPrevistoFilter filter = new ProcedimentoPrevistoFilter();
+		filter.setCodigoPaciente(codigo);
+		filter.setFinalizado(finalizado);
+		return procedimentoPrevistoRepository.filtrar(filter);
+		
 	}
 	
 }

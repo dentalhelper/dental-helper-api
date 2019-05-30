@@ -13,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Agendamento;
-import com.projeto.dentalhelper.domains.Paciente;
+import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Procedimento;
+import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 import com.projeto.dentalhelper.domains.enums.StatusAgendamento;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
 import com.projeto.dentalhelper.repositories.AgendamentoRepository;
@@ -23,18 +24,22 @@ import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHor
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoFinalizadoException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
 public class AgendamentoService extends AbstractService<Agendamento, AgendamentoRepository>{
 	
 	@Autowired
-	PacienteService pacienteService;
+	private ProcedimentoService procedimentoService;
 	
 	@Autowired
-	ProcedimentoService procedimentoService;
+	private OrcamentoService orcamentoService;
 	
-	private static final int PRIMEIRO_ITEM = 0;
+	@Autowired
+	private ProcedimentoPrevistoService procedimentoPrevistoService;
 	
 	
 	@Override
@@ -50,11 +55,28 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		horaInicialMenorQueFinal(objeto.getHoraInicio(), objeto.getHoraFim());
 		
 		agendamentoJaCadastradoNesseHorario(objeto, null);
+		
+		orcamentoEstaAprovado(objeto.getOrcamento());
+		ProcedimentoPrevisto p = procedimentoEstaNoOrcamento(objeto);
+		procedimentoPrevistoIniciado(p);
 
 		return repository.save(objeto);
 	}
 	
 	
+	private void procedimentoPrevistoIniciado(ProcedimentoPrevisto objeto)  throws ServiceApplicationException{
+		if(objeto.getDataInicio() == null) {
+			Calendar calendar = new GregorianCalendar();
+			objeto.setDataInicio(calendar.getTime());
+		}
+		if(objeto.getFinalizado() == true) {
+			throw new ProcedimentoFinalizadoException("O procedimento: "+objeto.getProcedimento().getNome()+ " já foi finalizado.");
+		}
+		
+		procedimentoPrevistoService.atualizar(objeto.getCodigo(), objeto);
+	}
+
+
 	@Override
 	public Agendamento atualizar(Long codigo, Agendamento objetoModificado) throws ServiceApplicationException{
 		
@@ -65,7 +87,11 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		dataDeAgendamentoMaiorIgualQueDataAtual(objetoModificado.getDataAgendamento());
 		horaInicialMenorQueFinal(objetoModificado.getHoraInicio(), objetoModificado.getHoraFim());
 		
-		agendamentoJaCadastradoNesseHorario(objetoModificado, codigo);
+		if(!(objetoModificado.getStatusAgendamento() == StatusAgendamento.CANCELADO)) {
+			agendamentoJaCadastradoNesseHorario(objetoModificado, codigo);
+		}
+		orcamentoEstaAprovado(objetoModificado.getOrcamento());
+		procedimentoEstaNoOrcamento(objetoModificado);
 		
 		Agendamento objetoAtualizado = buscarPorCodigo(codigo);
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
@@ -84,13 +110,19 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 			horaFim = converterStringParaHora(objetoDTO.getHoraFim());
 		}
 		
-		Paciente paciente = pacienteService.buscarPorCodigo(objetoDTO.getCodigoPaciente());
+		
+		Orcamento orcamento = orcamentoService.buscarPorCodigo(objetoDTO.getCodigoOrcamento());
 		
 		Procedimento procedimento = procedimentoService.buscarPorCodigo(objetoDTO.getCodigoProcedimento());
 		
+		Float valor = objetoDTO.getValor();
+		
+		if(valor == null) {
+			valor = procedimento.getValorBase();
+		}
 		
 		Agendamento agendamento = new Agendamento(objetoDTO.getDataAgendamento(), horaInicio, horaFim, StatusAgendamento.toEnum(objetoDTO.getStatusAgendamento()), 
-				objetoDTO.getObservacao(), objetoDTO.getPrimeiraAvalicao(), paciente , procedimento);
+				objetoDTO.getObservacao(), objetoDTO.getPrimeiraAvalicao(), orcamento , procedimento, valor);
 				
 		return agendamento;
 	}
@@ -172,29 +204,26 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 			return false;
 		} else {
 			Agendamento agendamentoExistente = null;
-			if(codigoDoObjetoAtualizado != null) {
-				for(Agendamento a: listaDeObjetos) {
-					agendamentoExistente = a;
-					if(codigoDoObjetoAtualizado != agendamentoExistente.getCodigo()) {
+			for(Agendamento a: listaDeObjetos) {
+				agendamentoExistente = a;
+				if(codigoDoObjetoAtualizado != null) {
+					if(codigoDoObjetoAtualizado != agendamentoExistente.getCodigo() && !(agendamentoExistente.getStatusAgendamento() == StatusAgendamento.CANCELADO)) {
 						throw new AgendamentoJaCadastradoNoHorarioException(Long.toString(agendamentoExistente.getCodigo()));			
 					}
 				}
-			}
-			else {
-				agendamentoExistente = obterPacienteExistente(listaDeObjetos);
-				throw new AgendamentoJaCadastradoNoHorarioException(Long.toString(agendamentoExistente.getCodigo()));	
-			}
-
+				else {
+					if(!(agendamentoExistente.getStatusAgendamento() == StatusAgendamento.CANCELADO)) {
+						throw new AgendamentoJaCadastradoNoHorarioException(Long.toString(agendamentoExistente.getCodigo()));
+					}
+				}
 				
-			
+			}
+				
 		}
 		return false;
 		
 	}
 	
-	private Agendamento obterPacienteExistente(List<Agendamento> listaDeObjetos) {
-		return listaDeObjetos.get(PRIMEIRO_ITEM);
-	}
 	
 	public List<Agendamento> filtrar(AgendamentoFilter filter){
 		filter.setHoraInicioMax(null);
@@ -203,6 +232,34 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		return repository.buscarPorFiltro(filter);
 	}
 	
+	public ProcedimentoPrevisto procedimentoEstaNoOrcamento(Agendamento a) throws ProcedimentoNaoEstaEmOrcamentoException {
+		Orcamento orcamento = a.getOrcamento();
+		boolean resultado = false;
+		for(ProcedimentoPrevisto p: orcamento.getProcedimentosPrevistos()) {
+			if(p.getProcedimento().getCodigo() == a.getProcedimento().getCodigo()) {
+				resultado = true;
+				return p;
+			}
+		}
+		if(resultado == false) {
+			throw new ProcedimentoNaoEstaEmOrcamentoException("O procedimento '"+a.getProcedimento().getNome() +"' não está no orçamento");
+		}
+		return null;
+	}
+	
+	
+	public void orcamentoEstaAprovado(Orcamento o) throws OrcamentoNaoAprovadoException {
+		if(o.getAprovado() == false) {
+			throw new OrcamentoNaoAprovadoException("Não poderá agendar procedimentos enquanto o orçamento não for aprovado.");
+		}
+	}
+	
+	public Agendamento atualizarStatus(Long codigo, Integer status) {
+		Agendamento agendamento = buscarPorCodigo(codigo);
+		agendamento.setStatusAgendamento(StatusAgendamento.toEnum(status));
+		
+		return repository.save(agendamento);
+	}
 	
 	
 

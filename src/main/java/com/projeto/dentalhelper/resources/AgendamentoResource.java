@@ -25,6 +25,12 @@ import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaExcep
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoException;
+import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoFinalizadoException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoFinalizadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @RestController
@@ -45,6 +51,12 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 			throw new DataAgendamentoInvalidaRuntimeException(e.getMessage());
 		} catch (DadoInvalidoException e) {
 			throw new DadoInvalidoRunTimeException(e.getMessage());
+		} catch (ProcedimentoNaoEstaEmOrcamentoException e) {
+			throw new ProcedimentoNaoEstaEmOrcamentoRuntimeException(e.getMessage());
+		} catch (OrcamentoNaoAprovadoException e) {
+			throw new OrcamentoNaoAprovadoRuntimeException(e.getMessage());
+		} catch (ProcedimentoFinalizadoException e) {
+			throw new ProcedimentoFinalizadoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -87,6 +99,12 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 			throw new DataAgendamentoInvalidaRuntimeException(e.getMessage());
 		} catch (DadoInvalidoException e) {
 			throw new DadoInvalidoRunTimeException(e.getMessage());
+		} catch (ProcedimentoNaoEstaEmOrcamentoException e) {
+			throw new ProcedimentoNaoEstaEmOrcamentoRuntimeException(e.getMessage());
+		} catch (OrcamentoNaoAprovadoException e) {
+			throw new OrcamentoNaoAprovadoRuntimeException(e.getMessage());
+		} catch (ProcedimentoFinalizadoException e) {
+			throw new ProcedimentoFinalizadoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -117,6 +135,14 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 		AgendamentoNovoDTO agendamentoDTO = new AgendamentoNovoDTO(objeto);
 		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(agendamentoDTO);
 	}
+
+	@Override
+	public ResponseEntity<Agendamento> atualizarStatus(@PathVariable Long codigo, @RequestBody Integer status) throws ServiceApplicationException {
+		Agendamento objetoBuscado = service.atualizarStatus(codigo, status);
+		return ResponseEntity.ok(objetoBuscado);
+	}
+	
+	
 	
 	
 

@@ -38,10 +38,12 @@ public class AgendamentoNovoDTO implements Serializable{
 	private Boolean primeiraAvalicao;
 	
 	@NotNull
-	private Long codigoPaciente;
+	private Long codigoOrcamento;
 	
 	@NotNull
 	private Long codigoProcedimento;
+	
+	private Float valor;
 	
 	public AgendamentoNovoDTO() {
 	}
@@ -53,8 +55,9 @@ public class AgendamentoNovoDTO implements Serializable{
 		this.statusAgendamento = agendamento.getStatusAgendamento().getCodigo();
 		this.observacao = agendamento.getObservacao();
 		this.primeiraAvalicao = agendamento.getPrimeiraAvalicao();
-		this.codigoPaciente = agendamento.getPaciente().getCodigo();
+		this.codigoOrcamento = agendamento.getOrcamento().getCodigo();
 		this.codigoProcedimento = agendamento.getProcedimento().getCodigo();
+		this.valor = agendamento.getValor();
 	}
 	
 	
@@ -107,14 +110,6 @@ public class AgendamentoNovoDTO implements Serializable{
 	public void setStatusAgendamento(Integer statusAgendamento) {
 		this.statusAgendamento = statusAgendamento;
 	}
-	
-	public Long getCodigoPaciente() {
-		return codigoPaciente;
-	}
-
-	public void setCodigoPaciente(Long codigoPaciente) {
-		this.codigoPaciente = codigoPaciente;
-	}
 
 	public Long getCodigoProcedimento() {
 		return codigoProcedimento;
@@ -122,6 +117,24 @@ public class AgendamentoNovoDTO implements Serializable{
 
 	public void setCodigoProcedimento(Long codigoProcedimento) {
 		this.codigoProcedimento = codigoProcedimento;
+	}
+	
+	
+
+	public Long getCodigoOrcamento() {
+		return codigoOrcamento;
+	}
+
+	public void setCodigoOrcamento(Long codigoOrcamento) {
+		this.codigoOrcamento = codigoOrcamento;
+	}
+	
+	public Float getValor() {
+		return valor;
+	}
+
+	public void setValor(Float valor) {
+		this.valor = valor;
 	}
 
 	private String converterHoraParaString(Date hora) {

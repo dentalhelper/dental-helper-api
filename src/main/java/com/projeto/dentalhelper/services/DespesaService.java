@@ -36,6 +36,7 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository> 
 		Pagamento pagamento = objeto.getPagamento();
 		pagamento.setValor(objeto.getValor());
 		pagamento.setTipo(TipoPagamento.DESPESA);
+		pagamento.setOrcamento(null);
 
 		objeto.setPagamento(pagamentoService.salvar(pagamento));
 
@@ -47,7 +48,8 @@ public class DespesaService extends AbstractService<Despesa, DespesaRepository> 
 
 		objetoModificado.getPagamento().setValor(objetoModificado.getValor());
 		objetoModificado.getPagamento().setTipo(TipoPagamento.DESPESA);
-
+		objetoModificado.getPagamento().setOrcamento(null);
+		
 		checkSetDescricao(objetoModificado);
 
 		Despesa objetoAtualizado = buscarPorCodigo(codigo);

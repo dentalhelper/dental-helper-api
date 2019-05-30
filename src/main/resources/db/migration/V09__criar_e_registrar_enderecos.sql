@@ -19,4 +19,8 @@ INSERT INTO endereco
 ('rua gonçalves altair', '21', 'centro', '55192000', 'vizinho a igreja', 2),
 ('rua pedrosa', '123', 'cohab', '55199000', 'casa', 3),
 ('avenida artur silva', '99', 'pedroso', '55198080', 'proximo a ponte', 4),
-('avenida maria', '90', 'novo', '55290088', 'apartamento', 5)
+('avenida maria', '90', 'novo', '55290088', 'apartamento', 5),
+
+('rua 5', '42', 'centro', '55195000', 'gafout', 1),
+('rua gonçalves', '21', 'centro', '55192000', 'vizinho a igreja', 2),
+('rua santana', '12', 'cohab', '55199000', 'casa', 3);

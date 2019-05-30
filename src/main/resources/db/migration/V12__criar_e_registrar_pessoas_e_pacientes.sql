@@ -37,7 +37,12 @@ INSERT INTO pessoa
 ('48798522545', '2111111', '1985-05-12', 'bbbb@gmail.com' ,2, 1, 'Julia Moraes', 2),
 ('58798598812', '3111111', '1993-07-08', 'cccc@gmail.com' ,3, 2, 'Douglas Nascimento', 3),
 ('09987896658', '4111111', '1999-12-11', 'marcelaTT@gmail.com' ,4, 1, 'Marcela Tavares', 4),
-('12345678911', '5111111', '1996-03-05', 'eeee@gmail.com' ,5, 2, 'Antônio Ferreira', 5);
+('12345678911', '5111111', '1996-03-05', 'eeee@gmail.com' ,5, 2, 'Antônio Ferreira', 5),
+
+('98758598987', '6111111', '1997-03-10', 'carlos@gmail.com' ,1, 2, 'Carlos Magno', 6),
+('48798522546', '7111111', '1985-05-12', 'renata@gmail.com' ,1, 1, 'Renata Silva', 7),
+('58798598813', '8111111', '1993-07-08', 'gabriel@gmail.com' ,1, 2, 'Gabriel Assis', 8);
+
 
 
 INSERT INTO paciente
