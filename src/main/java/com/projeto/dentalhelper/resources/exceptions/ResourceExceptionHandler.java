@@ -29,6 +29,7 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHorarioRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.ConfirmacaoDeSenhaIncorretaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
@@ -52,6 +53,7 @@ import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoRuntimeE
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.SenhaIncorretaRuntimeException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
@@ -325,6 +327,32 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
+	
+	@ExceptionHandler(ConfirmacaoDeSenhaIncorretaRuntimeException.class)
+	public ResponseEntity<Object> confirmacaoDeSenhaIncorreta(ConfirmacaoDeSenhaIncorretaRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("confirmacao.senha-incorreta");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(SenhaIncorretaRuntimeException.class)
+	public ResponseEntity<Object> confirmacaoDeSenhaIncorreta(SenhaIncorretaRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("senha.incorreta");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	
 	
 	@ExceptionHandler(DespesaNaoPodeSerEditadaRuntimeException.class)
 	public ResponseEntity<Object> pagamentoSuperaValorTotalDoProcedimento(DespesaNaoPodeSerEditadaRuntimeException exception,

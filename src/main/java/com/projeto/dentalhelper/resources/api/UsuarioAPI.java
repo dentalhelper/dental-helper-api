@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projeto.dentalhelper.domains.Usuario;
+import com.projeto.dentalhelper.dtos.UsuarioAlteraSenhaDTO;
 import com.projeto.dentalhelper.dtos.UsuarioNovoDTO;
 
 import io.swagger.annotations.ApiOperation;
@@ -49,5 +49,17 @@ public interface UsuarioAPI {
 			@ApiResponse(code = 404, message = "Código inexistente.") })
 	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> delete(@PathVariable Long codigo);
+	
+	
+	
+	@ApiOperation(value = "Atualiza a senha de um usuário")
+	@PutMapping(value = "/{codigo}/senha")
+	public ResponseEntity<Usuario> AlterarSenha(@PathVariable Long codigo, @Valid @RequestBody UsuarioAlteraSenhaDTO objetoDTO);
+	
+	@ApiOperation(value = "Busca dados cadastrais do usuário pelo código")
+	@GetMapping(value = "/{codigo}/edit")
+	public ResponseEntity<UsuarioNovoDTO> getByCodigoForEdit(@PathVariable Long codigo);
+	
+	
 	
 }
