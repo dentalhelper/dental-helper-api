@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projeto.dentalhelper.domains.Usuario;
+import com.projeto.dentalhelper.dtos.UsuarioAlteraSenhaDTO;
 import com.projeto.dentalhelper.dtos.UsuarioNovoDTO;
 
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +27,7 @@ public interface UsuarioAPI {
 
 	@ApiOperation(value = "Salva um usuário")
 	@PostMapping(value = "/novo")
+//	@PreAuthorize("hasAuthority('ROLE_ADMINISTRADOR') and #oauth2.hasScope('write')")
 	public ResponseEntity<Usuario> post(@Valid @RequestBody UsuarioNovoDTO objeto, HttpServletResponse response);
 	
 	@ApiOperation(value = "Busca todos os usuários")
@@ -47,5 +49,17 @@ public interface UsuarioAPI {
 			@ApiResponse(code = 404, message = "Código inexistente.") })
 	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> delete(@PathVariable Long codigo);
+	
+	
+	
+	@ApiOperation(value = "Atualiza a senha de um usuário")
+	@PutMapping(value = "/{codigo}/senha")
+	public ResponseEntity<Usuario> AlterarSenha(@PathVariable Long codigo, @Valid @RequestBody UsuarioAlteraSenhaDTO objetoDTO);
+	
+	@ApiOperation(value = "Busca dados cadastrais do usuário pelo código")
+	@GetMapping(value = "/{codigo}/edit")
+	public ResponseEntity<UsuarioNovoDTO> getByCodigoForEdit(@PathVariable Long codigo);
+	
+	
 	
 }

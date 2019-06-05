@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.projeto.dentalhelper.domains.Cidade;
@@ -16,17 +18,20 @@ import com.projeto.dentalhelper.domains.Usuario;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
 import com.projeto.dentalhelper.domains.enums.Sexo;
 import com.projeto.dentalhelper.domains.enums.TipoUsuario;
+import com.projeto.dentalhelper.dtos.UsuarioAlteraSenhaDTO;
 import com.projeto.dentalhelper.dtos.UsuarioNovoDTO;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.UsuarioRepository;
 import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.repositories.filter.UsuarioFilter;
+import com.projeto.dentalhelper.services.exceptions.ConfirmacaoDeSenhaIncorretaException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoLoginDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoException;
+import com.projeto.dentalhelper.services.exceptions.SenhaIncorretaException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
@@ -84,21 +89,21 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		objetoAtualizado.getTelefones().forEach(telefone -> telefone.setPessoa(objetoAtualizado));
 		
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "ativo", "tipo", "dataCadastro", "telefones");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "ativo", "tipo", "dataCadastro", "telefones", "senha");
 		return repository.save(objetoAtualizado);
 	}
 	
-//	public String senhaToBcrypt(String senha) {
-//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//		return encoder.encode(senha);
-//	}
+	public String senhaToBcrypt(String senha) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.encode(senha);
+	}
 	
 	public Usuario fromDTO(UsuarioNovoDTO objetoDTO) {
 		
 		Usuario usuario = new Usuario(objetoDTO.getNome(), objetoDTO.getDataNascimento(), 
 				objetoDTO.getcPF(), objetoDTO.getrG(), EstadoCivil.toEnum(objetoDTO.getEstadoCivil()), 
 				Sexo.toEnum(objetoDTO.getSexo()), objetoDTO.getEmail(), objetoDTO.getLogin(), 
-				objetoDTO.getSenha(), true , TipoUsuario.toEnum(objetoDTO.getTipo()), null);
+				senhaToBcrypt(objetoDTO.getSenha()), true , TipoUsuario.toEnum(objetoDTO.getTipo()), null);
 		
 		
 		
@@ -195,6 +200,26 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 			throw new RecursoLoginDuplicadoException(Long.toString(usuarioExistente.getCodigo()));
 		}
 		return false;
+	}
+	
+	public Usuario alterarSenha(UsuarioAlteraSenhaDTO dto, Long codigo) throws ConfirmacaoDeSenhaIncorretaException, SenhaIncorretaException {
+		if(!dto.getSenhaAtual().equals(dto.getConfirmacaoDeSenhaAtual())){
+			throw new ConfirmacaoDeSenhaIncorretaException("A senha atual e a senha de confirmação não estão iguais");
+		}
+		String senhaAtual = dto.getSenhaAtual();
+		
+		String novaSenha = senhaToBcrypt(dto.getNovaSenha());
+		
+		Usuario usuarioBuscado = buscarPorCodigo(codigo);
+		
+		if(!BCrypt.checkpw(senhaAtual, usuarioBuscado.getSenha())) {
+			throw new SenhaIncorretaException("A senha passada está incorreta");
+		}
+		
+		usuarioBuscado.setSenha(novaSenha);
+		
+		return repository.save(usuarioBuscado);
+		
 	}
 	
 	

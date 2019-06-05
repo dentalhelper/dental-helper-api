@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Usuario;
+import com.projeto.dentalhelper.dtos.UsuarioAlteraSenhaDTO;
 import com.projeto.dentalhelper.dtos.UsuarioNovoDTO;
 import com.projeto.dentalhelper.resources.api.UsuarioAPI;
 import com.projeto.dentalhelper.services.UsuarioService;
+import com.projeto.dentalhelper.services.exceptions.ConfirmacaoDeSenhaIncorretaException;
+import com.projeto.dentalhelper.services.exceptions.ConfirmacaoDeSenhaIncorretaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
@@ -26,6 +29,8 @@ import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.SenhaIncorretaException;
+import com.projeto.dentalhelper.services.exceptions.SenhaIncorretaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @RestController
@@ -113,5 +118,29 @@ public class UsuarioResource extends AbstractResource<Usuario, UsuarioService> i
 		service.deletar(codigo);
 		return ResponseEntity.noContent().header("Entity", Long.toString(codigo)).build();
 	}
+
+	@Override
+	public ResponseEntity<Usuario> AlterarSenha(Long codigo, @Valid UsuarioAlteraSenhaDTO objetoDTO) {
+		Usuario objetoEditado;
+		try {
+			objetoEditado = service.alterarSenha(objetoDTO, codigo);
+		} catch (ConfirmacaoDeSenhaIncorretaException e) {
+			throw new ConfirmacaoDeSenhaIncorretaRuntimeException(e.getMessage());
+		} catch (SenhaIncorretaException e) {
+			throw new SenhaIncorretaRuntimeException(e.getMessage());
+		}
+		
+		return ResponseEntity.ok(objetoEditado);
+	}
+
+	@Override
+	public ResponseEntity<UsuarioNovoDTO> getByCodigoForEdit(Long codigo) {
+		Usuario objeto = service.buscarPorCodigo(codigo);
+		adicionarLink(objeto, codigo);
+		UsuarioNovoDTO usuarioDTO = new UsuarioNovoDTO(objeto);
+		usuarioDTO.setSenha("******");
+		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(usuarioDTO);
+	}
+	
 
 }
