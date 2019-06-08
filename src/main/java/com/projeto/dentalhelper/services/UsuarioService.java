@@ -222,5 +222,13 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		
 	}
 	
+	public Usuario alterarAtivo(Long codigo) {
+		Usuario usuarioBuscado = buscarPorCodigo(codigo);
+		
+		usuarioBuscado.setAtivo(!usuarioBuscado.getAtivo());
+		
+		return repository.save(usuarioBuscado);
+	}
+	
 	
 }

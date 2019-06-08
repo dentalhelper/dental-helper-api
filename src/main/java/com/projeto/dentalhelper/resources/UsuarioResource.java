@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Usuario;
 import com.projeto.dentalhelper.dtos.UsuarioAlteraSenhaDTO;
 import com.projeto.dentalhelper.dtos.UsuarioNovoDTO;
@@ -140,6 +141,12 @@ public class UsuarioResource extends AbstractResource<Usuario, UsuarioService> i
 		UsuarioNovoDTO usuarioDTO = new UsuarioNovoDTO(objeto);
 		usuarioDTO.setSenha("******");
 		return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(usuarioDTO);
+	}
+
+	@Override
+	public ResponseEntity<Usuario> atualizarStatus(Long codigo) throws ServiceApplicationException {
+		Usuario objetoEditado = service.alterarAtivo(codigo);
+		return ResponseEntity.ok(objetoEditado);
 	}
 	
 

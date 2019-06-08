@@ -28,6 +28,9 @@ public class AppUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 		Optional<Usuario> usuarioOptional = usuarioRepository.findByLogin(login);
 		Usuario usuario = usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário e/ou senha incorretos"));
+		if(usuario.getAtivo()==false) {
+			throw new UsernameNotFoundException("Usuário está desativado");
+		}
 		return new User(login, usuario.getSenha(), getPermissoes(usuario));
 	}
 

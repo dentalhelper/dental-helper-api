@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.projeto.dentalhelper.domains.Usuario;
 import com.projeto.dentalhelper.dtos.UsuarioAlteraSenhaDTO;
 import com.projeto.dentalhelper.dtos.UsuarioNovoDTO;
+import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -59,6 +61,10 @@ public interface UsuarioAPI {
 	@ApiOperation(value = "Busca dados cadastrais do usuário pelo código")
 	@GetMapping(value = "/{codigo}/edit")
 	public ResponseEntity<UsuarioNovoDTO> getByCodigoForEdit(@PathVariable Long codigo);
+	
+	@ApiOperation(value = "Troca o status de ativo de um paciente")
+	@PatchMapping(value = "/{codigo}")
+	public ResponseEntity<Usuario> atualizarStatus(@PathVariable Long codigo) throws ServiceApplicationException;
 	
 	
 	
