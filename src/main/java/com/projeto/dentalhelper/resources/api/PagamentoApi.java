@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +49,7 @@ public interface PagamentoApi {
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = "Integridade de dados violada, não é possível excluir um recurso que está relacionado à outro."),
 			@ApiResponse(code = 404, message = "Código inexistente.") })
+	@PreAuthorize("hasAnyAuthority('ADMINISTRADOR', 'ASSISTENTE')")
 	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> delete(@PathVariable Long codigo);
 
