@@ -3,6 +3,7 @@ package com.projeto.dentalhelper.services;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.projeto.dentalhelper.domains.enums.Sexo;
 import com.projeto.dentalhelper.domains.enums.TipoUsuario;
 import com.projeto.dentalhelper.dtos.UsuarioAlteraSenhaDTO;
 import com.projeto.dentalhelper.dtos.UsuarioNovoDTO;
+import com.projeto.dentalhelper.mail.Mailer;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
 import com.projeto.dentalhelper.repositories.PacienteRepository;
 import com.projeto.dentalhelper.repositories.UsuarioRepository;
@@ -27,7 +29,10 @@ import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.repositories.filter.UsuarioFilter;
 import com.projeto.dentalhelper.services.exceptions.ConfirmacaoDeSenhaIncorretaException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
+import com.projeto.dentalhelper.services.exceptions.EmailInvalidoException;
+import com.projeto.dentalhelper.services.exceptions.EmailNaoEnviadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.RecursoEmailDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoLoginDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoException;
@@ -44,6 +49,9 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 	@Autowired
 	private PacienteRepository pacienteRepository;
 	
+	@Autowired
+	private Mailer mailer;
+	
 	
 	@Override
 	public Usuario salvar(Usuario objeto) throws ServiceApplicationException {
@@ -53,6 +61,7 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		CpfJaExiste(objeto, null);
 		RgJaExiste(objeto, null);
 		loginJaExiste(objeto, null);
+		emailJaCadastrado(objeto, null);
 		
 		
 		Calendar calendar = new GregorianCalendar();
@@ -71,6 +80,7 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		CpfJaExiste(objetoModificado, codigo);
 		RgJaExiste(objetoModificado, codigo);
 		loginJaExiste(objetoModificado, codigo);
+		emailJaCadastrado(objetoModificado, codigo);
 		
 		
 		objetoModificado.getEndereco().setCodigo(objetoAtualizado.getEndereco().getCodigo());
@@ -229,6 +239,57 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		
 		return repository.save(usuarioBuscado);
 	}
+	
+	public Usuario redefinirSenha(Long codigo) throws EmailInvalidoException, EmailNaoEnviadoException {
+		Usuario usuarioBuscado = buscarPorCodigo(codigo);
+		String senhaGerada = geradorDeSenha();
+		String senhaComBCrypt = senhaToBcrypt(senhaGerada);
+		
+		if(usuarioBuscado.getEmail()==null) {
+			throw new EmailInvalidoException("O email do usuário é inválido");
+		}
+		
+		mailer.enviarEmailComNovaSenha(usuarioBuscado.getEmail(), senhaGerada);
+		usuarioBuscado.setSenha(senhaComBCrypt);
+		return repository.save(usuarioBuscado);
+	}
+	
+	
+	private String geradorDeSenha() {
+		String[] carct ={"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
+
+		String senha="";
+
+
+		for (int x=0; x<10; x++){
+			int j = (int) (Math.random()*carct.length);
+			senha += carct[j];
+		}
+		
+		return senha;
+	}
+	
+	
+	private boolean emailJaCadastrado(Usuario objeto, Long codigoDoObjetoAtualizado) throws RecursoEmailDuplicadoException {		
+		
+		Optional<Usuario> usuario = repository.findByEmail(objeto.getEmail());
+		
+		
+		if(usuario.isPresent()){
+			Usuario usuarioExistente = usuario.get();
+			if(codigoDoObjetoAtualizado != null) {
+				if(usuarioExistente.getCodigo() == codigoDoObjetoAtualizado) {
+					return false;
+				}
+			}
+			throw new RecursoEmailDuplicadoException(Long.toString(usuarioExistente.getCodigo()));
+			
+		}
+		
+		return false;
+		
+	}
+	
 	
 	
 }

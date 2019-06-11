@@ -39,5 +39,17 @@ public class AppUserDetailsService implements UserDetailsService {
 		authorities.add(new SimpleGrantedAuthority(usuario.getTipo().getDescricao().toUpperCase()));
 		return authorities;
 	}
-
+	
+//	public Usuario getUserLogged() {
+//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		String nome= null;
+//		if (principal instanceof UserDetails) {
+//		     nome = ((UserDetails)principal).getUsername();
+//		} else {
+//		     nome = principal.toString();
+//		}
+//		Optional<Usuario> usuarioOptional = usuarioRepository.findByLogin(nome);
+//		return usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Login não encontrado"));
+//		
+//	}
 }

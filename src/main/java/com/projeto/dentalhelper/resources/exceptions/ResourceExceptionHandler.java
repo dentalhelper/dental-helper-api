@@ -35,6 +35,8 @@ import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.EmailInvalidoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.EmailNaoEnviadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.FileException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
@@ -48,6 +50,7 @@ import com.projeto.dentalhelper.services.exceptions.ProcedimentoFinalizadoRuntim
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoEmailDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoLoginDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
@@ -183,6 +186,32 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
 	
+	
+	@ExceptionHandler(EmailInvalidoRuntimeException.class)
+	public ResponseEntity<Object> emailInvalido(EmailInvalidoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+	
+		String mensagemUsuario = montarMensagemUsuario("email-invalido");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(EmailNaoEnviadoRuntimeException.class)
+	public ResponseEntity<Object> emailNaoEnviado(EmailNaoEnviadoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+	
+		String mensagemUsuario = montarMensagemUsuario("email.nao-enviado");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
 	
 	
 	@ExceptionHandler(DadoInvalidoRunTimeException.class)
@@ -395,6 +424,14 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpServletResponse response) {
 
 		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.rg-duplicado");
+		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
+	}
+	
+	@ExceptionHandler(RecursoEmailDuplicadoRuntimeException.class)
+	public ResponseEntity<Object> recursoEmailDuplicado(RecursoEmailDuplicadoRuntimeException exception, WebRequest request,
+			HttpServletResponse response) {
+
+		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.email-duplicado");
 		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
 	}
 	

@@ -38,6 +38,7 @@ public class UsuarioNovoDTO implements Serializable{
 
 	@Size(max = 50)
 	@Email
+	@NotBlank
 	private String email;
 
 	@NotBlank

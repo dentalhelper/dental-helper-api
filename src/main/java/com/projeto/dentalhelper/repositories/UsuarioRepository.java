@@ -10,4 +10,6 @@ import com.projeto.dentalhelper.repositories.Usuario.UsuarioRepositoryQuery;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>, UsuarioRepositoryQuery{
 	
 	public Optional<Usuario> findByLogin(String login);
+	
+	public Optional<Usuario> findByEmail(String email);
 }

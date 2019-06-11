@@ -63,9 +63,14 @@ public interface UsuarioAPI {
 	@GetMapping(value = "/{codigo}/edit")
 	public ResponseEntity<UsuarioNovoDTO> getByCodigoForEdit(@PathVariable Long codigo);
 	
-	@ApiOperation(value = "Troca o status de ativo de um paciente")
+	@ApiOperation(value = "Troca o status de ativo de um usuários")
 	@PatchMapping(value = "/{codigo}")
 	public ResponseEntity<Usuario> atualizarStatus(@PathVariable Long codigo) throws ServiceApplicationException;
+	
+	
+	@ApiOperation(value = "Gera uma nova senha e redefine para o usuário enviando um email com a senha gerada.")
+	@PatchMapping(value = "/{codigo}/senha/redefinir")
+	public ResponseEntity<Usuario> redefinirSenha(@PathVariable Long codigo) throws ServiceApplicationException;
 	
 	
 	

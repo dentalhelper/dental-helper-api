@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Usuario;
 import com.projeto.dentalhelper.dtos.UsuarioAlteraSenhaDTO;
 import com.projeto.dentalhelper.dtos.UsuarioNovoDTO;
@@ -22,8 +21,14 @@ import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
+import com.projeto.dentalhelper.services.exceptions.EmailInvalidoException;
+import com.projeto.dentalhelper.services.exceptions.EmailInvalidoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.EmailNaoEnviadoException;
+import com.projeto.dentalhelper.services.exceptions.EmailNaoEnviadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoEmailDuplicadoException;
+import com.projeto.dentalhelper.services.exceptions.RecursoEmailDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoLoginDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoLoginDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
@@ -48,7 +53,7 @@ public class UsuarioResource extends AbstractResource<Usuario, UsuarioService> i
 		} catch (RgJaCadastradoException e) {
 			throw new RgJaCadastradoRuntimeException(e.getMessage());
 		} catch (CpfJaCadastradoException e) {
-			throw new CpfJaCadastradoRuntimeException(e.getMessage());
+			throw new CpfJaCadastradoRuntimeException(e.getMessage());	
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -111,6 +116,9 @@ public class UsuarioResource extends AbstractResource<Usuario, UsuarioService> i
 		}else if(e instanceof RecursoLoginDuplicadoException){
 			throw new RecursoLoginDuplicadoRuntimeException("Já existe um Usuario com esse login: " + usuarioExistente.getLogin(),
 					usuarioExistente.getId().getHref());
+		}else if(e instanceof RecursoEmailDuplicadoException){
+			throw new RecursoEmailDuplicadoRuntimeException("Já existe um Usuario com esse email: " + usuarioExistente.getLogin(),
+					usuarioExistente.getId().getHref());
 		}
 	}
 
@@ -146,6 +154,19 @@ public class UsuarioResource extends AbstractResource<Usuario, UsuarioService> i
 	@Override
 	public ResponseEntity<Usuario> atualizarStatus(Long codigo) throws ServiceApplicationException {
 		Usuario objetoEditado = service.alterarAtivo(codigo);
+		return ResponseEntity.ok(objetoEditado);
+	}
+
+	@Override
+	public ResponseEntity<Usuario> redefinirSenha(Long codigo) throws ServiceApplicationException {
+		Usuario objetoEditado;
+		try {
+			objetoEditado = service.redefinirSenha(codigo);
+		} catch (EmailInvalidoException e) {
+			throw new EmailInvalidoRuntimeException(e.getMessage());
+		} catch (EmailNaoEnviadoException e) {
+			throw new EmailNaoEnviadoRuntimeException(e.getMessage());
+		}
 		return ResponseEntity.ok(objetoEditado);
 	}
 	
