@@ -29,6 +29,7 @@ import com.projeto.dentalhelper.repositories.filter.PacienteFilter;
 import com.projeto.dentalhelper.repositories.filter.UsuarioFilter;
 import com.projeto.dentalhelper.services.exceptions.ConfirmacaoDeSenhaIncorretaException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
+import com.projeto.dentalhelper.services.exceptions.EmailIncorretoException;
 import com.projeto.dentalhelper.services.exceptions.EmailInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.EmailNaoEnviadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
@@ -240,8 +241,12 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		return repository.save(usuarioBuscado);
 	}
 	
-	public Usuario redefinirSenha(Long codigo) throws EmailInvalidoException, EmailNaoEnviadoException {
+	public Usuario redefinirSenha(Long codigo, String email) throws EmailInvalidoException, EmailNaoEnviadoException, EmailIncorretoException {
 		Usuario usuarioBuscado = buscarPorCodigo(codigo);
+		if(usuarioBuscado.getEmail() == null || !usuarioBuscado.getEmail().equals(email)) {
+			throw new EmailIncorretoException("O email informado está incorreto.");
+		}
+		
 		String senhaGerada = geradorDeSenha();
 		String senhaComBCrypt = senhaToBcrypt(senhaGerada);
 		

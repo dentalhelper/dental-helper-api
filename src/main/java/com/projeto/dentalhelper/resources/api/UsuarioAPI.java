@@ -70,7 +70,7 @@ public interface UsuarioAPI {
 	
 	@ApiOperation(value = "Gera uma nova senha e redefine para o usuário enviando um email com a senha gerada.")
 	@PatchMapping(value = "/{codigo}/senha/redefinir")
-	public ResponseEntity<Usuario> redefinirSenha(@PathVariable Long codigo) throws ServiceApplicationException;
+	public ResponseEntity<Usuario> redefinirSenha(@PathVariable Long codigo, @RequestBody String email) throws ServiceApplicationException;
 	
 	
 	

@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Usuario;
@@ -21,6 +22,8 @@ import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
+import com.projeto.dentalhelper.services.exceptions.EmailIncorretoException;
+import com.projeto.dentalhelper.services.exceptions.EmailIncorretoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.EmailInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.EmailInvalidoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.EmailNaoEnviadoException;
@@ -158,14 +161,16 @@ public class UsuarioResource extends AbstractResource<Usuario, UsuarioService> i
 	}
 
 	@Override
-	public ResponseEntity<Usuario> redefinirSenha(Long codigo) throws ServiceApplicationException {
+	public ResponseEntity<Usuario> redefinirSenha(Long codigo, @RequestBody String email) throws ServiceApplicationException {
 		Usuario objetoEditado;
 		try {
-			objetoEditado = service.redefinirSenha(codigo);
+			objetoEditado = service.redefinirSenha(codigo, email);
 		} catch (EmailInvalidoException e) {
 			throw new EmailInvalidoRuntimeException(e.getMessage());
 		} catch (EmailNaoEnviadoException e) {
 			throw new EmailNaoEnviadoRuntimeException(e.getMessage());
+		}catch (EmailIncorretoException e) {
+			throw new EmailIncorretoRuntimeException(e.getMessage());
 		}
 		return ResponseEntity.ok(objetoEditado);
 	}
