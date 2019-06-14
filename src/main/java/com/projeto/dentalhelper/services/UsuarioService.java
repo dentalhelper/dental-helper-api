@@ -241,11 +241,13 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		return repository.save(usuarioBuscado);
 	}
 	
-	public Usuario redefinirSenha(Long codigo, String email) throws EmailInvalidoException, EmailNaoEnviadoException, EmailIncorretoException {
-		Usuario usuarioBuscado = buscarPorCodigo(codigo);
-		if(usuarioBuscado.getEmail() == null || !usuarioBuscado.getEmail().equals(email)) {
-			throw new EmailIncorretoException("O email informado está incorreto.");
+	public Usuario redefinirSenha(String email) throws EmailInvalidoException, EmailNaoEnviadoException, EmailIncorretoException {
+		Optional<Usuario> usuarioOptional = repository.findByEmail(email);
+		if(!usuarioOptional.isPresent()) {
+			throw new EmailIncorretoException("Não há nenhum usuário com esse email.");
 		}
+		
+		Usuario usuarioBuscado = usuarioOptional.get();
 		
 		String senhaGerada = geradorDeSenha();
 		String senhaComBCrypt = senhaToBcrypt(senhaGerada);

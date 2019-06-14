@@ -25,26 +25,31 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@PreAuthorize("hasAuthority('ADMINISTRADOR')")
+
 @RequestMapping(value = "/usuarios")
 public interface UsuarioAPI {
 
+	@PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	@ApiOperation(value = "Salva um usuário")
 	@PostMapping(value = "/novo")
 	public ResponseEntity<Usuario> post(@Valid @RequestBody UsuarioNovoDTO objeto, HttpServletResponse response);
 	
+	@PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	@ApiOperation(value = "Busca todos os usuários")
 	@GetMapping
 	public List<Usuario> getAll();
 
+	@PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	@ApiOperation(value = "Busca um usuário por código")
 	@GetMapping(value = "/{codigo}")
 	public ResponseEntity<Usuario> getByCodigo(@PathVariable Long codigo);
 
+	@PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	@ApiOperation(value = "Atualiza um usuário")
 	@PutMapping(value = "/{codigo}")
 	public ResponseEntity<Usuario> put(@PathVariable Long codigo, @Valid @RequestBody UsuarioNovoDTO objetoDTO);
 
+	@PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	@ApiOperation(value = "Deleta um usuário")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = "Integridade de dados violada, não é possível excluir um recurso que "
@@ -54,23 +59,25 @@ public interface UsuarioAPI {
 	public ResponseEntity<Void> delete(@PathVariable Long codigo);
 	
 	
-	
+	@PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	@ApiOperation(value = "Atualiza a senha de um usuário")
 	@PutMapping(value = "/{codigo}/senha")
 	public ResponseEntity<Usuario> AlterarSenha(@PathVariable Long codigo, @Valid @RequestBody UsuarioAlteraSenhaDTO objetoDTO);
 	
+	@PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	@ApiOperation(value = "Busca dados cadastrais do usuário pelo código")
 	@GetMapping(value = "/{codigo}/edit")
 	public ResponseEntity<UsuarioNovoDTO> getByCodigoForEdit(@PathVariable Long codigo);
 	
+	@PreAuthorize("hasAuthority('ADMINISTRADOR')")
 	@ApiOperation(value = "Troca o status de ativo de um usuários")
 	@PatchMapping(value = "/{codigo}")
 	public ResponseEntity<Usuario> atualizarStatus(@PathVariable Long codigo) throws ServiceApplicationException;
 	
 	
 	@ApiOperation(value = "Gera uma nova senha e redefine para o usuário enviando um email com a senha gerada.")
-	@PatchMapping(value = "/{codigo}/senha/redefinir")
-	public ResponseEntity<Usuario> redefinirSenha(@PathVariable Long codigo, @RequestBody String email) throws ServiceApplicationException;
+	@PatchMapping(value = "/senha/redefinir")
+	public ResponseEntity<Usuario> redefinirSenha(@RequestBody String email) throws ServiceApplicationException;
 	
 	
 	

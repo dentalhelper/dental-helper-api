@@ -161,10 +161,10 @@ public class UsuarioResource extends AbstractResource<Usuario, UsuarioService> i
 	}
 
 	@Override
-	public ResponseEntity<Usuario> redefinirSenha(Long codigo, @RequestBody String email) throws ServiceApplicationException {
+	public ResponseEntity<Usuario> redefinirSenha(@RequestBody String email) throws ServiceApplicationException {
 		Usuario objetoEditado;
 		try {
-			objetoEditado = service.redefinirSenha(codigo, email);
+			objetoEditado = service.redefinirSenha(email);
 		} catch (EmailInvalidoException e) {
 			throw new EmailInvalidoRuntimeException(e.getMessage());
 		} catch (EmailNaoEnviadoException e) {
