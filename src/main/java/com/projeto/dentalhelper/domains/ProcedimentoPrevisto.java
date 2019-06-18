@@ -1,14 +1,21 @@
 package com.projeto.dentalhelper.domains;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "procedimento_previsto")
@@ -39,12 +46,21 @@ public class ProcedimentoPrevisto extends ObjetoIdentificado{
 	@JoinColumn(name = "codigo_orcamento")
 	private Orcamento orcamento;
 	
+//	@ManyToMany(mappedBy="procedimentosPrevistos", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("procedimentosPrevistos")
+  @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REFRESH})
+  @JoinTable(name="dente_procedimento_previsto", joinColumns=
+  {@JoinColumn(name="codigo_procedimento_previsto")}, inverseJoinColumns=
+    {@JoinColumn(name="codigo_dente")})
+	private List<Dente> dentes = new ArrayList<Dente>();
+	
+	
 	public ProcedimentoPrevisto() {
 		super();
 	}
 	
 	public ProcedimentoPrevisto(Float valorDoProcedimento, Boolean finalizado, Date dataInicio,
-			 Date dataFinalizacao, Procedimento procedimento, Orcamento orcamento) {
+			 Date dataFinalizacao, Procedimento procedimento, Orcamento orcamento, List<Dente> dentes) {
 		super();
 		this.valorDoProcedimento = valorDoProcedimento;
 		this.finalizado = finalizado;
@@ -52,6 +68,7 @@ public class ProcedimentoPrevisto extends ObjetoIdentificado{
 		this.dataFinalizacao = dataFinalizacao;
 		this.procedimento = procedimento;
 		this.orcamento = orcamento;
+		this.dentes = dentes;
 	}
 
 
@@ -103,6 +120,14 @@ public class ProcedimentoPrevisto extends ObjetoIdentificado{
 
 	public void setOrcamento(Orcamento orcamento) {
 		this.orcamento = orcamento;
+	}
+
+	public List<Dente> getDentes() {
+		return dentes;
+	}
+
+	public void setDentes(List<Dente> dentes) {
+		this.dentes = dentes;
 	}
 	
 	

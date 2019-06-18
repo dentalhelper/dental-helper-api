@@ -1,16 +1,21 @@
 package com.projeto.dentalhelper.domains;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
 import com.projeto.dentalhelper.domains.enums.Sexo;
 
@@ -33,6 +38,15 @@ public class Paciente extends Pessoa {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "codigo_anamnese")
 	private Anamnese anamnese;
+	
+	@Valid
+	@JsonIgnoreProperties("paciente")
+	@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Dente> dentes = new ArrayList<Dente>();
+	
+	
+//	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//	@JoinColumn(name = "codigo_paciente")
 
 	public Date getDataCriacaoFicha() {
 		return dataCriacaoFicha;
@@ -85,5 +99,15 @@ public class Paciente extends Pessoa {
 	public void setAnamnese(Anamnese anamnese) {
 		this.anamnese = anamnese;
 	}
+
+	public List<Dente> getDentes() {
+		return dentes;
+	}
+
+	public void setDentes(List<Dente> dentes) {
+		this.dentes = dentes;
+	}
+	
+	
 
 }

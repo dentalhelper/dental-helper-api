@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.projeto.dentalhelper.domains.Dente;
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.domains.Procedimento;
@@ -18,6 +19,7 @@ import com.projeto.dentalhelper.dtos.OrcamentoNovoDTO;
 import com.projeto.dentalhelper.dtos.ProcedimentoPrevistoNovoDTO;
 import com.projeto.dentalhelper.repositories.OrcamentoRepository;
 import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
+import com.projeto.dentalhelper.services.exceptions.DenteInvalidoDePacienteException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
@@ -30,6 +32,9 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 
 	@Autowired
 	private PacienteService pacienteService;
+	
+	@Autowired
+	private DenteService denteService;
 
 	@Override
 	public Orcamento salvar(Orcamento objeto) throws ServiceApplicationException {
@@ -128,7 +133,7 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 
 		objetoAtualizado.getProcedimentosPrevistos().forEach(procedimento -> procedimento.setOrcamento(objetoAtualizado));
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "pagamentos", "dataOrcamento", "procedimentosPrevistos", "status");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "pagamentos", "dataOrcamento", "procedimentosPrevistos", "status", "paciente");
 		return repository.save(objetoAtualizado);
 	}
 	
@@ -141,17 +146,20 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		return repository.filtrar(filter);
 	}
 	
-	public Orcamento fromDTO(OrcamentoNovoDTO objetoDTO) throws OrcamentoDeveConterProcedimentoException {
-		
+	public Orcamento fromDTO(OrcamentoNovoDTO objetoDTO) throws OrcamentoDeveConterProcedimentoException, DenteInvalidoDePacienteException {
+
 		procedimentosVazio(objetoDTO.getProcedimentos());
+		
+		Paciente paciente = pacienteService.buscarPorCodigo(objetoDTO.getCodPaciente());
 		
 		List<ProcedimentoPrevisto> procedimentosPrevistos = new ArrayList<ProcedimentoPrevisto>();
 		
 		for(ProcedimentoPrevistoNovoDTO pp: objetoDTO.getProcedimentos()) {
-			procedimentosPrevistos.add(procedimentoPrevistoFromDTO(pp));
+			procedimentosPrevistos.add(procedimentoPrevistoFromDTO(pp, paciente.getCodigo()));
 		}
 		
-		Paciente paciente = pacienteService.buscarPorCodigo(objetoDTO.getCodPaciente());
+		
+		
 		
 		Orcamento orcamento = new Orcamento(objetoDTO.getValorTotal(), objetoDTO.getAprovado(), procedimentosPrevistos, paciente, null, objetoDTO.getDesconto());
 		
@@ -159,9 +167,23 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 	}
 	
 	
-	public ProcedimentoPrevisto procedimentoPrevistoFromDTO (ProcedimentoPrevistoNovoDTO objetoDTO) {
+	public ProcedimentoPrevisto procedimentoPrevistoFromDTO (ProcedimentoPrevistoNovoDTO objetoDTO, Long codPaciente) throws DenteInvalidoDePacienteException {
 		
 		Procedimento procedimento = procedimentoService.buscarPorCodigo(objetoDTO.getCodigo());
+		
+		List<Dente> dentes = new ArrayList<Dente>();
+		
+		for(Long codigo: objetoDTO.getCodDentes()) {
+			Dente dente = denteService.buscarPorCodigo(codigo);
+			if(dente.getPaciente().getCodigo() != codPaciente) {
+				throw new DenteInvalidoDePacienteException("Dente de paciente inválido");
+			}
+			
+			if(!dentes.contains(dente)) {
+				dentes.add(dente);
+			}
+			
+		}
 		
 		if(objetoDTO.getValor() == null) {
 			objetoDTO.setValor(procedimento.getValorBase());
@@ -169,7 +191,7 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		
 		
 		ProcedimentoPrevisto procedimentoPrevisto = new ProcedimentoPrevisto(objetoDTO.getValor(), objetoDTO.getFinalizado(), objetoDTO.getDataInicio(), 
-				objetoDTO.getDataFinalizacao(), procedimento, null);
+				objetoDTO.getDataFinalizacao(), procedimento, null, dentes);
 		
 		return procedimentoPrevisto;
 		
@@ -195,6 +217,5 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		
 		return repository.save(orcamento);
 	}
-	
 	
 }

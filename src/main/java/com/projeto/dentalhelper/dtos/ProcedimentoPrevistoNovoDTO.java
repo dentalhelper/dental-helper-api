@@ -1,10 +1,13 @@
 package com.projeto.dentalhelper.dtos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.projeto.dentalhelper.domains.Dente;
 import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 
 public class ProcedimentoPrevistoNovoDTO implements Serializable {
@@ -23,6 +26,8 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable {
 	private Date dataInicio;
 
 	private Date dataFinalizacao;
+	
+	private List<Long> codDentes = new ArrayList<Long>();
 
 	public ProcedimentoPrevistoNovoDTO() {
 		super();
@@ -36,6 +41,7 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable {
 		this.dataInicio = p.getDataInicio();
 		this.dataFinalizacao = p.getDataFinalizacao();
 		this.nome = p.getProcedimento().getNome();
+		this.codDentes = adicionarCodigoDosDentes(p);
 	}
 
 	public Float getValor() {
@@ -84,6 +90,24 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable {
 
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
+	}
+
+	public List<Long> getCodDentes() {
+		return codDentes;
+	}
+
+	public void setCodDentes(List<Long> codDentes) {
+		this.codDentes = codDentes;
+	}
+	
+	
+	private List<Long> adicionarCodigoDosDentes(ProcedimentoPrevisto p) {
+		List<Long> codDentes = new ArrayList<Long>();
+		
+		for(Dente d: p.getDentes()) {
+			codDentes.add(d.getCodigo());
+		}
+		return codDentes;
 	}
 
 }

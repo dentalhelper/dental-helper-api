@@ -33,6 +33,7 @@ import com.projeto.dentalhelper.services.exceptions.ConfirmacaoDeSenhaIncorretaR
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.DenteInvalidoDePacienteRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.EmailIncorretoRuntimeException;
@@ -325,6 +326,18 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request, HttpServletResponse response) {
 
 		String mensagemUsuario = montarMensagemUsuario("pagamento.valor-superado");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(DenteInvalidoDePacienteRuntimeException.class)
+	public ResponseEntity<Object> denteDePacienteInvalido(DenteInvalidoDePacienteRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("dente.paciente-invalido");
 		String mensagemDesenvolvedor = exception.toString();
 		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
 				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));

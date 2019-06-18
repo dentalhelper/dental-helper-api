@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Cidade;
+import com.projeto.dentalhelper.domains.Dente;
 import com.projeto.dentalhelper.domains.Endereco;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Orcamento;
@@ -72,6 +73,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	
 	private static final int PRIMEIRO_ITEM = 0;
 	
 	@Override
@@ -93,6 +95,8 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		
 		anamnese.setQuestoes(questoes);
 		objeto.setAnamnese(anamnese);
+		
+		objeto.setDentes(criarDentes(objeto));
 		
 		if(StringUtils.hasText(objeto.getFotoPerfil())) {
 			s3Service.salvar(objeto.getFotoPerfil());
@@ -347,6 +351,21 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		filter.setFinalizado(finalizado);
 		return procedimentoPrevistoRepository.filtrar(filter);
 		
+	}
+	
+	private List<Dente> criarDentes(Paciente p){
+		List<Dente> dentes = new ArrayList<Dente>();
+		for(int i = 0; i<37; i++) {
+			Dente dente = new Dente();
+			dente.setExistente(true);
+			dente.setNome(""+(i+1));
+			dente.setNumero(i+1);
+			dente.setPaciente(p);
+			
+			dentes.add(dente);
+		}
+		
+		return dentes;
 	}
 	
 }
