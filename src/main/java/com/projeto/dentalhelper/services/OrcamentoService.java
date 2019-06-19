@@ -40,7 +40,9 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 	public Orcamento salvar(Orcamento objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);	
 		
-		objeto.setAprovado(false);
+		if(objeto.getAprovado() == null) {
+			objeto.setAprovado(false);
+		}
 		objeto.setStatus(StatusPagamento.ABERTO);
 		for(ProcedimentoPrevisto p: objeto.getProcedimentosPrevistos()) {
 			p.setOrcamento(objeto);

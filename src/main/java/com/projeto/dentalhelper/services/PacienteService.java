@@ -354,12 +354,13 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	}
 	
 	private List<Dente> criarDentes(Paciente p){
+		int[] numDentes = {18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38};
+		
 		List<Dente> dentes = new ArrayList<Dente>();
-		for(int i = 0; i<37; i++) {
+		for(int i = 0; i<32; i++) {
 			Dente dente = new Dente();
 			dente.setExistente(true);
-			dente.setNome(""+(i+1));
-			dente.setNumero(i+1);
+			dente.setNumero(numDentes[i]);
 			dente.setPaciente(p);
 			
 			dentes.add(dente);

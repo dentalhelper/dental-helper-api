@@ -11,8 +11,6 @@ public class UsuarioAlteraSenhaDTO implements Serializable{
 	
 	@NotBlank
 	private String senhaAtual;
-	@NotBlank
-	private String confirmacaoDeSenhaAtual;
 	
 	@NotBlank
 	@Size(min = 5, max = 50)
@@ -23,12 +21,6 @@ public class UsuarioAlteraSenhaDTO implements Serializable{
 	}
 	public void setSenhaAtual(String senhaAtual) {
 		this.senhaAtual = senhaAtual;
-	}
-	public String getConfirmacaoDeSenhaAtual() {
-		return confirmacaoDeSenhaAtual;
-	}
-	public void setConfirmacaoDeSenhaAtual(String confirmacaoDeSenhaAtual) {
-		this.confirmacaoDeSenhaAtual = confirmacaoDeSenhaAtual;
 	}
 	public String getNovaSenha() {
 		return novaSenha;

@@ -14,5 +14,5 @@ CREATE TABLE usuario(
 INSERT INTO usuario
 (codigo, data_cadastro, ativo, login, senha, tipo) values
 (6,'2019-05-27', true, 'carlos', '$2a$10$yniupl2B5Spz9saUzWe6ier2KhnHkDdGjIKaxKg803En3B.VDDbpO', 1),
-(7,'2019-05-27', true, 'renata', '$2a$10$8Wrzz6xfHZRSDVFEo6FbtuAOM7pnlcQ9dM5S0jE8FwAn/hAK7CbY6', 2),
-(8,'2019-05-27', true, 'gabriel', '$2a$10$8j5LIn8gE3HuedG6F8oYaOOdzfhQTZxgFi5yi6HZ8h0HX4g654Fru', 3);
+(7,'2019-05-27', true, 'renata', '$2a$10$kvOqpiYo3ESKIlgsEDoP8OAFgGhQQYoBSpj41xR2JCfwSaeM3Otni', 2),
+(8,'2019-05-27', true, 'gabriel', '$2a$10$KYAz3LUP6BcRm3bHBxGju.oqPBmucSbYos8KoWdGoNiOICdJlfW3y', 3);

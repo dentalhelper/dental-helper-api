@@ -20,7 +20,6 @@ public class Dente extends ObjetoIdentificado {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String nome;
 	private Integer numero;
 	private String observacao;
 	private Boolean existente;
@@ -39,12 +38,6 @@ public class Dente extends ObjetoIdentificado {
 	@ManyToMany(mappedBy="dentes")
 	private List<ProcedimentoPrevisto> procedimentosPrevistos = new ArrayList<ProcedimentoPrevisto>();
 	
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
 	public Integer getNumero() {
 		return numero;
 	}

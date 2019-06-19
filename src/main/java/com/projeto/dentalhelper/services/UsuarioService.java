@@ -214,17 +214,13 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 	}
 	
 	public Usuario alterarSenha(UsuarioAlteraSenhaDTO dto, Long codigo) throws ConfirmacaoDeSenhaIncorretaException, SenhaIncorretaException {
-		if(!dto.getSenhaAtual().equals(dto.getConfirmacaoDeSenhaAtual())){
-			throw new ConfirmacaoDeSenhaIncorretaException("A senha atual e a senha de confirmação não estão iguais");
-		}
 		String senhaAtual = dto.getSenhaAtual();
-		
 		String novaSenha = senhaToBcrypt(dto.getNovaSenha());
 		
 		Usuario usuarioBuscado = buscarPorCodigo(codigo);
 		
 		if(!BCrypt.checkpw(senhaAtual, usuarioBuscado.getSenha())) {
-			throw new SenhaIncorretaException("A senha passada está incorreta");
+			throw new SenhaIncorretaException("A senha passada está incorreta: " +novaSenha);
 		}
 		
 		usuarioBuscado.setSenha(novaSenha);
