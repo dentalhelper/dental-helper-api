@@ -220,7 +220,7 @@ public class UsuarioService extends AbstractService<Usuario, UsuarioRepository>{
 		Usuario usuarioBuscado = buscarPorCodigo(codigo);
 		
 		if(!BCrypt.checkpw(senhaAtual, usuarioBuscado.getSenha())) {
-			throw new SenhaIncorretaException("A senha passada está incorreta: " +novaSenha);
+			throw new SenhaIncorretaException("A senha passada está incorreta");
 		}
 		
 		usuarioBuscado.setSenha(novaSenha);
