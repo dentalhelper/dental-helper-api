@@ -22,6 +22,7 @@ import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 import com.projeto.dentalhelper.dtos.AgendamentoResumoPacienteDTO;
+import com.projeto.dentalhelper.dtos.OdontogramaResumoDTO;
 import com.projeto.dentalhelper.dtos.OrcamentoPagamentoDTO;
 import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
@@ -227,6 +228,14 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 		return ResponseEntity.ok().body(orcamentosDTO);
 		
 		
+	}
+
+	@Override
+	public ResponseEntity<OdontogramaResumoDTO> getOdontogramaByCodigoPaciente(Long codigo) {
+		Paciente objeto = service.buscarPorCodigo(codigo);
+		OdontogramaResumoDTO odontogramaDTO = new OdontogramaResumoDTO(objeto);
+		
+		return ResponseEntity.ok().body(odontogramaDTO);
 	}
 
 }
