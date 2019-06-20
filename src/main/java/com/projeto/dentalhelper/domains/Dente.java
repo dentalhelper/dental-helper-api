@@ -27,14 +27,10 @@ public class Dente extends ObjetoIdentificado {
 	@JoinColumn(name = "codigo_paciente")
 	private Paciente paciente;
 	
-//    @ManyToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name="dente_procedimento_previsto", joinColumns=
-//    {@JoinColumn(name="codigo_dente")}, inverseJoinColumns=
-//      {@JoinColumn(name="codigo_procedimento_previsto")})
-	
     @JsonIgnoreProperties({"dentes", "orcamento"})
 	@ManyToMany(mappedBy="dentes")
 	private List<ProcedimentoPrevisto> procedimentosPrevistos = new ArrayList<ProcedimentoPrevisto>();
+    
 	
 	public Integer getNumero() {
 		return numero;

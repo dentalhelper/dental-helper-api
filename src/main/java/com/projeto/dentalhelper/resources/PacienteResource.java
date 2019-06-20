@@ -39,6 +39,8 @@ import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
+import com.projeto.dentalhelper.services.exceptions.OdontogramaInvalidoException;
+import com.projeto.dentalhelper.services.exceptions.OdontogramaInvalidoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
@@ -237,5 +239,20 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 		
 		return ResponseEntity.ok().body(odontogramaDTO);
 	}
+
+	@Override
+	public ResponseEntity<Paciente> atualizarOdontograma(Long codigo, @Valid OdontogramaResumoDTO odontograma) {
+		Paciente paciente;
+		try {
+			paciente = service.atualizarOdontograma(odontograma, codigo);
+		} catch (OdontogramaInvalidoException e) {
+			throw new OdontogramaInvalidoRuntimeException(e.getMessage());
+		}
+		
+		return ResponseEntity.ok().body(paciente);
+	}
+	
+	
+	
 
 }

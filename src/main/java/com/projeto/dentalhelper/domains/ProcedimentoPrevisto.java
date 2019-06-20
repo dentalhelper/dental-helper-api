@@ -46,7 +46,6 @@ public class ProcedimentoPrevisto extends ObjetoIdentificado{
 	@JoinColumn(name = "codigo_orcamento")
 	private Orcamento orcamento;
 	
-//	@ManyToMany(mappedBy="procedimentosPrevistos", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("procedimentosPrevistos")
   @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REFRESH})
   @JoinTable(name="dente_procedimento_previsto", joinColumns=

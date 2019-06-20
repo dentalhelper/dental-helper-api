@@ -177,7 +177,7 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		
 		for(Long codigo: objetoDTO.getCodDentes()) {
 			Dente dente = denteService.buscarPorCodigo(codigo);
-			if(dente.getPaciente().getCodigo() != codPaciente) {
+			if(dente.getPaciente().getCodigo() != codPaciente || dente.getExistente() == false) {
 				throw new DenteInvalidoDePacienteException("Dente de paciente inválido");
 			}
 			

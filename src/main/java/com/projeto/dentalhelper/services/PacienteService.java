@@ -28,6 +28,8 @@ import com.projeto.dentalhelper.domains.Usuario;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
 import com.projeto.dentalhelper.domains.enums.RespostaQuestaoAnamnese;
 import com.projeto.dentalhelper.domains.enums.Sexo;
+import com.projeto.dentalhelper.dtos.DenteOdontogramaResumoDTO;
+import com.projeto.dentalhelper.dtos.OdontogramaResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.repositories.AgendamentoRepository;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
@@ -42,6 +44,7 @@ import com.projeto.dentalhelper.repositories.filter.ProcedimentoPrevistoFilter;
 import com.projeto.dentalhelper.repositories.filter.UsuarioFilter;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
+import com.projeto.dentalhelper.services.exceptions.OdontogramaInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaException;
@@ -367,6 +370,24 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		}
 		
 		return dentes;
+	}
+	
+	public Paciente atualizarOdontograma(OdontogramaResumoDTO objetoDTO, Long codPaciente) throws OdontogramaInvalidoException {
+		Paciente paciente = buscarPorCodigo(codPaciente);
+		
+		if(objetoDTO.getDentes().size() != paciente.getDentes().size()) {
+			throw new OdontogramaInvalidoException("O odontograma está inválido");
+		}
+		
+		for(int i = 0; i<paciente.getDentes().size(); i++) {
+			if(objetoDTO.getDentes().get(i).getObservacao() != null)
+				paciente.getDentes().get(i).setObservacao(objetoDTO.getDentes().get(i).getObservacao());
+			if(objetoDTO.getDentes().get(i).getExistente() != null)
+				paciente.getDentes().get(i).setExistente(objetoDTO.getDentes().get(i).getExistente());
+		}
+		
+		return repository.save(paciente);
+		
 	}
 	
 }

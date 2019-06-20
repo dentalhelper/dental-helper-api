@@ -43,6 +43,7 @@ import com.projeto.dentalhelper.services.exceptions.FileException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
+import com.projeto.dentalhelper.services.exceptions.OdontogramaInvalidoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoCanceladoRuntimeException;
@@ -338,6 +339,18 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request, HttpServletResponse response) {
 
 		String mensagemUsuario = montarMensagemUsuario("dente.paciente-invalido");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(OdontogramaInvalidoRuntimeException.class)
+	public ResponseEntity<Object> odontogramaInvalido(OdontogramaInvalidoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("odontograma.invalido");
 		String mensagemDesenvolvedor = exception.toString();
 		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
 				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));

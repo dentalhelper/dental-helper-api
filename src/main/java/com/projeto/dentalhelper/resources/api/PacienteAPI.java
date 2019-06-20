@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.projeto.dentalhelper.domains.Anamnese;
+import com.projeto.dentalhelper.domains.Dente;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.dtos.OdontogramaResumoDTO;
@@ -100,5 +101,9 @@ public interface PacienteAPI {
 	@ApiOperation(value = "Buscar odontograma pelo código do paciente")
 	@GetMapping(value = "/{codigo}/odontograma")
 	public ResponseEntity<OdontogramaResumoDTO> getOdontogramaByCodigoPaciente(@PathVariable Long codigo);
+
+	@ApiOperation(value = "Atualiza o odontograma do paciente")
+	@PutMapping(value = "/{codigo}/odontograma")
+	public ResponseEntity<Paciente> atualizarOdontograma(@PathVariable Long codigo, @Valid @RequestBody OdontogramaResumoDTO odontograma);
 	
 }
