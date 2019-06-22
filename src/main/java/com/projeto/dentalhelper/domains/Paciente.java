@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
+import com.projeto.dentalhelper.domains.enums.FormaDoRosto;
 import com.projeto.dentalhelper.domains.enums.Sexo;
 
 @Entity
@@ -44,10 +46,16 @@ public class Paciente extends Pessoa {
 	@OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Dente> dentes = new ArrayList<Dente>();
 	
+	@Column(name = "escala_dente")
+	private String escalaDente;
 	
-//	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//	@JoinColumn(name = "codigo_paciente")
-
+	@Column(name = "cor_dente")
+	private String corDente;
+	
+	@Column(name = "forma_rosto")
+	private Integer formaRosto;
+	
+	
 	public Date getDataCriacaoFicha() {
 		return dataCriacaoFicha;
 	}
@@ -106,6 +114,30 @@ public class Paciente extends Pessoa {
 
 	public void setDentes(List<Dente> dentes) {
 		this.dentes = dentes;
+	}
+
+	public String getEscalaDente() {
+		return escalaDente;
+	}
+
+	public void setEscalaDente(String escalaDente) {
+		this.escalaDente = escalaDente;
+	}
+
+	public String getCorDente() {
+		return corDente;
+	}
+
+	public void setCorDente(String corDente) {
+		this.corDente = corDente;
+	}
+
+	public FormaDoRosto getFormaRosto() {
+		return FormaDoRosto.toEnum(formaRosto);
+	}
+
+	public void setFormaRosto(FormaDoRosto formaRosto) {
+		this.formaRosto = formaRosto.getCodigo();
 	}
 	
 	

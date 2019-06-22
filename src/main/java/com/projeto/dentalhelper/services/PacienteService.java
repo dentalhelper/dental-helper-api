@@ -26,9 +26,9 @@ import com.projeto.dentalhelper.domains.QuestaoPreDefinida;
 import com.projeto.dentalhelper.domains.Telefone;
 import com.projeto.dentalhelper.domains.Usuario;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
+import com.projeto.dentalhelper.domains.enums.FormaDoRosto;
 import com.projeto.dentalhelper.domains.enums.RespostaQuestaoAnamnese;
 import com.projeto.dentalhelper.domains.enums.Sexo;
-import com.projeto.dentalhelper.dtos.DenteOdontogramaResumoDTO;
 import com.projeto.dentalhelper.dtos.OdontogramaResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.repositories.AgendamentoRepository;
@@ -385,6 +385,10 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 			if(objetoDTO.getDentes().get(i).getExistente() != null)
 				paciente.getDentes().get(i).setExistente(objetoDTO.getDentes().get(i).getExistente());
 		}
+		
+		paciente.setFormaRosto(FormaDoRosto.toEnum(objetoDTO.getFormaRosto()));
+		paciente.setEscalaDente(objetoDTO.getEscalaDente());
+		paciente.setCorDente(objetoDTO.getCorDente());
 		
 		return repository.save(paciente);
 		

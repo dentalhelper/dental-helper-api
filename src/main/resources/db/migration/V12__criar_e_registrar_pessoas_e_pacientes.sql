@@ -21,6 +21,9 @@ CREATE TABLE paciente(
 	foto_perfil VARCHAR(500),
 	url_da_foto VARCHAR(500),
 	codigo_anamnese BIGINT(20),
+	escala_dente VARCHAR(20),
+	cor_dente VARCHAR(20),
+	forma_rosto INT(15),
 	
 	 FOREIGN KEY (codigo) REFERENCES pessoa(codigo),
 	 FOREIGN KEY (codigo_anamnese) REFERENCES anamnese(codigo)
@@ -46,9 +49,9 @@ INSERT INTO pessoa
 
 
 INSERT INTO paciente
-(codigo, data_criacao_ficha, profissao, foto_perfil, url_da_foto, codigo_anamnese) values
-(1,'2019-03-10','Pedreiro',  'bbddcc46-3b9f-4dd7-a777-6b9411e1ed70_joao.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/bbddcc46-3b9f-4dd7-a777-6b9411e1ed70_joao.jpg', 1),
-(2,'2019-03-11','Recepcionista',  'f248aef7-90c1-4195-bd3c-748c488c535e_julia-sperling.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/f248aef7-90c1-4195-bd3c-748c488c535e_julia-sperling.jpg', 2),
-(3,'2019-03-12','Motorista',  '0ddaa345-cc18-4fdd-a755-72f3b9b9d952_61TGQuDZX8L._SY606_.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/0ddaa345-cc18-4fdd-a755-72f3b9b9d952_61TGQuDZX8L._SY606_.jpg', 3),
-(4,'2019-03-13','Advogada',  '52cd8c4a-91d9-4b45-950e-89b659aba57c_marcelatavares.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/52cd8c4a-91d9-4b45-950e-89b659aba57c_marcelatavares.jpg', 4),
-(5,'2019-03-14','Professor',  '', 'https://s3-sa-east-1.amazonaws.com/dental-helper/noimage.png', 5);
+(codigo, data_criacao_ficha, escala_dente, cor_dente, forma_rosto ,profissao, foto_perfil, url_da_foto, codigo_anamnese) values
+(1,'2019-03-10', 'ESC', 'COR1', 1,'Pedreiro',  'bbddcc46-3b9f-4dd7-a777-6b9411e1ed70_joao.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/bbddcc46-3b9f-4dd7-a777-6b9411e1ed70_joao.jpg', 1),
+(2,'2019-03-11', 'ESC', 'COR1', 1, 'Recepcionista',  'f248aef7-90c1-4195-bd3c-748c488c535e_julia-sperling.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/f248aef7-90c1-4195-bd3c-748c488c535e_julia-sperling.jpg', 2),
+(3,'2019-03-12', 'ESC', 'COR1', 1, 'Motorista',  '0ddaa345-cc18-4fdd-a755-72f3b9b9d952_61TGQuDZX8L._SY606_.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/0ddaa345-cc18-4fdd-a755-72f3b9b9d952_61TGQuDZX8L._SY606_.jpg', 3),
+(4,'2019-03-13', 'ESC', 'COR1', 1, 'Advogada',  '52cd8c4a-91d9-4b45-950e-89b659aba57c_marcelatavares.jpg', 'https://dental-helper.s3.sa-east-1.amazonaws.com/52cd8c4a-91d9-4b45-950e-89b659aba57c_marcelatavares.jpg', 4),
+(5,'2019-03-14', 'ESC', 'COR1', 1, 'Professor',  '', 'https://s3-sa-east-1.amazonaws.com/dental-helper/noimage.png', 5);
