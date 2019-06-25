@@ -24,7 +24,7 @@ public class DenteOdontogramaResumoDTO extends ResourceSupport implements Serial
 	
 	private Integer status;
 	
-	private List<String> procedimentos = new ArrayList<String>();
+	private List<ProcedimentoOdontogramaResumoDTO> procedimentos = new ArrayList<ProcedimentoOdontogramaResumoDTO>();
 	
 	
 	
@@ -74,12 +74,11 @@ public class DenteOdontogramaResumoDTO extends ResourceSupport implements Serial
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-
-	public List<String> getProcedimentos() {
+	public List<ProcedimentoOdontogramaResumoDTO> getProcedimentos() {
 		return procedimentos;
 	}
 
-	public void setProcedimentos(List<String> procedimentos) {
+	public void setProcedimentos(List<ProcedimentoOdontogramaResumoDTO> procedimentos) {
 		this.procedimentos = procedimentos;
 	}
 
@@ -103,12 +102,13 @@ public class DenteOdontogramaResumoDTO extends ResourceSupport implements Serial
 		return StatusDenteProcedimento.FINALIZADO;
 	}
 	
-	public List<String> adicionarNomesProcedimentos(List<ProcedimentoPrevisto> procedimentos){
-		List<String> nomesProcedimentos = new ArrayList<String>();
+	public List<ProcedimentoOdontogramaResumoDTO> adicionarNomesProcedimentos(List<ProcedimentoPrevisto> procedimentos){
+		List<ProcedimentoOdontogramaResumoDTO> procedimentosResumo = new ArrayList<ProcedimentoOdontogramaResumoDTO>();
 		for(ProcedimentoPrevisto p: procedimentos) {
-			nomesProcedimentos.add(p.getProcedimento().getNome());
+			procedimentosResumo.add(new ProcedimentoOdontogramaResumoDTO(p.getProcedimento().getNome(), p.getFinalizado()));
 		}
 		
-		return nomesProcedimentos;
+		return procedimentosResumo;
 	}
+
 }
