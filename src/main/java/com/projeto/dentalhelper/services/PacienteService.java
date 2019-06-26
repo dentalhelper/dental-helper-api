@@ -157,7 +157,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 
 		
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "anamnese");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "anamnese", "escalaDente", "corDente", "formaRosto", "dentes");
 		return repository.save(objetoAtualizado);
 	}
 	
