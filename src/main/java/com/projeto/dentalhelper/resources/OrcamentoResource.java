@@ -23,6 +23,8 @@ import com.projeto.dentalhelper.services.exceptions.DenteInvalidoDePacienteExcep
 import com.projeto.dentalhelper.services.exceptions.DenteInvalidoDePacienteRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoDuplicadoEmOrcamentoException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoDuplicadoEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @RestController
@@ -39,6 +41,8 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 			throw new OrcamentoDeveConterProcedimentoRuntimeException(e.getMessage());
 		} catch (DenteInvalidoDePacienteException e) {
 			throw new DenteInvalidoDePacienteRuntimeException(e.getMessage());
+		} catch (ProcedimentoDuplicadoEmOrcamentoException e) {
+			throw new ProcedimentoDuplicadoEmOrcamentoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}
@@ -72,6 +76,8 @@ public class OrcamentoResource extends AbstractResource<Orcamento, OrcamentoServ
 			throw new OrcamentoDeveConterProcedimentoRuntimeException(e.getMessage());
 		} catch (DenteInvalidoDePacienteException e) {
 			throw new DenteInvalidoDePacienteRuntimeException(e.getMessage());
+		} catch (ProcedimentoDuplicadoEmOrcamentoException e) {
+			throw new ProcedimentoDuplicadoEmOrcamentoRuntimeException(e.getMessage());
 		} catch (ServiceApplicationException e) {
 			lancarExceptionComLocation(e);
 		}

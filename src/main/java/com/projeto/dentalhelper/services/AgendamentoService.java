@@ -33,12 +33,6 @@ import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 public class AgendamentoService extends AbstractService<Agendamento, AgendamentoRepository>{
 	
 	@Autowired
-	private ProcedimentoService procedimentoService;
-	
-	@Autowired
-	private OrcamentoService orcamentoService;
-	
-	@Autowired
 	private ProcedimentoPrevistoService procedimentoPrevistoService;
 	
 	
@@ -111,9 +105,11 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		}
 		
 		
-		Orcamento orcamento = orcamentoService.buscarPorCodigo(objetoDTO.getCodigoOrcamento());
+		ProcedimentoPrevisto procedimentoPrevisto = procedimentoPrevistoService.buscarPorCodigo(objetoDTO.getCodigoProcedimentoPrevisto());
+
+		Orcamento orcamento = procedimentoPrevisto.getOrcamento();
 		
-		Procedimento procedimento = procedimentoService.buscarPorCodigo(objetoDTO.getCodigoProcedimento());
+		Procedimento procedimento = procedimentoPrevisto.getProcedimento();
 		
 		Float valor = objetoDTO.getValor();
 		

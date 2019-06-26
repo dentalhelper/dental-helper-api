@@ -49,6 +49,7 @@ import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoRuntimeE
 import com.projeto.dentalhelper.services.exceptions.PagamentoCanceladoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoFinalizadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoSuperaValorTotalDoOrcamentoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoDuplicadoEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoFinalizadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
@@ -221,6 +222,19 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request, HttpServletResponse response) {
 	
 		String mensagemUsuario = montarMensagemUsuario("email-incorreto");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(ProcedimentoDuplicadoEmOrcamentoRuntimeException.class)
+	public ResponseEntity<Object> procedimentoDuplicadoEmOrcamento(ProcedimentoDuplicadoEmOrcamentoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+	
+		String mensagemUsuario = montarMensagemUsuario("procedimento.duplicado-orcamento");
 		String mensagemDesenvolvedor = exception.toString();
 		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
 				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));

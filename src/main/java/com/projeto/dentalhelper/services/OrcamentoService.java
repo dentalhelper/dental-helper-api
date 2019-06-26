@@ -21,6 +21,7 @@ import com.projeto.dentalhelper.repositories.OrcamentoRepository;
 import com.projeto.dentalhelper.repositories.filter.OrcamentoFilter;
 import com.projeto.dentalhelper.services.exceptions.DenteInvalidoDePacienteException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoDuplicadoEmOrcamentoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
@@ -148,13 +149,21 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		return repository.filtrar(filter);
 	}
 	
-	public Orcamento fromDTO(OrcamentoNovoDTO objetoDTO) throws OrcamentoDeveConterProcedimentoException, DenteInvalidoDePacienteException {
+	public Orcamento fromDTO(OrcamentoNovoDTO objetoDTO) throws OrcamentoDeveConterProcedimentoException, DenteInvalidoDePacienteException, ProcedimentoDuplicadoEmOrcamentoException {
 
 		procedimentosVazio(objetoDTO.getProcedimentos());
 		
 		Paciente paciente = pacienteService.buscarPorCodigo(objetoDTO.getCodPaciente());
 		
 		List<ProcedimentoPrevisto> procedimentosPrevistos = new ArrayList<ProcedimentoPrevisto>();
+		
+		for(int i =0; i<objetoDTO.getProcedimentos().size(); i++) {
+			for(int j =i+1; j<objetoDTO.getProcedimentos().size(); j++) {
+				if(objetoDTO.getProcedimentos().get(i).getCodigo() == objetoDTO.getProcedimentos().get(j).getCodigo()) {
+					throw new ProcedimentoDuplicadoEmOrcamentoException("Mais de um procedimento igual no mesmo orçamento");
+				}
+			}
+		}
 		
 		for(ProcedimentoPrevistoNovoDTO pp: objetoDTO.getProcedimentos()) {
 			procedimentosPrevistos.add(procedimentoPrevistoFromDTO(pp, paciente.getCodigo()));

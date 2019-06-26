@@ -101,6 +101,10 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		
 		objeto.setDentes(criarDentes(objeto));
 		
+		objeto.setEscalaDente("");
+		objeto.setCorDente("");
+		objeto.setFormaRosto(FormaDoRosto.REDONDO);
+		
 		if(StringUtils.hasText(objeto.getFotoPerfil())) {
 			s3Service.salvar(objeto.getFotoPerfil());
 		}
@@ -365,6 +369,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 			dente.setExistente(true);
 			dente.setNumero(numDentes[i]);
 			dente.setPaciente(p);
+			dente.setObservacao("");
 			
 			dentes.add(dente);
 		}

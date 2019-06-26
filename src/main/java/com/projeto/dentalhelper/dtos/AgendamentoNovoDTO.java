@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.projeto.dentalhelper.domains.Agendamento;
+import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 
 public class AgendamentoNovoDTO implements Serializable{
 
@@ -37,11 +39,11 @@ public class AgendamentoNovoDTO implements Serializable{
 	@NotNull
 	private Boolean primeiraAvalicao;
 	
-	@NotNull
+	//Não será utilizado o código do orçamento na criação nem edição do agendamento
 	private Long codigoOrcamento;
 	
 	@NotNull
-	private Long codigoProcedimento;
+	private Long codigoProcedimentoPrevisto;
 	
 	private Float valor;
 	
@@ -56,7 +58,7 @@ public class AgendamentoNovoDTO implements Serializable{
 		this.observacao = agendamento.getObservacao();
 		this.primeiraAvalicao = agendamento.getPrimeiraAvalicao();
 		this.codigoOrcamento = agendamento.getOrcamento().getCodigo();
-		this.codigoProcedimento = agendamento.getProcedimento().getCodigo();
+		this.codigoProcedimentoPrevisto = retornarCodigoDoProcedimentoPrevisto(agendamento.getProcedimento().getCodigo(), agendamento.getOrcamento().getProcedimentosPrevistos());
 		this.valor = agendamento.getValor();
 	}
 	
@@ -111,15 +113,13 @@ public class AgendamentoNovoDTO implements Serializable{
 		this.statusAgendamento = statusAgendamento;
 	}
 
-	public Long getCodigoProcedimento() {
-		return codigoProcedimento;
+	public Long getCodigoProcedimentoPrevisto() {
+		return codigoProcedimentoPrevisto;
 	}
 
-	public void setCodigoProcedimento(Long codigoProcedimento) {
-		this.codigoProcedimento = codigoProcedimento;
+	public void setCodigoProcedimentoPrevisto(Long codigoProcedimentoPrevisto) {
+		this.codigoProcedimentoPrevisto = codigoProcedimentoPrevisto;
 	}
-	
-	
 
 	public Long getCodigoOrcamento() {
 		return codigoOrcamento;
@@ -140,6 +140,15 @@ public class AgendamentoNovoDTO implements Serializable{
 	private String converterHoraParaString(Date hora) {
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm");  
         return dateFormat.format(hora);  
+	}
+	
+	private Long retornarCodigoDoProcedimentoPrevisto(Long codProcedimento, List<ProcedimentoPrevisto> procedimentosPrevistos) {
+		for(ProcedimentoPrevisto pV: procedimentosPrevistos) {
+			if(pV.getProcedimento().getCodigo() == codProcedimento) {
+				return pV.getCodigo();
+			}
+		}
+		return null;
 	}
 	
 	

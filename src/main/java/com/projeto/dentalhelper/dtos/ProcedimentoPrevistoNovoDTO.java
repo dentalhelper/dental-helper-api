@@ -14,6 +14,7 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	//Esse é o código do procedimento que fica no procedimento previsto, não o código do procedimento previsto
 	@NotNull
 	private Long codigo;
 
