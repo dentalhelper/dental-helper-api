@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -53,6 +54,10 @@ public class ProcedimentoPrevisto extends ObjetoIdentificado{
     {@JoinColumn(name="codigo_dente")})
 	private List<Dente> dentes = new ArrayList<Dente>();
 	
+	
+	@JsonIgnoreProperties("procedimentoPrevisto")
+	@OneToMany(mappedBy = "procedimentoPrevisto")
+	private List<ImagemAnexada> imagensAnexadas = new ArrayList<ImagemAnexada>();
 	
 	public ProcedimentoPrevisto() {
 		super();
@@ -128,6 +133,15 @@ public class ProcedimentoPrevisto extends ObjetoIdentificado{
 	public void setDentes(List<Dente> dentes) {
 		this.dentes = dentes;
 	}
+
+	public List<ImagemAnexada> getImagensAnexadas() {
+		return imagensAnexadas;
+	}
+
+	public void setImagensAnexadas(List<ImagemAnexada> imagensAnexadas) {
+		this.imagensAnexadas = imagensAnexadas;
+	}
+	
 	
 	
 	
