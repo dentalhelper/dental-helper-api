@@ -25,6 +25,8 @@ public class ProcedimentoPrevistoResumoDTO extends ResourceSupport implements Se
 	
 	private String nomeProcedimento;
 	
+	private Integer faceDente;
+	
 	public ProcedimentoPrevistoResumoDTO (ProcedimentoPrevisto p) {
 		this.codigo = p.getCodigo();
 		this.valorDoProcedimento = p.getValorDoProcedimento();
@@ -33,6 +35,7 @@ public class ProcedimentoPrevistoResumoDTO extends ResourceSupport implements Se
 		this.dataInicio = p.getDataInicio();
 		this.codProcedimento = p.getProcedimento().getCodigo();
 		this.nomeProcedimento = p.getProcedimento().getNome();
+		this.faceDente = p.getFaceDente().getCodigo();
 	}
 	
 	public Long getCodigo() {
@@ -89,6 +92,14 @@ public class ProcedimentoPrevistoResumoDTO extends ResourceSupport implements Se
 
 	public void setNomeProcedimento(String nomeProcedimento) {
 		this.nomeProcedimento = nomeProcedimento;
+	}
+
+	public Integer getFaceDente() {
+		return faceDente;
+	}
+
+	public void setFaceDente(Integer faceDente) {
+		this.faceDente = faceDente;
 	}
 	
 	

@@ -14,6 +14,7 @@ import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.domains.Procedimento;
 import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
+import com.projeto.dentalhelper.domains.enums.FaceDente;
 import com.projeto.dentalhelper.domains.enums.StatusPagamento;
 import com.projeto.dentalhelper.dtos.OrcamentoNovoDTO;
 import com.projeto.dentalhelper.dtos.ProcedimentoPrevistoNovoDTO;
@@ -157,13 +158,13 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		
 		List<ProcedimentoPrevisto> procedimentosPrevistos = new ArrayList<ProcedimentoPrevisto>();
 		
-		for(int i =0; i<objetoDTO.getProcedimentos().size(); i++) {
-			for(int j =i+1; j<objetoDTO.getProcedimentos().size(); j++) {
-				if(objetoDTO.getProcedimentos().get(i).getCodigo() == objetoDTO.getProcedimentos().get(j).getCodigo()) {
-					throw new ProcedimentoDuplicadoEmOrcamentoException("Mais de um procedimento igual no mesmo orçamento");
-				}
-			}
-		}
+//		for(int i =0; i<objetoDTO.getProcedimentos().size(); i++) {
+//			for(int j =i+1; j<objetoDTO.getProcedimentos().size(); j++) {
+//				if(objetoDTO.getProcedimentos().get(i).getCodigo() == objetoDTO.getProcedimentos().get(j).getCodigo()) {
+//					throw new ProcedimentoDuplicadoEmOrcamentoException("Mais de um procedimento igual no mesmo orçamento");
+//				}
+//			}
+//		}
 		
 		for(ProcedimentoPrevistoNovoDTO pp: objetoDTO.getProcedimentos()) {
 			procedimentosPrevistos.add(procedimentoPrevistoFromDTO(pp, paciente.getCodigo()));
@@ -202,7 +203,7 @@ public class OrcamentoService extends AbstractService<Orcamento, OrcamentoReposi
 		
 		
 		ProcedimentoPrevisto procedimentoPrevisto = new ProcedimentoPrevisto(objetoDTO.getValor(), objetoDTO.getFinalizado(), objetoDTO.getDataInicio(), 
-				objetoDTO.getDataFinalizacao(), procedimento, null, dentes);
+				objetoDTO.getDataFinalizacao(), procedimento, null, dentes, FaceDente.toEnum(objetoDTO.getFaceDente()));
 		
 		return procedimentoPrevisto;
 		

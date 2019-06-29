@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.projeto.dentalhelper.domains.enums.FaceDente;
 
 @Entity
 @Table(name = "procedimento_previsto")
@@ -59,12 +60,15 @@ public class ProcedimentoPrevisto extends ObjetoIdentificado{
 	@OneToMany(mappedBy = "procedimentoPrevisto")
 	private List<ImagemAnexada> imagensAnexadas = new ArrayList<ImagemAnexada>();
 	
+	@Column(name = "face_dente")
+	private Integer faceDente;
+	
 	public ProcedimentoPrevisto() {
 		super();
 	}
 	
 	public ProcedimentoPrevisto(Float valorDoProcedimento, Boolean finalizado, Date dataInicio,
-			 Date dataFinalizacao, Procedimento procedimento, Orcamento orcamento, List<Dente> dentes) {
+			 Date dataFinalizacao, Procedimento procedimento, Orcamento orcamento, List<Dente> dentes, FaceDente faceDente) {
 		super();
 		this.valorDoProcedimento = valorDoProcedimento;
 		this.finalizado = finalizado;
@@ -73,6 +77,7 @@ public class ProcedimentoPrevisto extends ObjetoIdentificado{
 		this.procedimento = procedimento;
 		this.orcamento = orcamento;
 		this.dentes = dentes;
+		this.faceDente = faceDente.getCodigo();
 	}
 
 
@@ -140,6 +145,14 @@ public class ProcedimentoPrevisto extends ObjetoIdentificado{
 
 	public void setImagensAnexadas(List<ImagemAnexada> imagensAnexadas) {
 		this.imagensAnexadas = imagensAnexadas;
+	}
+
+	public FaceDente getFaceDente() {
+		return FaceDente.toEnum(this.faceDente);
+	}
+
+	public void setFaceDente(FaceDente faceDente) {
+		this.faceDente = faceDente.getCodigo();
 	}
 	
 	

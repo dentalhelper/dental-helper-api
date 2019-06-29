@@ -29,6 +29,9 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable {
 	private Date dataFinalizacao;
 	
 	private List<Long> codDentes = new ArrayList<Long>();
+	
+	@NotNull
+	private Integer faceDente;
 
 	public ProcedimentoPrevistoNovoDTO() {
 		super();
@@ -43,6 +46,7 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable {
 		this.dataFinalizacao = p.getDataFinalizacao();
 		this.nome = p.getProcedimento().getNome();
 		this.codDentes = adicionarCodigoDosDentes(p);
+		this.faceDente = p.getFaceDente().getCodigo();
 	}
 
 	public Float getValor() {
@@ -101,7 +105,14 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable {
 		this.codDentes = codDentes;
 	}
 	
-	
+	public Integer getFaceDente() {
+		return faceDente;
+	}
+
+	public void setFaceDente(Integer faceDente) {
+		this.faceDente = faceDente;
+	}
+
 	private List<Long> adicionarCodigoDosDentes(ProcedimentoPrevisto p) {
 		List<Long> codDentes = new ArrayList<Long>();
 		
