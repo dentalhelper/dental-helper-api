@@ -50,6 +50,10 @@ public class OrcamentoRepositoryImpl implements OrcamentoRepositoryQuery {
 			predicates.add(
 					builder.lessThanOrEqualTo(root.get("dataOrcamento"), filter.getDataOrcamentoAte()));
 		}
+		if(filter.getAprovado() != null) {
+			predicates.add(
+					builder.equal(root.get("aprovado"), filter.getAprovado()));
+		}
 		
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}

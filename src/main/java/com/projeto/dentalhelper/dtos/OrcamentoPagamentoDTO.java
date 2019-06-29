@@ -1,11 +1,13 @@
 package com.projeto.dentalhelper.dtos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.hateoas.ResourceSupport;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Pagamento;
 import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
@@ -26,6 +28,9 @@ public class OrcamentoPagamentoDTO extends ResourceSupport implements Serializab
 	
 	private Integer statusPagamento;
 	
+	@JsonIgnoreProperties("orcamento")
+	private List<Pagamento> pagamentos = new ArrayList<Pagamento>();
+	
 	public OrcamentoPagamentoDTO(Orcamento o) {
 		super();
 		this.codigoOrcamento = o.getCodigo();
@@ -34,6 +39,7 @@ public class OrcamentoPagamentoDTO extends ResourceSupport implements Serializab
 		this.valorPago = valorPago(o);
 		this.valorEmAberto = o.getValorTotal()-valorPago(o);
 		this.statusPagamento = o.getStatus().getCodigo();
+		this.pagamentos = o.getPagamentos();
 	}
 
 	public OrcamentoPagamentoDTO() {}
@@ -91,7 +97,14 @@ public class OrcamentoPagamentoDTO extends ResourceSupport implements Serializab
 		this.statusPagamento = statusPagamento;
 	}
 	
-	
+	public List<Pagamento> getPagamentos() {
+		return pagamentos;
+	}
+
+	public void setPagamentos(List<Pagamento> pagamentos) {
+		this.pagamentos = pagamentos;
+	}
+
 	public Date pegarUltimaDataDePagamento(List<Pagamento> pagamentos) {
 		if(pagamentos.size() == 0) {
 			return null;

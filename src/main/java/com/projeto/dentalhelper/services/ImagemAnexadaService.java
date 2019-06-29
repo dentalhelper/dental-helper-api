@@ -49,7 +49,7 @@ public class ImagemAnexadaService extends AbstractService<ImagemAnexada, ImagemA
 	public ImagemAnexada salvar(ImagemAnexada objeto) throws ServiceApplicationException {
 		objeto.setCodigo(null);
 		
-//		s3Service.salvar(objeto.getFoto());
+		s3Service.salvar(objeto.getFoto());
 		
 		return repository.save(objeto);
 	}

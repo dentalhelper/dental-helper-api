@@ -352,6 +352,14 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		return orcamentoRepository.filtrar(filter);
 	}
 	
+	public List<Orcamento> buscarOrcamentosAprovadosDoPacientePeloCodigo(Long codigo){
+		OrcamentoFilter filter = new OrcamentoFilter();
+		filter.setCodigoPaciente(codigo);
+		filter.setAprovado(true);
+		return orcamentoRepository.filtrar(filter);
+	}
+	
+	
 	public List<ProcedimentoPrevisto> buscarProcedimentosPrevistosPeloCodigoDoPacienteEPeloFinalizado(Long codigo, Boolean finalizado){
 		ProcedimentoPrevistoFilter filter = new ProcedimentoPrevistoFilter();
 		filter.setCodigoPaciente(codigo);

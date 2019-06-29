@@ -13,9 +13,12 @@ public class OrcamentoFilter {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dataOrcamentoAte;
 
+	private Boolean aprovado;
+	
 	public Long getCodigoPaciente() {
 		return codigoPaciente;
 	}
+	
 
 	public void setCodigoPaciente(Long codigoPaciente) {
 		this.codigoPaciente = codigoPaciente;
@@ -35,6 +38,16 @@ public class OrcamentoFilter {
 
 	public void setDataOrcamentoAte(Date dataOrcamentoAte) {
 		this.dataOrcamentoAte = dataOrcamentoAte;
+	}
+
+
+	public Boolean getAprovado() {
+		return aprovado;
+	}
+
+
+	public void setAprovado(Boolean aprovado) {
+		this.aprovado = aprovado;
 	}
 	
 	

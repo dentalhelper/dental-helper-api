@@ -223,7 +223,7 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 	
 	@Override
 	public ResponseEntity<List<OrcamentoPagamentoDTO>> buscarInformacoesPagamento(Long codigo) {
-		List<Orcamento> orcamentos = service.buscarOrcamentosDoPacientePeloCodigo(codigo);
+		List<Orcamento> orcamentos = service.buscarOrcamentosAprovadosDoPacientePeloCodigo(codigo);
 		List<OrcamentoPagamentoDTO> orcamentosDTO = new ArrayList<OrcamentoPagamentoDTO>();
 		orcamentos.forEach((o) -> orcamentosDTO.add(new OrcamentoPagamentoDTO(o)));
 		
