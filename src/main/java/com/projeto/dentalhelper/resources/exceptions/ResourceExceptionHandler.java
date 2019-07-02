@@ -364,7 +364,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> odontogramaInvalido(OdontogramaInvalidoRuntimeException exception,
 			WebRequest request, HttpServletResponse response) {
 
-		String mensagemUsuario = montarMensagemUsuario("odontograma.invalido");
+		String mensagemUsuario = montarMensagemUsuario("odontograma-invalido");
 		String mensagemDesenvolvedor = exception.toString();
 		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
 				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
