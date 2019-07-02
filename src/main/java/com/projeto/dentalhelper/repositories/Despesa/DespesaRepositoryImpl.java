@@ -55,6 +55,10 @@ public class DespesaRepositoryImpl implements DespesaRepositoryQuery{
 		if(filter.getDescricao() != null) {
 			predicates.add(builder.like(builder.lower(root.get("descricao")), "%" + filter.getDescricao().toLowerCase() + "%"));
 		}
+		
+		if(filter.getDataPagamento() != null) {
+			predicates.add(builder.equal(root.join("pagamento").<Date>get("dataPagamento"), filter.getDataPagamento()));
+		}
 			
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}

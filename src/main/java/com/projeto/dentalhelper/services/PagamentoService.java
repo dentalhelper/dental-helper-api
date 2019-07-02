@@ -1,5 +1,7 @@
 package com.projeto.dentalhelper.services;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,6 +13,7 @@ import com.projeto.dentalhelper.domains.enums.StatusPagamento;
 import com.projeto.dentalhelper.domains.enums.TipoPagamento;
 import com.projeto.dentalhelper.dtos.PagamentoRecebimentoNovoDTO;
 import com.projeto.dentalhelper.repositories.PagamentoRepository;
+import com.projeto.dentalhelper.repositories.filter.PagamentoFilter;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoException;
@@ -132,6 +135,10 @@ public class PagamentoService extends AbstractService<Pagamento, PagamentoReposi
 		if(o.getAprovado() == false) {
 			throw new OrcamentoNaoAprovadoException("Não poderá adicionar pagamentos enquanto o orçamento não for aprovado.");
 		}
+	}
+	
+	public List<Pagamento >filtrar(PagamentoFilter filter) {
+		return repository.filtrar(filter);
 	}
 	
 	

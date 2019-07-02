@@ -1,5 +1,7 @@
 package com.projeto.dentalhelper.resources;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Agendamento;
+import com.projeto.dentalhelper.dtos.AgendamentoDashBoardDTO;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
 import com.projeto.dentalhelper.dtos.AgendamentoResumoDTO;
 import com.projeto.dentalhelper.repositories.filter.AgendamentoFilter;
@@ -140,6 +143,20 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 	public ResponseEntity<Agendamento> atualizarStatus(@PathVariable Long codigo, @RequestBody Integer status) throws ServiceApplicationException {
 		Agendamento objetoBuscado = service.atualizarStatus(codigo, status);
 		return ResponseEntity.ok(objetoBuscado);
+	}
+
+	@Override
+	public ResponseEntity<List<AgendamentoDashBoardDTO>> buscarParaDashBoard(Date data) {
+		AgendamentoFilter filter = new AgendamentoFilter();
+		filter.setDataAgendamento(data);
+		
+		List<Agendamento> agendamentos= service.filtrar(filter);
+		List<AgendamentoDashBoardDTO> agendamentosDTO = new ArrayList<AgendamentoDashBoardDTO>();
+		for(Agendamento a: agendamentos) {
+			agendamentosDTO.add(new AgendamentoDashBoardDTO(a));
+		}
+		
+		return ResponseEntity.ok(agendamentosDTO);
 	}
 	
 	
