@@ -1,12 +1,10 @@
 package com.projeto.dentalhelper.resources.api;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,10 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.projeto.dentalhelper.domains.Pagamento;
-import com.projeto.dentalhelper.dtos.DespesaRecebimentoDashBoardDTO;
 import com.projeto.dentalhelper.dtos.PagamentoRecebimentoNovoDTO;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
@@ -57,8 +53,5 @@ public interface PagamentoApi {
 	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Void> delete(@PathVariable Long codigo);
 	
-	@ApiOperation(value = "Busca despesas por filtros")
-	@GetMapping("/dashboard")
-	public ResponseEntity<List<DespesaRecebimentoDashBoardDTO>> filtrarparaDashBoard(@RequestParam(required = true)	@DateTimeFormat(pattern = "yyyy-MM-dd")Date data);
 
 }

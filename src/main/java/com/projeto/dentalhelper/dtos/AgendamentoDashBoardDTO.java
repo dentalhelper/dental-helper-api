@@ -13,15 +13,17 @@ public class AgendamentoDashBoardDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer status;
-	private String nomePaciente;
 	private String nomeProcedimento;
 	private String horaInicio;
 	
 	//paciente
+	private String nomePaciente;
 	private String urlFoto;
 	private Date dataNascimento;
 	private String telefonePrincipal;
 	private Integer sexo;
+	private Long codPaciente;
+
 	
 	
 	public AgendamentoDashBoardDTO(Agendamento a) {
@@ -35,6 +37,7 @@ public class AgendamentoDashBoardDTO implements Serializable{
 		this.dataNascimento = paciente.getDataNascimento();
 		this.telefonePrincipal = paciente.getTelefonePrincipal();
 		this.sexo = paciente.getSexo().getCodigo();
+		this.codPaciente = paciente.getCodigo();
 	}
 	
 	
@@ -98,6 +101,15 @@ public class AgendamentoDashBoardDTO implements Serializable{
 		DateFormat dateFormat = new SimpleDateFormat("HH:mm");  
         return dateFormat.format(hora);  
 	}
+
+	public Long getCodPaciente() {
+		return codPaciente;
+	}
+
+	public void setCodPaciente(Long codPaciente) {
+		this.codPaciente = codPaciente;
+	}
+	
 	
 	
 

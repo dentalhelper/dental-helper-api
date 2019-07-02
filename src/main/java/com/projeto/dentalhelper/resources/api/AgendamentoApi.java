@@ -1,12 +1,10 @@
 package com.projeto.dentalhelper.resources.api;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.projeto.dentalhelper.domains.Agendamento;
-import com.projeto.dentalhelper.dtos.AgendamentoDashBoardDTO;
 import com.projeto.dentalhelper.dtos.AgendamentoNovoDTO;
 import com.projeto.dentalhelper.dtos.AgendamentoResumoDTO;
 import com.projeto.dentalhelper.repositories.filter.AgendamentoFilter;
@@ -67,8 +63,8 @@ public interface AgendamentoApi {
 	public ResponseEntity<Agendamento> atualizarStatus(@PathVariable Long codigo, @RequestBody Integer status) throws ServiceApplicationException;
 	
 	
-	@ApiOperation(value = "Busca agendamentos de um dia para dashboard")
-	@GetMapping("/dashboard")
-	public ResponseEntity<List<AgendamentoDashBoardDTO>> buscarParaDashBoard(@RequestParam(required = true)	@DateTimeFormat(pattern = "yyyy-MM-dd")Date data);
+//	@ApiOperation(value = "Busca agendamentos de um dia para dashboard")
+//	@GetMapping("/dashboard")
+//	public ResponseEntity<List<AgendamentoDashBoardDTO>> buscarParaDashBoard(@RequestParam(required = true)	@DateTimeFormat(pattern = "yyyy-MM-dd")Date data);
 
 }

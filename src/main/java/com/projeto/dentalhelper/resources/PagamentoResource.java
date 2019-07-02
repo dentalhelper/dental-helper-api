@@ -1,7 +1,5 @@
 package com.projeto.dentalhelper.resources;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,11 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Pagamento;
-import com.projeto.dentalhelper.domains.enums.TipoPagamento;
-import com.projeto.dentalhelper.dtos.DespesaRecebimentoDashBoardDTO;
 import com.projeto.dentalhelper.dtos.PagamentoRecebimentoNovoDTO;
 import com.projeto.dentalhelper.repositories.PagamentoRepository;
-import com.projeto.dentalhelper.repositories.filter.PagamentoFilter;
 import com.projeto.dentalhelper.resources.api.PagamentoApi;
 import com.projeto.dentalhelper.services.PagamentoService;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaException;
@@ -121,21 +116,6 @@ public class PagamentoResource extends AbstractResource<Pagamento, PagamentoServ
 			lancarExceptionComLocation(e);
 		}	
 		return ResponseEntity.noContent().header("Entity", Long.toString(codigo)).build();
-	}
-
-	@Override
-	public ResponseEntity<List<DespesaRecebimentoDashBoardDTO>> filtrarparaDashBoard(Date data) {
-		PagamentoFilter filter = new PagamentoFilter();
-		filter.setDataPagamento(data);
-		filter.setTipo(TipoPagamento.RECEBIMENTO.getCodigo());
-		
-		List<Pagamento> pagamentos = service.filtrar(filter);
-		List<DespesaRecebimentoDashBoardDTO> pagamentosDTO = new ArrayList<DespesaRecebimentoDashBoardDTO>();
-		for(Pagamento p: pagamentos) {
-			pagamentosDTO.add(new DespesaRecebimentoDashBoardDTO(p));
-		}
-		
-		return ResponseEntity.ok(pagamentosDTO);
 	}
 
 }
