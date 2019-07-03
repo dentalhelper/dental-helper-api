@@ -85,7 +85,7 @@ public class DespesaRecebimentoDashBoardDTO implements Serializable{
 	private String adicionarDescricaoComBaseNoOrcamento(Orcamento o) {
 		String resultado = "";
 		for(int i = 0; i<o.getProcedimentosPrevistos().size(); i++) {
-			if(i<o.getProcedimentosPrevistos().size()) {
+			if(i>0 && i<o.getProcedimentosPrevistos().size()) {
 				resultado += ", ";
 			}
 			resultado += o.getProcedimentosPrevistos().get(i).getProcedimento().getNome();
