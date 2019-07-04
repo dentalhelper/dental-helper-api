@@ -42,6 +42,8 @@ public class AgendamentoNovoDTO implements Serializable{
 	//Não será utilizado o código do orçamento na criação nem edição do agendamento
 	private Long codigoOrcamento;
 	
+	private Long codigoPaciente;
+	
 	@NotNull
 	private Long codigoProcedimentoPrevisto;
 	
@@ -59,6 +61,7 @@ public class AgendamentoNovoDTO implements Serializable{
 		this.primeiraAvalicao = agendamento.getPrimeiraAvalicao();
 		this.codigoOrcamento = agendamento.getOrcamento().getCodigo();
 		this.codigoProcedimentoPrevisto = agendamento.getProcedimentoPrevisto().getCodigo();
+		this.codigoPaciente = agendamento.getOrcamento().getPaciente().getCodigo();
 		this.valor = agendamento.getValor();
 	}
 	
@@ -129,6 +132,14 @@ public class AgendamentoNovoDTO implements Serializable{
 		this.codigoOrcamento = codigoOrcamento;
 	}
 	
+	public Long getCodigoPaciente() {
+		return codigoPaciente;
+	}
+
+	public void setCodigoPaciente(Long codigoPaciente) {
+		this.codigoPaciente = codigoPaciente;
+	}
+
 	public Float getValor() {
 		return valor;
 	}

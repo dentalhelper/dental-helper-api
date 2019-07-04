@@ -10,7 +10,7 @@ import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 import io.swagger.annotations.ApiOperation;
 
-@RequestMapping(value = "/procedimentosPrevistos")
+@RequestMapping(value = "/procedimentos-previstos")
 public interface ProcedimentoPrevistoApi {
 	
 	@ApiOperation(value = "Atualiza o atributo finalizado do procedimento previsto")
