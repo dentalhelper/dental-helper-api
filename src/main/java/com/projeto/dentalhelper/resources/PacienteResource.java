@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.domains.Anamnese;
+import com.projeto.dentalhelper.domains.Dente;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
@@ -235,6 +236,18 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 	@Override
 	public ResponseEntity<OdontogramaResumoDTO> getOdontogramaByCodigoPaciente(Long codigo) {
 		Paciente objeto = service.buscarPorCodigo(codigo);
+		
+
+		for(Dente d: objeto.getDentes()) {
+			List<ProcedimentoPrevisto> procedimentosPrevistos = new ArrayList<ProcedimentoPrevisto>();
+			for(ProcedimentoPrevisto p: d.getProcedimentosPrevistos()) {
+				if(p.getOrcamento().getAprovado()==true) {
+					procedimentosPrevistos.add(p);
+				}
+			}
+			d.setProcedimentosPrevistos(procedimentosPrevistos);
+		}
+		
 		OdontogramaResumoDTO odontogramaDTO = new OdontogramaResumoDTO(objeto);
 		
 		return ResponseEntity.ok().body(odontogramaDTO);
