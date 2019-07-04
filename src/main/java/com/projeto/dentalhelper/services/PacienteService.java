@@ -387,18 +387,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	
 	public Paciente atualizarOdontograma(OdontogramaResumoDTO objetoDTO, Long codPaciente) throws OdontogramaInvalidoException {
 		Paciente paciente = buscarPorCodigo(codPaciente);
-		
-		if(objetoDTO.getDentes().size() != paciente.getDentes().size()) {
-			throw new OdontogramaInvalidoException("O odontograma está inválido");
-		}
-		
-		for(int i = 0; i<paciente.getDentes().size(); i++) {
-			if(objetoDTO.getDentes().get(i).getObservacao() != null)
-				paciente.getDentes().get(i).setObservacao(objetoDTO.getDentes().get(i).getObservacao());
-			if(objetoDTO.getDentes().get(i).getExistente() != null)
-				paciente.getDentes().get(i).setExistente(objetoDTO.getDentes().get(i).getExistente());
-		}
-		
+				
 		paciente.setFormaRosto(FormaDoRosto.toEnum(objetoDTO.getFormaRosto()));
 		paciente.setEscalaDente(objetoDTO.getEscalaDente());
 		paciente.setCorDente(objetoDTO.getCorDente());
