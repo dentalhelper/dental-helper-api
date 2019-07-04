@@ -58,7 +58,7 @@ public class AgendamentoNovoDTO implements Serializable{
 		this.observacao = agendamento.getObservacao();
 		this.primeiraAvalicao = agendamento.getPrimeiraAvalicao();
 		this.codigoOrcamento = agendamento.getOrcamento().getCodigo();
-		this.codigoProcedimentoPrevisto = retornarCodigoDoProcedimentoPrevisto(agendamento.getProcedimento().getCodigo(), agendamento.getOrcamento().getProcedimentosPrevistos());
+		this.codigoProcedimentoPrevisto = agendamento.getProcedimentoPrevisto().getCodigo();
 		this.valor = agendamento.getValor();
 	}
 	
@@ -142,14 +142,14 @@ public class AgendamentoNovoDTO implements Serializable{
         return dateFormat.format(hora);  
 	}
 	
-	private Long retornarCodigoDoProcedimentoPrevisto(Long codProcedimento, List<ProcedimentoPrevisto> procedimentosPrevistos) {
-		for(ProcedimentoPrevisto pV: procedimentosPrevistos) {
-			if(pV.getProcedimento().getCodigo() == codProcedimento) {
-				return pV.getCodigo();
-			}
-		}
-		return null;
-	}
+//	private Long retornarCodigoDoProcedimentoPrevisto(Long codProcedimento, List<ProcedimentoPrevisto> procedimentosPrevistos) {
+//		for(ProcedimentoPrevisto pV: procedimentosPrevistos) {
+//			if(pV.getProcedimento().getCodigo() == codProcedimento) {
+//				return pV.getCodigo();
+//			}
+//		}
+//		return null;
+//	}
 	
 	
 }

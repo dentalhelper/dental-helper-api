@@ -208,7 +208,7 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 		return ResponseEntity.ok().body(responseDTO);
 	}
 	
-	public ResponseEntity<PacienteProcedimentoDTO> getProcedimentosByCodigoPaciente(@PathVariable Long codigo, @RequestParam(required = false, defaultValue = "false") Boolean finalizado){
+	public ResponseEntity<PacienteProcedimentoDTO> getProcedimentosByCodigoPaciente(@PathVariable Long codigo, @RequestParam(required = false) Boolean finalizado){
 		Paciente objeto = service.buscarPorCodigo(codigo);
 		List<ProcedimentoPrevisto> procedimentos = service.buscarProcedimentosPrevistosPeloCodigoDoPacienteEPeloFinalizado(codigo, finalizado);
 		List<ProcedimentoPrevistoResumoDTO> procedimentosDTO = new ArrayList<ProcedimentoPrevistoResumoDTO>();

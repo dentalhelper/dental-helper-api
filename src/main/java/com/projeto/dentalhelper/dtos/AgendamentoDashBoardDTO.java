@@ -31,7 +31,7 @@ public class AgendamentoDashBoardDTO implements Serializable{
 		
 		this.status = a.getStatusAgendamento().getCodigo();
 		this.nomePaciente = paciente.getNome();
-		this.nomeProcedimento = a.getProcedimento().getNome();
+		this.nomeProcedimento = a.getProcedimentoPrevisto().getProcedimento().getNome();
 		this.horaInicio = converterHoraParaString(a.getHoraInicio());
 		this.urlFoto = paciente.getUrlDaFoto();
 		this.dataNascimento = paciente.getDataNascimento();

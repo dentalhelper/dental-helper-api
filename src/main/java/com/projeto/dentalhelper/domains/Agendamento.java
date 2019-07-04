@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.projeto.dentalhelper.domains.enums.StatusAgendamento;
 
 @Entity
@@ -53,8 +54,9 @@ public class Agendamento extends ObjetoIdentificado{
 	
 
 	@ManyToOne
-	@JoinColumn(name = "codigo_procedimento")
-	private Procedimento procedimento;
+	@JsonIgnoreProperties("orcamento")
+	@JoinColumn(name = "codigo_procedimento_previsto")
+	private ProcedimentoPrevisto procedimentoPrevisto;
 	
 	private Float valor;
 	
@@ -66,7 +68,7 @@ public class Agendamento extends ObjetoIdentificado{
 
 
 	public Agendamento(Date dataAgendamento, Date horaInicio, Date horaFim, StatusAgendamento statusAgendamento,
-			String observacao, Boolean primeiraAvalicao, Orcamento orcamento, Procedimento procedimento, Float valor) {
+			String observacao, Boolean primeiraAvalicao, Orcamento orcamento, ProcedimentoPrevisto procedimentoPrevisto, Float valor) {
 		super();
 		this.dataAgendamento = dataAgendamento;
 		this.horaInicio = horaInicio;
@@ -75,7 +77,7 @@ public class Agendamento extends ObjetoIdentificado{
 		this.observacao = observacao;
 		this.primeiraAvalicao = primeiraAvalicao;
 		this.orcamento = orcamento;
-		this.procedimento = procedimento;
+		this.procedimentoPrevisto = procedimentoPrevisto;
 		this.valor = valor;
 	}
 
@@ -129,13 +131,21 @@ public class Agendamento extends ObjetoIdentificado{
 	public void setPrimeiraAvalicao(Boolean primeiraAvalicao) {
 		this.primeiraAvalicao = primeiraAvalicao;
 	}
-	public Procedimento getProcedimento() {
-		return procedimento;
+
+
+	public ProcedimentoPrevisto getProcedimentoPrevisto() {
+		return procedimentoPrevisto;
 	}
 
-	public void setProcedimento(Procedimento procedimento) {
-		this.procedimento = procedimento;
+
+
+
+	public void setProcedimentoPrevisto(ProcedimentoPrevisto procedimentoPrevisto) {
+		this.procedimentoPrevisto = procedimentoPrevisto;
 	}
+
+
+
 
 	public Orcamento getOrcamento() {
 		return orcamento;

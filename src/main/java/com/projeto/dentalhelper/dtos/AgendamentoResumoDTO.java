@@ -43,11 +43,11 @@ public class AgendamentoResumoDTO extends ResourceSupport implements Serializabl
 		this.horaFim = a.getHoraFim();
 		this.primeiraAvalicao = a.getPrimeiraAvalicao();
 		this.codigoPaciente = a.getOrcamento().getPaciente().getCodigo();
-		this.codigoProcedimento = a.getProcedimento().getCodigo();
+		this.codigoProcedimento = a.getProcedimentoPrevisto().getProcedimento().getCodigo();
 		this.statusAgendamento = a.getStatusAgendamento().getCodigo();
 		this.observacao = a.getObservacao();
 		this.nomePaciente = a.getOrcamento().getPaciente().getNome();
-		this.nomeProcedimento = a.getProcedimento().getNome();
+		this.nomeProcedimento = a.getProcedimentoPrevisto().getProcedimento().getNome();
 	}
 
 	public Long getCodigoAgendamento() {

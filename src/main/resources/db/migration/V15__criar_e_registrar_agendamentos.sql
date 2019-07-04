@@ -8,18 +8,18 @@ CREATE TABLE agendamento(
 	observacao VARCHAR(70) NOT NULL,
 	primeira_avaliacao BOOLEAN NOT NULL,
 	codigo_orcamento BIGINT(20),
-	codigo_procedimento BIGINT(20),
+	codigo_procedimento_previsto BIGINT(20),
 	valor FLOAT NOT NULL,
 	
 	
 	FOREIGN KEY (codigo_orcamento) REFERENCES orcamento(codigo),
-	FOREIGN KEY (codigo_procedimento) REFERENCES procedimento(codigo)
+	FOREIGN KEY (codigo_procedimento_previsto) REFERENCES procedimento_previsto(codigo)
 	
 )ENGINE=innoDB DEFAULT charset=utf8;
 
 
 INSERT INTO agendamento
-(data_agendamento, hora_inicio, hora_fim, status_agendamento, observacao, primeira_avaliacao, valor ,codigo_orcamento, codigo_procedimento) values
+(data_agendamento, hora_inicio, hora_fim, status_agendamento, observacao, primeira_avaliacao, valor ,codigo_orcamento, codigo_procedimento_previsto) values
 ('2019-05-13', '14:30', '15:00', 1, '', true, 45, 1, 1),
 ('2019-05-13', '13:00', '14:20', 2, '', false, 55, 2, 3),
 ('2019-05-14', '15:00', '16:30', 3, '', true, 35, 3, 1),

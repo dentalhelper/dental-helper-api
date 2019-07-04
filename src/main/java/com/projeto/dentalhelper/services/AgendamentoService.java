@@ -26,7 +26,6 @@ import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaExcep
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoFinalizadoException;
-import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoException;
 import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 
 @Service
@@ -42,7 +41,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		
 		
 		if(objeto.getHoraFim() == null) {
-			objeto.setHoraFim(adicionarTempoDeProcedimentoNaHora(objeto.getHoraInicio(), objeto.getProcedimento().getDuracaoMinutos()));
+			objeto.setHoraFim(adicionarTempoDeProcedimentoNaHora(objeto.getHoraInicio(), objeto.getProcedimentoPrevisto().getProcedimento().getDuracaoMinutos()));
 		}
 		
 		dataDeAgendamentoMaiorIgualQueDataAtual(objeto.getDataAgendamento());
@@ -51,8 +50,8 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		agendamentoJaCadastradoNesseHorario(objeto, null);
 		
 		orcamentoEstaAprovado(objeto.getOrcamento());
-		ProcedimentoPrevisto p = procedimentoEstaNoOrcamento(objeto);
-		procedimentoPrevistoIniciado(p);
+//		procedimentoEstaNoOrcamento(objeto);
+		procedimentoPrevistoIniciado(objeto.getProcedimentoPrevisto());
 
 		return repository.save(objeto);
 	}
@@ -75,7 +74,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 	public Agendamento atualizar(Long codigo, Agendamento objetoModificado) throws ServiceApplicationException{
 		
 		if(objetoModificado.getHoraFim() == null) {
-			objetoModificado.setHoraFim(adicionarTempoDeProcedimentoNaHora(objetoModificado.getHoraInicio(), objetoModificado.getProcedimento().getDuracaoMinutos()));
+			objetoModificado.setHoraFim(adicionarTempoDeProcedimentoNaHora(objetoModificado.getHoraInicio(), objetoModificado.getProcedimentoPrevisto().getProcedimento().getDuracaoMinutos()));
 		}
 		
 		dataDeAgendamentoMaiorIgualQueDataAtual(objetoModificado.getDataAgendamento());
@@ -85,7 +84,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 			agendamentoJaCadastradoNesseHorario(objetoModificado, codigo);
 		}
 		orcamentoEstaAprovado(objetoModificado.getOrcamento());
-		procedimentoEstaNoOrcamento(objetoModificado);
+//		procedimentoEstaNoOrcamento(objetoModificado);
 		
 		Agendamento objetoAtualizado = buscarPorCodigo(codigo);
 		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo");
@@ -118,7 +117,7 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		}
 		
 		Agendamento agendamento = new Agendamento(objetoDTO.getDataAgendamento(), horaInicio, horaFim, StatusAgendamento.toEnum(objetoDTO.getStatusAgendamento()), 
-				objetoDTO.getObservacao(), objetoDTO.getPrimeiraAvalicao(), orcamento , procedimento, valor);
+				objetoDTO.getObservacao(), objetoDTO.getPrimeiraAvalicao(), orcamento , procedimentoPrevisto, valor);
 				
 		return agendamento;
 	}
@@ -228,20 +227,20 @@ public class AgendamentoService extends AbstractService<Agendamento, Agendamento
 		return repository.buscarPorFiltro(filter);
 	}
 	
-	public ProcedimentoPrevisto procedimentoEstaNoOrcamento(Agendamento a) throws ProcedimentoNaoEstaEmOrcamentoException {
-		Orcamento orcamento = a.getOrcamento();
-		boolean resultado = false;
-		for(ProcedimentoPrevisto p: orcamento.getProcedimentosPrevistos()) {
-			if(p.getProcedimento().getCodigo() == a.getProcedimento().getCodigo()) {
-				resultado = true;
-				return p;
-			}
-		}
-		if(resultado == false) {
-			throw new ProcedimentoNaoEstaEmOrcamentoException("O procedimento '"+a.getProcedimento().getNome() +"' não está no orçamento");
-		}
-		return null;
-	}
+//	public ProcedimentoPrevisto procedimentoEstaNoOrcamento(Agendamento a) throws ProcedimentoNaoEstaEmOrcamentoException {
+//		Orcamento orcamento = a.getOrcamento();
+//		boolean resultado = false;
+//		for(ProcedimentoPrevisto p: orcamento.getProcedimentosPrevistos()) {
+//			if(p.getProcedimento().getCodigo() == a.getProcedimento().getCodigo()) {
+//				resultado = true;
+//				return p;
+//			}
+//		}
+//		if(resultado == false) {
+//			throw new ProcedimentoNaoEstaEmOrcamentoException("O procedimento '"+a.getProcedimento().getNome() +"' não está no orçamento");
+//		}
+//		return null;
+//	}
 	
 	
 	public void orcamentoEstaAprovado(Orcamento o) throws OrcamentoNaoAprovadoException {
