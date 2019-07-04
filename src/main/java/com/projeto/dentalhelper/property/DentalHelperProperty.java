@@ -19,5 +19,6 @@ public class DentalHelperProperty {
 	public void setOriginsPermitidas(List<String> originsPermitidas) {
 		this.originsPermitidas = originsPermitidas;
 	}
+	
 
 }

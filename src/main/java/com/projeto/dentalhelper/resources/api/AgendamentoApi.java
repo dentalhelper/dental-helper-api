@@ -62,5 +62,9 @@ public interface AgendamentoApi {
 	@PatchMapping(value = "/{codigo}")
 	public ResponseEntity<Agendamento> atualizarStatus(@PathVariable Long codigo, @RequestBody Integer status) throws ServiceApplicationException;
 	
+	
+//	@ApiOperation(value = "Busca agendamentos de um dia para dashboard")
+//	@GetMapping("/dashboard")
+//	public ResponseEntity<List<AgendamentoDashBoardDTO>> buscarParaDashBoard(@RequestParam(required = true)	@DateTimeFormat(pattern = "yyyy-MM-dd")Date data);
 
 }

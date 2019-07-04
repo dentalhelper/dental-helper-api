@@ -15,6 +15,12 @@ public class DespesaFilter {
 	private String descricao;
 	
 	private String categoria;
+	
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date dataPagamento;
+	
+	
 
 	public Date getDataPagamentoDe() {
 		return dataPagamentoDe;
@@ -46,6 +52,14 @@ public class DespesaFilter {
 
 	public void setCategoria(String categoria) {
 		this.categoria = categoria;
+	}
+
+	public Date getDataPagamento() {
+		return dataPagamento;
+	}
+
+	public void setDataPagamento(Date dataPagamento) {
+		this.dataPagamento = dataPagamento;
 	}
 	
 	

@@ -33,7 +33,7 @@ import com.projeto.dentalhelper.services.exceptions.ServiceApplicationException;
 public class PagamentoResource extends AbstractResource<Pagamento, PagamentoService> implements PagamentoApi{
 
 	@Autowired
-	private PagamentoRepository repository;
+	private PagamentoRepository repository;	
 	
 	@Override
 	public List<Pagamento> getAll() {

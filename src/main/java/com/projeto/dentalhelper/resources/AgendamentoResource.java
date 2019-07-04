@@ -141,6 +141,20 @@ public class AgendamentoResource extends AbstractResource<Agendamento, Agendamen
 		Agendamento objetoBuscado = service.atualizarStatus(codigo, status);
 		return ResponseEntity.ok(objetoBuscado);
 	}
+
+//	@Override
+//	public ResponseEntity<List<AgendamentoDashBoardDTO>> buscarParaDashBoard(Date data) {
+//		AgendamentoFilter filter = new AgendamentoFilter();
+//		filter.setDataAgendamento(data);
+//		
+//		List<Agendamento> agendamentos= service.filtrar(filter);
+//		List<AgendamentoDashBoardDTO> agendamentosDTO = new ArrayList<AgendamentoDashBoardDTO>();
+//		for(Agendamento a: agendamentos) {
+//			agendamentosDTO.add(new AgendamentoDashBoardDTO(a));
+//		}
+//		
+//		return ResponseEntity.ok(agendamentosDTO);
+//	}
 	
 	
 	

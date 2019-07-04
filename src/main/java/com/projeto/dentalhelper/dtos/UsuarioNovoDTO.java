@@ -38,6 +38,7 @@ public class UsuarioNovoDTO implements Serializable{
 
 	@Size(max = 50)
 	@Email
+	@NotBlank
 	private String email;
 
 	@NotBlank
@@ -49,14 +50,14 @@ public class UsuarioNovoDTO implements Serializable{
 	private String telefone2;
 
 	@NotBlank
-	@Size(min = 3)
+	@Size(min = 3, max = 70)
 	private String logradouro;
 
 	@NotNull
 	private String numero;
 
 	@NotBlank
-	@Size(min = 3)
+	@Size(min = 3, max = 70)
 	private String bairro;
 	
 	@Pattern(regexp = "[0-9]{8}")
@@ -69,11 +70,11 @@ public class UsuarioNovoDTO implements Serializable{
 	private Long codigoCidade;
 	
 	@NotBlank
-	@Size(min = 5)
+	@Size(min = 5, max = 50)
 	private String login;
 	
 	@NotBlank
-	@Size(min = 5)
+	@Size(min = 5, max = 50)
 	private String senha;
 	
 	@NotNull

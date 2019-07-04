@@ -1,5 +1,7 @@
 package com.projeto.dentalhelper.resources;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.projeto.dentalhelper.domains.Despesa;
+import com.projeto.dentalhelper.dtos.DespesaRecebimentoDashBoardDTO;
 import com.projeto.dentalhelper.repositories.filter.DespesaFilter;
 import com.projeto.dentalhelper.resources.api.DespesaApi;
 import com.projeto.dentalhelper.services.DespesaService;
@@ -58,6 +61,20 @@ public class DespesaResource extends AbstractResource<Despesa, DespesaService> i
 	public ResponseEntity<Void> delete(Long codigo) {
 		service.deletar(codigo);
 		return ResponseEntity.noContent().header("Entity", Long.toString(codigo)).build();
+	}
+
+	@Override
+	public ResponseEntity<List<DespesaRecebimentoDashBoardDTO>> filtrarparaDashBoard(Date data) {
+		DespesaFilter filter = new DespesaFilter();
+		filter.setDataPagamento(data);
+		
+		List<Despesa> despesas = service.filtrar(filter);
+		List<DespesaRecebimentoDashBoardDTO> despesasDTO = new ArrayList<DespesaRecebimentoDashBoardDTO>();
+		for(Despesa d: despesas) {
+			despesasDTO.add(new DespesaRecebimentoDashBoardDTO(d));
+		}
+		return ResponseEntity.ok(despesasDTO);
+		
 	}
 
 }

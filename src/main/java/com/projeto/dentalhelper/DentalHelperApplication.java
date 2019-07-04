@@ -25,9 +25,9 @@ public class DentalHelperApplication {
 		return APPLICATION_CONTEXT.getBean(type);
 	}
 
-	@PostConstruct
-	void started() {
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-	}
+//	@PostConstruct
+//	void started() {
+//		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+//	}
 
 }

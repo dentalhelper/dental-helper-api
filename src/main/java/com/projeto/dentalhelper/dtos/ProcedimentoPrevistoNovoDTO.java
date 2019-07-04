@@ -1,16 +1,20 @@
 package com.projeto.dentalhelper.dtos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.projeto.dentalhelper.domains.Dente;
 import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 
 public class ProcedimentoPrevistoNovoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	//Esse é o código do procedimento que fica no procedimento previsto, não o código do procedimento previsto
 	@NotNull
 	private Long codigo;
 
@@ -23,6 +27,11 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable {
 	private Date dataInicio;
 
 	private Date dataFinalizacao;
+	
+	private List<Long> codDentes = new ArrayList<Long>();
+	
+	@NotNull
+	private Integer faceDente;
 
 	public ProcedimentoPrevistoNovoDTO() {
 		super();
@@ -36,6 +45,8 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable {
 		this.dataInicio = p.getDataInicio();
 		this.dataFinalizacao = p.getDataFinalizacao();
 		this.nome = p.getProcedimento().getNome();
+		this.codDentes = adicionarCodigoDosDentes(p);
+		this.faceDente = p.getFaceDente().getCodigo();
 	}
 
 	public Float getValor() {
@@ -84,6 +95,31 @@ public class ProcedimentoPrevistoNovoDTO implements Serializable {
 
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
+	}
+
+	public List<Long> getCodDentes() {
+		return codDentes;
+	}
+
+	public void setCodDentes(List<Long> codDentes) {
+		this.codDentes = codDentes;
+	}
+	
+	public Integer getFaceDente() {
+		return faceDente;
+	}
+
+	public void setFaceDente(Integer faceDente) {
+		this.faceDente = faceDente;
+	}
+
+	private List<Long> adicionarCodigoDosDentes(ProcedimentoPrevisto p) {
+		List<Long> codDentes = new ArrayList<Long>();
+		
+		for(Dente d: p.getDentes()) {
+			codDentes.add(d.getCodigo());
+		}
+		return codDentes;
 	}
 
 }

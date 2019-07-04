@@ -4,7 +4,8 @@ public enum FormaDoRosto {
 	
 	QUADRADO(1, "Quadrado"),
 	REDONDO(2, "Redondo"),
-	TRIANGULAR(3, "Triangular");
+	TRIANGULAR(3, "Triangular"),
+	RETANGULAR(4, "Retangular");
 	
 	private int codigo;
 	private String descricao;

@@ -40,7 +40,7 @@ public class AgendamentoResumoPacienteDTO extends ResourceSupport implements Ser
 		this.horaFim = converterHoraParaString(agendamento.getHoraFim());
 		this.primeiraAvalicao = agendamento.getPrimeiraAvalicao();
 		this.codigoPaciente = agendamento.getOrcamento().getPaciente().getCodigo();
-		this.nomeProcedimento = agendamento.getProcedimento().getNome();
+		this.nomeProcedimento = agendamento.getProcedimentoPrevisto().getProcedimento().getNome();
 		this.statusAgendamento = agendamento.getStatusAgendamento().getDescricao();
 	}
 	

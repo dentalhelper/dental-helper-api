@@ -29,29 +29,38 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.projeto.dentalhelper.services.exceptions.AgendamentoJaCadastradoNoHorarioRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.ConfirmacaoDeSenhaIncorretaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
 import com.projeto.dentalhelper.services.exceptions.DataAgendamentoInvalidaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.DenteInvalidoDePacienteRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerApagadaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DespesaNaoPodeSerEditadaRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.EmailIncorretoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.EmailInvalidoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.EmailNaoEnviadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.FileException;
 import com.projeto.dentalhelper.services.exceptions.HoraAgendamentoInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
 import com.projeto.dentalhelper.services.exceptions.ObjetoNaoEncontradoException;
+import com.projeto.dentalhelper.services.exceptions.OdontogramaInvalidoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoDeveConterProcedimentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.OrcamentoNaoAprovadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoCanceladoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoFinalizadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.PagamentoSuperaValorTotalDoOrcamentoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.ProcedimentoDuplicadoEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoFinalizadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.ProcedimentoNaoEstaEmOrcamentoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoDuplicadoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.RecursoEmailDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoLoginDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoNomeDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RgJaCadastradoRuntimeException;
+import com.projeto.dentalhelper.services.exceptions.SenhaIncorretaRuntimeException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
@@ -182,6 +191,57 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	
+	@ExceptionHandler(EmailInvalidoRuntimeException.class)
+	public ResponseEntity<Object> emailInvalido(EmailInvalidoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+	
+		String mensagemUsuario = montarMensagemUsuario("email-invalido");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(EmailNaoEnviadoRuntimeException.class)
+	public ResponseEntity<Object> emailNaoEnviado(EmailNaoEnviadoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+	
+		String mensagemUsuario = montarMensagemUsuario("email.nao-enviado");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+
+	@ExceptionHandler(EmailIncorretoRuntimeException.class)
+	public ResponseEntity<Object> emailIncorreto(EmailIncorretoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+	
+		String mensagemUsuario = montarMensagemUsuario("email-incorreto");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(ProcedimentoDuplicadoEmOrcamentoRuntimeException.class)
+	public ResponseEntity<Object> procedimentoDuplicadoEmOrcamento(ProcedimentoDuplicadoEmOrcamentoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+	
+		String mensagemUsuario = montarMensagemUsuario("procedimento.duplicado-orcamento");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
 	
 	@ExceptionHandler(DadoInvalidoRunTimeException.class)
 	public ResponseEntity<Object> recursoNomeDuplicado(DadoInvalidoRunTimeException exception,
@@ -288,6 +348,30 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
 	
+	@ExceptionHandler(DenteInvalidoDePacienteRuntimeException.class)
+	public ResponseEntity<Object> denteDePacienteInvalido(DenteInvalidoDePacienteRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("dente.paciente-invalido");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(OdontogramaInvalidoRuntimeException.class)
+	public ResponseEntity<Object> odontogramaInvalido(OdontogramaInvalidoRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("odontograma-invalido");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
 	
 	@ExceptionHandler(PagamentoCanceladoRuntimeException.class)
 	public ResponseEntity<Object> pagamentoCanceladoRuntimeException(PagamentoCanceladoRuntimeException exception,
@@ -325,6 +409,32 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
 	}
+	
+	@ExceptionHandler(ConfirmacaoDeSenhaIncorretaRuntimeException.class)
+	public ResponseEntity<Object> confirmacaoDeSenhaIncorreta(ConfirmacaoDeSenhaIncorretaRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("confirmacao.senha-incorreta");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	@ExceptionHandler(SenhaIncorretaRuntimeException.class)
+	public ResponseEntity<Object> confirmacaoDeSenhaIncorreta(SenhaIncorretaRuntimeException exception,
+			WebRequest request, HttpServletResponse response) {
+
+		String mensagemUsuario = montarMensagemUsuario("senha.incorreta");
+		String mensagemDesenvolvedor = exception.toString();
+		List<ErroMensagem> responseBody = Arrays.asList(new ErroMensagem(mensagemUsuario,
+				mensagemDesenvolvedor, BAD_REQUEST.value(), System.currentTimeMillis()));
+		
+		return ResponseEntity.status(BAD_REQUEST).body(responseBody);
+	}
+	
+	
 	
 	@ExceptionHandler(DespesaNaoPodeSerEditadaRuntimeException.class)
 	public ResponseEntity<Object> pagamentoSuperaValorTotalDoProcedimento(DespesaNaoPodeSerEditadaRuntimeException exception,
@@ -367,6 +477,14 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpServletResponse response) {
 
 		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.rg-duplicado");
+		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
+	}
+	
+	@ExceptionHandler(RecursoEmailDuplicadoRuntimeException.class)
+	public ResponseEntity<Object> recursoEmailDuplicado(RecursoEmailDuplicadoRuntimeException exception, WebRequest request,
+			HttpServletResponse response) {
+
+		List<ErroMensagemConflict> responseBody = montarResponseBodyConflict(exception, "recurso.email-duplicado");
 		return ResponseEntity.status(CONFLICT).header("Location", exception.getLinkRecurso()).body(responseBody);
 	}
 	

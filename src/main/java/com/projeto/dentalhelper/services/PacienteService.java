@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.domains.Anamnese;
 import com.projeto.dentalhelper.domains.Cidade;
+import com.projeto.dentalhelper.domains.Dente;
 import com.projeto.dentalhelper.domains.Endereco;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Orcamento;
@@ -25,8 +26,10 @@ import com.projeto.dentalhelper.domains.QuestaoPreDefinida;
 import com.projeto.dentalhelper.domains.Telefone;
 import com.projeto.dentalhelper.domains.Usuario;
 import com.projeto.dentalhelper.domains.enums.EstadoCivil;
+import com.projeto.dentalhelper.domains.enums.FormaDoRosto;
 import com.projeto.dentalhelper.domains.enums.RespostaQuestaoAnamnese;
 import com.projeto.dentalhelper.domains.enums.Sexo;
+import com.projeto.dentalhelper.dtos.OdontogramaResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteNovoDTO;
 import com.projeto.dentalhelper.repositories.AgendamentoRepository;
 import com.projeto.dentalhelper.repositories.CidadeRepository;
@@ -41,6 +44,7 @@ import com.projeto.dentalhelper.repositories.filter.ProcedimentoPrevistoFilter;
 import com.projeto.dentalhelper.repositories.filter.UsuarioFilter;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.IntegridadeDeDadosException;
+import com.projeto.dentalhelper.services.exceptions.OdontogramaInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RespostaInvalidaException;
@@ -72,6 +76,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
+	
 	private static final int PRIMEIRO_ITEM = 0;
 	
 	@Override
@@ -93,6 +98,12 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		
 		anamnese.setQuestoes(questoes);
 		objeto.setAnamnese(anamnese);
+		
+		objeto.setDentes(criarDentes(objeto));
+		
+		objeto.setEscalaDente("");
+		objeto.setCorDente("");
+		objeto.setFormaRosto(FormaDoRosto.REDONDO);
 		
 		if(StringUtils.hasText(objeto.getFotoPerfil())) {
 			s3Service.salvar(objeto.getFotoPerfil());
@@ -146,7 +157,7 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 
 		
 		
-		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "anamnese");
+		BeanUtils.copyProperties(objetoModificado, objetoAtualizado, "codigo", "telefones", "anamnese", "escalaDente", "corDente", "formaRosto", "dentes");
 		return repository.save(objetoAtualizado);
 	}
 	
@@ -341,11 +352,47 @@ public class PacienteService extends AbstractService<Paciente, PacienteRepositor
 		return orcamentoRepository.filtrar(filter);
 	}
 	
+	public List<Orcamento> buscarOrcamentosAprovadosDoPacientePeloCodigo(Long codigo){
+		OrcamentoFilter filter = new OrcamentoFilter();
+		filter.setCodigoPaciente(codigo);
+		filter.setAprovado(true);
+		return orcamentoRepository.filtrar(filter);
+	}
+	
+	
 	public List<ProcedimentoPrevisto> buscarProcedimentosPrevistosPeloCodigoDoPacienteEPeloFinalizado(Long codigo, Boolean finalizado){
 		ProcedimentoPrevistoFilter filter = new ProcedimentoPrevistoFilter();
 		filter.setCodigoPaciente(codigo);
 		filter.setFinalizado(finalizado);
 		return procedimentoPrevistoRepository.filtrar(filter);
+		
+	}
+	
+	private List<Dente> criarDentes(Paciente p){
+		int[] numDentes = {18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28,48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38};
+		
+		List<Dente> dentes = new ArrayList<Dente>();
+		for(int i = 0; i<32; i++) {
+			Dente dente = new Dente();
+			dente.setExistente(true);
+			dente.setNumero(numDentes[i]);
+			dente.setPaciente(p);
+			dente.setObservacao("");
+			
+			dentes.add(dente);
+		}
+		
+		return dentes;
+	}
+	
+	public Paciente atualizarOdontograma(OdontogramaResumoDTO objetoDTO, Long codPaciente) throws OdontogramaInvalidoException {
+		Paciente paciente = buscarPorCodigo(codPaciente);
+				
+		paciente.setFormaRosto(FormaDoRosto.toEnum(objetoDTO.getFormaRosto()));
+		paciente.setEscalaDente(objetoDTO.getEscalaDente());
+		paciente.setCorDente(objetoDTO.getCorDente());
+		
+		return repository.save(paciente);
 		
 	}
 	

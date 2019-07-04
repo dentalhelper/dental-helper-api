@@ -17,11 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.projeto.dentalhelper.domains.Agendamento;
 import com.projeto.dentalhelper.domains.Anamnese;
+import com.projeto.dentalhelper.domains.Dente;
 import com.projeto.dentalhelper.domains.Foto;
 import com.projeto.dentalhelper.domains.Orcamento;
 import com.projeto.dentalhelper.domains.Paciente;
 import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 import com.projeto.dentalhelper.dtos.AgendamentoResumoPacienteDTO;
+import com.projeto.dentalhelper.dtos.OdontogramaResumoDTO;
 import com.projeto.dentalhelper.dtos.OrcamentoPagamentoDTO;
 import com.projeto.dentalhelper.dtos.OrcamentoResumoDTO;
 import com.projeto.dentalhelper.dtos.PacienteAgendamentoDTO;
@@ -38,6 +40,8 @@ import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoException;
 import com.projeto.dentalhelper.services.exceptions.CpfJaCadastradoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoException;
 import com.projeto.dentalhelper.services.exceptions.DadoInvalidoRunTimeException;
+import com.projeto.dentalhelper.services.exceptions.OdontogramaInvalidoException;
+import com.projeto.dentalhelper.services.exceptions.OdontogramaInvalidoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoException;
 import com.projeto.dentalhelper.services.exceptions.RecursoCpfDuplicadoRuntimeException;
 import com.projeto.dentalhelper.services.exceptions.RecursoRgDuplicadoRuntimeException;
@@ -205,7 +209,7 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 		return ResponseEntity.ok().body(responseDTO);
 	}
 	
-	public ResponseEntity<PacienteProcedimentoDTO> getProcedimentosByCodigoPaciente(@PathVariable Long codigo, @RequestParam(required = false, defaultValue = "false") Boolean finalizado){
+	public ResponseEntity<PacienteProcedimentoDTO> getProcedimentosByCodigoPaciente(@PathVariable Long codigo, @RequestParam(required = false) Boolean finalizado){
 		Paciente objeto = service.buscarPorCodigo(codigo);
 		List<ProcedimentoPrevisto> procedimentos = service.buscarProcedimentosPrevistosPeloCodigoDoPacienteEPeloFinalizado(codigo, finalizado);
 		List<ProcedimentoPrevistoResumoDTO> procedimentosDTO = new ArrayList<ProcedimentoPrevistoResumoDTO>();
@@ -220,7 +224,7 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 	
 	@Override
 	public ResponseEntity<List<OrcamentoPagamentoDTO>> buscarInformacoesPagamento(Long codigo) {
-		List<Orcamento> orcamentos = service.buscarOrcamentosDoPacientePeloCodigo(codigo);
+		List<Orcamento> orcamentos = service.buscarOrcamentosAprovadosDoPacientePeloCodigo(codigo);
 		List<OrcamentoPagamentoDTO> orcamentosDTO = new ArrayList<OrcamentoPagamentoDTO>();
 		orcamentos.forEach((o) -> orcamentosDTO.add(new OrcamentoPagamentoDTO(o)));
 		
@@ -228,5 +232,40 @@ public class PacienteResource extends AbstractResource<Paciente, PacienteService
 		
 		
 	}
+
+	@Override
+	public ResponseEntity<OdontogramaResumoDTO> getOdontogramaByCodigoPaciente(Long codigo) {
+		Paciente objeto = service.buscarPorCodigo(codigo);
+		
+
+		for(Dente d: objeto.getDentes()) {
+			List<ProcedimentoPrevisto> procedimentosPrevistos = new ArrayList<ProcedimentoPrevisto>();
+			for(ProcedimentoPrevisto p: d.getProcedimentosPrevistos()) {
+				if(p.getOrcamento().getAprovado()==true) {
+					procedimentosPrevistos.add(p);
+				}
+			}
+			d.setProcedimentosPrevistos(procedimentosPrevistos);
+		}
+		
+		OdontogramaResumoDTO odontogramaDTO = new OdontogramaResumoDTO(objeto);
+		
+		return ResponseEntity.ok().body(odontogramaDTO);
+	}
+
+	@Override
+	public ResponseEntity<Paciente> atualizarOdontograma(Long codigo, @Valid OdontogramaResumoDTO odontograma) {
+		Paciente paciente;
+		try {
+			paciente = service.atualizarOdontograma(odontograma, codigo);
+		} catch (OdontogramaInvalidoException e) {
+			throw new OdontogramaInvalidoRuntimeException(e.getMessage());
+		}
+		
+		return ResponseEntity.ok().body(paciente);
+	}
+	
+	
+	
 
 }

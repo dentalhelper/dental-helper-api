@@ -10,22 +10,26 @@ import com.projeto.dentalhelper.domains.ProcedimentoPrevisto;
 public class ProcedimentoPrevistoResumoDTO extends ResourceSupport implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Long codigo;
-	
+
 	private Float valorDoProcedimento;
-	
+
 	private Boolean finalizado;
-	
+
 	private Date dataInicio;
-	
+
 	private Date dataFinalizacao;
-	
+
 	private Long codProcedimento;
-	
+
 	private String nomeProcedimento;
-	
-	public ProcedimentoPrevistoResumoDTO (ProcedimentoPrevisto p) {
+
+	private String faceDente;
+
+	private Integer dente;
+
+	public ProcedimentoPrevistoResumoDTO(ProcedimentoPrevisto p) {
 		this.codigo = p.getCodigo();
 		this.valorDoProcedimento = p.getValorDoProcedimento();
 		this.finalizado = p.getFinalizado();
@@ -33,8 +37,12 @@ public class ProcedimentoPrevistoResumoDTO extends ResourceSupport implements Se
 		this.dataInicio = p.getDataInicio();
 		this.codProcedimento = p.getProcedimento().getCodigo();
 		this.nomeProcedimento = p.getProcedimento().getNome();
+		this.faceDente = p.getFaceDente().getDescricao();
+		if (!p.getDentes().isEmpty()) {
+			this.dente = p.getDentes().get(0).getNumero();
+		}
 	}
-	
+
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -42,7 +50,7 @@ public class ProcedimentoPrevistoResumoDTO extends ResourceSupport implements Se
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
 	}
-	
+
 	public Float getValorDoProcedimento() {
 		return valorDoProcedimento;
 	}
@@ -90,8 +98,21 @@ public class ProcedimentoPrevistoResumoDTO extends ResourceSupport implements Se
 	public void setNomeProcedimento(String nomeProcedimento) {
 		this.nomeProcedimento = nomeProcedimento;
 	}
-	
-	
-	
+
+	public String getFaceDente() {
+		return faceDente;
+	}
+
+	public void setFaceDente(String faceDente) {
+		this.faceDente = faceDente;
+	}
+
+	public Integer getDente() {
+		return dente;
+	}
+
+	public void setDente(Integer dente) {
+		this.dente = dente;
+	}
 
 }
